@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.elements.Element;
 
 public class WoodWall extends Wall {
 
