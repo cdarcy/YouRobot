@@ -6,10 +6,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+=======
+>>>>>>> 9684f09eba5de4c1b8f811794b640c7183dcf294
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
@@ -30,12 +33,17 @@ import fr.umlv.zen.KeyboardEvent;
 public class RobotWorld  {
 	
 	private World jboxWorld;
-	private HashMap<Vec2, Element> elements;
+	private ArrayList<Element> elements;
 	private ArrayList<Robot> robotMap;
 	private ArrayList<Element> tmpelements;
 	private ArrayList<AICallback> callbacks;
 	private ArrayList<HumanRobot> players;
+<<<<<<< HEAD
 	private BufferedImage img;
+=======
+	
+>>>>>>> 9684f09eba5de4c1b8f811794b640c7183dcf294
+	
 	public int WIDTH = 800;
 	public int HEIGHT = 600;
 
@@ -55,7 +63,7 @@ public class RobotWorld  {
 		jboxWorld.createBody(new BodyDef());		
 		jboxWorld.setContactListener(new CollisionListener(this));
 		robotMap = new ArrayList<>();
-		elements = new HashMap<>();
+		elements = new ArrayList<>();
 		tmpelements = new ArrayList<>();
 		callbacks = new ArrayList<>();
 		players = new ArrayList<>();
@@ -70,7 +78,7 @@ public class RobotWorld  {
 
 	public void addRobot(Robot element) {
 		robotMap.add(element);
-		elements.put(element.getBody().getPosition(), element);
+		elements.add(element);
 		callbacks.add(new AICallback(this, element));
 	}	
 	
@@ -78,20 +86,21 @@ public class RobotWorld  {
 
 	public void addPlayer(HumanRobot p) {
 		players.add(p);
-		elements.put(p.getBody().getPosition(), p);
+		elements.add(p);
 	}	
 
 	public WoodWall addWall(int x, int y) {
 		WoodWall element = new WoodWall(this, x, y);
-		elements.put(element.getBody().getPosition(), element);
+		elements.add(element);
 		return element;
 	}	
 
 	public Bonus putBonus() {
-		float x = MathUtils.randomFloat(Wall.WALL_SIZE, WIDTH-Wall.WALL_SIZE);
-		float y = MathUtils.randomFloat(Wall.WALL_SIZE, HEIGHT-Wall.WALL_SIZE);
-		final Bonus element = new Bomb(this, x, y);
-		elements.put(element.getBody().getPosition(), element);
+		float x = MathUtils.randomFloat(100, WIDTH-100);
+		float y = MathUtils.randomFloat(100, HEIGHT-100);
+		System.out.println(x + "," +y);
+		final Bomb element = new Bomb(this, x, y);
+		elements.add(element);
 		return element;
 	}	
 
@@ -156,7 +165,7 @@ public class RobotWorld  {
 	public void updateRaycasts(){
 		for (HumanRobot p : players){
 			for (AICallback a : callbacks){
-				ComputerRobot robot = (ComputerRobot) getRobotFromCurrentPosition(a.getOrigin());
+				ComputerRobot robot = (ComputerRobot) getRobotFromPosition(a.getOrigin());
 				float quarter_diagonal = (float) (Math.sqrt((WIDTH*WIDTH)+(HEIGHT*HEIGHT))/4);
 				float x = (robot.getX()-p.getX())*(robot.getX()-p.getX());
 				float y = (robot.getY()-p.getY())*(robot.getY()-p.getY());
@@ -178,11 +187,13 @@ public class RobotWorld  {
 		}
 	}
 	public void draw(Graphics2D g) throws IOException {
-		for(Element e : elements.values()){
+		for(Element e : elements){
 			if(e != null){
 				e.draw(g);
 			}
 		}
+		elements.removeAll(tmpelements);
+		tmpelements.clear();
 	}
 
 	public void drowBackgroung (Graphics2D g) throws IOException{
@@ -196,7 +207,6 @@ public class RobotWorld  {
 		Robot p1 = players.get(0);
 		int p1Col = 10;
 		g.drawString("Player 1 : " + p1.getpName() + " - " + p1.getLife()+"%", p1Col, 15);
-		p1.drawBonusList(g, p1Col, 45);
 		
 	}
 
@@ -205,24 +215,27 @@ public class RobotWorld  {
 	}
 
 
-	public void removeElement(Vec2 vec2) {
-		if(elements.get(vec2) != null){
-			jboxWorld.destroyBody(elements.get(vec2).getBody());
-			elements.remove(vec2);	
+	public synchronized void removeElement(Vec2 pos) {
+		if(getElement(pos) != null){
+			jboxWorld.destroyBody(getElement(pos).getBody());
+			elements.remove(pos);	
 		}
 	}
 	
 	public synchronized Element getElement(Vec2 pos){
-		return elements.get(pos);
+		for(Element e : elements)
+			if(e.getBody().getPosition().equals(pos))
+				return e;
+		return null;
 	}
 
 	public void drawElement(Element element) {
-		elements.put(element.getBody().getPosition(), element);
 		tmpelements.add(element);
 	}
-
-	public ComputerRobot getRobotFromCurrentPosition(Vec2 pos) {
-		for(Element e : elements.values())
+	
+	
+	public ComputerRobot getRobotFromPosition(Vec2 pos) {
+		for(Element e : elements)
 			if(e.getBody().getPosition().equals(pos))
 				return (ComputerRobot) e;
 		return null;
@@ -234,7 +247,4 @@ public class RobotWorld  {
 				return (HumanRobot) e;
 		return null;
 	}
-
-
-
 }

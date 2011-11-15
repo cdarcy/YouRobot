@@ -1,12 +1,11 @@
 package fr.umlv.yourobot;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Random;
 
 import fr.umlv.yourobot.RobotWorld.RobotGameMod;
-import fr.umlv.yourobot.elements.bonus.Bonus;
+import fr.umlv.yourobot.elements.bonus.Bomb;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
@@ -28,7 +27,7 @@ public class YouRobotCode implements ApplicationCode{
 	HumanRobot e1;
 	HumanRobot e2;
 	Wall w1;
-	Bonus b1;
+	Bomb b1;
 	RobotWorld world;
 
 	@Override

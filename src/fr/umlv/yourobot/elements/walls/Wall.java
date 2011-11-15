@@ -1,13 +1,5 @@
 package fr.umlv.yourobot.elements.walls;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 

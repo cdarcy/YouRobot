@@ -3,17 +3,14 @@ package fr.umlv.yourobot.physics.raycasts;
 import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Fixture;
-import org.jbox2d.dynamics.World;
-
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
-import fr.umlv.yourobot.util.ElementData;
 
 public class AICallback implements RayCastCallback{
 	private RobotWorld world;
 	private Robot robot;
+	
 	public AICallback(RobotWorld world, Robot robot){
 		this.world = world;
 		this.robot = robot;

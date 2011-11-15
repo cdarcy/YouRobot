@@ -4,12 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.geom.Ellipse2D;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyType;
@@ -18,7 +13,6 @@ import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.KeyController;
 import fr.umlv.zen.KeyboardEvent;
@@ -31,7 +25,7 @@ abstract public class Robot extends Element{
 	protected Fixture fixture;
 	protected KeyController controller;
 	private double direction = 0.;
-	private ArrayList<Bonus> bonuslist;
+	
 
 	/*
 	 * Public contructor for human players
@@ -51,7 +45,6 @@ abstract public class Robot extends Element{
 		bodyElem.resetMassData();
 		bodyElem.setType(BodyType.DYNAMIC);
 		
-		bonuslist = new ArrayList<>();
 	}
 	public void setBody(Body bodyElem){
 		super.setBody(bodyElem);
@@ -105,17 +98,6 @@ abstract public class Robot extends Element{
 
 	public String getpName() {
 		return pName;
-	}
-	public void drawBonusList(Graphics2D g, int x, int y) throws IOException {
-		
-		for (int i = 0;i < bonuslist.size();  i++){
-			bonuslist.get(i).drawIcon(x, (y*y)+y, g);
-		}
-	}
-	public void addBonus(Bonus b) {
-		if(b == null)
-			return;
-		bonuslist.add(b);
 	}
 	public float getLife() {
 		return ((ElementData) bodyElem.getUserData()).life();
