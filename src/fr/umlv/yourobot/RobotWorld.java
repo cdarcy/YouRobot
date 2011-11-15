@@ -6,13 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-<<<<<<< HEAD
-import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-
-=======
->>>>>>> 9684f09eba5de4c1b8f811794b640c7183dcf294
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
@@ -38,11 +33,7 @@ public class RobotWorld  {
 	private ArrayList<Element> tmpelements;
 	private ArrayList<AICallback> callbacks;
 	private ArrayList<HumanRobot> players;
-<<<<<<< HEAD
 	private BufferedImage img;
-=======
-	
->>>>>>> 9684f09eba5de4c1b8f811794b640c7183dcf294
 	
 	public int WIDTH = 800;
 	public int HEIGHT = 600;
