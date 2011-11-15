@@ -2,9 +2,13 @@ package fr.umlv.yourobot;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.imageio.ImageIO;
 
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
@@ -31,14 +35,13 @@ public class RobotWorld  {
 	private ArrayList<Element> tmpelements;
 	private ArrayList<AICallback> callbacks;
 	private ArrayList<HumanRobot> players;
+	private BufferedImage img;
 	public int WIDTH = 800;
 	public int HEIGHT = 600;
 
 	public enum RobotGameMod{
 		ONEPLAYER,
-		TWOPLAYER,
-		FOURPLAYER
-		
+		TWOPLAYER
 	}
 
 	RobotGameMod mode;
@@ -56,7 +59,6 @@ public class RobotWorld  {
 		tmpelements = new ArrayList<>();
 		callbacks = new ArrayList<>();
 		players = new ArrayList<>();
-
 	}
 
 
@@ -129,6 +131,8 @@ public class RobotWorld  {
 		// Steps jbox2d physics world
 		jboxWorld.step(1/10f, 15, 8);
 		jboxWorld.clearForces();
+		// Draw background
+		drowBackgroung(g);
 		// Draw elements of the game
 		draw(g);
 		// Draw Interface
@@ -181,6 +185,12 @@ public class RobotWorld  {
 		}
 	}
 
+	public void drowBackgroung (Graphics2D g) throws IOException{
+		if(img == null)
+			img = ImageIO.read(new File("images/background_1.png"));	
+		g.drawImage(img, null, 0, 0);
+	}
+	
 	public void drawInterface(Graphics2D g) throws IOException {
 		g.setColor(Color.WHITE);
 		Robot p1 = players.get(0);
