@@ -16,31 +16,32 @@ import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
-public class PlayerCollisionListener implements ContactListener {
+public class CollisionListener implements ContactListener {
 	private final RobotWorld world;
-	public PlayerCollisionListener(RobotWorld world){
+	public CollisionListener(RobotWorld world){
 		this.world = world;
 	}
 	@Override
 	public void beginContact(Contact contact) {
 		Element elem = ((ElementData) contact.getFixtureA().getBody().getUserData()).getObj();
 		Body bodyB = contact.getFixtureB().getBody();
-	
-        Vec2 posB = bodyB.getPosition();
-    	
-    	ElementType typeA = ((ElementData) elem.getBody().getUserData()).type();
-        ElementType typeB = ((ElementData) bodyB.getUserData()).type();
-        
-        if(typeA != ElementType.PLAYER_ROBOT)
-    	   return;
-        
-		if(typeB == ElementType.BOMB){
-			((HumanRobot) elem).addBonus((Bonus) world.getElement(posB));
-			world.removeElement(posB);
+		System.out.println("collision");
+		Vec2 posB = bodyB.getPosition();
+
+		ElementType typeA = ((ElementData) elem.getBody().getUserData()).type();
+		ElementType typeB = ((ElementData) bodyB.getUserData()).type();
+
+		if(typeA == ElementType.PLAYER_ROBOT){
+			if(typeB == ElementType.BOMB){
+				((HumanRobot) elem).addBonus((Bonus) world.getElement(posB));
+				world.removeElement(posB);
+			}
+
+			if(typeB == ElementType.WALL){
+				world.drawElement(world.getElement(posB));
+			}
 		}
-		
-		if(typeB == ElementType.WALL){
-			world.drawElement(world.getElement(posB));
+		else if(typeA == ElementType.COMPUTER_ROBOT){
 			
 		}
 	}
@@ -53,11 +54,11 @@ public class PlayerCollisionListener implements ContactListener {
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		
+
 	}
 }

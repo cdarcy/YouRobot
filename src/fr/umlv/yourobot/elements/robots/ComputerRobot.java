@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.physics.collisions.AICollisionListener;
 import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
@@ -19,7 +18,6 @@ public class ComputerRobot extends Robot {
 	public ComputerRobot(String pName, RobotWorld world, float x, float y) {
 		super(pName, world, x, y);
 		bodyElem.setUserData(new ElementData(pName, 100, ElementType.COMPUTER_ROBOT, this));
-		world.getJBoxWorld().setContactListener(new AICollisionListener(world));
 	}
 	@Override
 	public void draw(Graphics2D g) throws IOException{

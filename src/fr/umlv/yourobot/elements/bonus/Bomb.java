@@ -21,8 +21,6 @@ public class Bomb extends Bonus {
 	
 	public void draw(Graphics2D g) throws IOException{
 		Vec2 pos = this.bodyElem.getPosition();
-		//g.setColor(color);
-		//g.fillOval((int)pos.x, (int)pos.y, BONUS_SIZE, BONUS_SIZE);
 		if(img == null)
 			img = ImageIO.read(new File("images/bombicon.png"));	
 		g.drawImage(img, null, (int)pos.x, (int)pos.y);

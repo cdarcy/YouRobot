@@ -18,18 +18,20 @@ import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
-public class Element {
+abstract public class Element {
 
 	protected final int ELEM_SIZE = 20;
 	final ArrayList<Shape> jbox2DShapes = new ArrayList<>();
 	protected BufferedImage img;
 	protected Body bodyElem;
 	protected PolygonShape shapeElem;
-	protected Vec2 positionElem;
 	protected BodyDef bodyDef;
 	protected Fixture fixture;
 	public Color color = Color.RED;
 	int size;
+	
+
+	abstract public void draw(Graphics2D g) throws IOException;
 
 	/*
 	 * Creates body and shape. Sets element position 
@@ -74,11 +76,7 @@ public class Element {
 	public void move(Vec2 force){
 		this.bodyElem.applyForce(force, bodyElem.getLocalCenter());
 	}
-	
-	public void draw(Graphics2D graphics) throws IOException {
-		Vec2 pos = this.bodyElem.getPosition();
-		graphics.fillRect((int)pos.x, (int)pos.y, ELEM_SIZE, ELEM_SIZE);
-	}
+
 
 	public ElementType getType() {
 		return ((ElementData) getBody().getUserData()).type();

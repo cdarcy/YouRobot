@@ -29,21 +29,12 @@ public class AICallback implements RayCastCallback{
 	@Override
 	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
 		Vec2 pos = fixture.getBody().getPosition();
-		Element player= world.getPlayer(pos);
+		Element player= world.getPlayerFromCurrentPosition(pos);
 		if(player != null)
 		{
-			float quarter_diagonal = (float) (Math.sqrt((world.WIDTH*world.WIDTH)+(world.HEIGHT*world.HEIGHT))/4);
-			float x = (robot.getX()-player.getX())*(robot.getX()-player.getX());
-			float y = (robot.getY()-player.getY())*(robot.getY()-player.getY());
-			float distance = (float) Math.sqrt(x+y);
-			
-			if(distance<=quarter_diagonal){
-				System.out.println("Detected");
 				Vec2 force = pos.sub(point);
 				robot.move(new Vec2(force.x*100000,force.y*100000));
-			}
 		}
-
 		return 0;
 	}
 

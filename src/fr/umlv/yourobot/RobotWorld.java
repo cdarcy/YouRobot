@@ -14,14 +14,17 @@ import org.jbox2d.dynamics.World;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bomb;
 import fr.umlv.yourobot.elements.bonus.Bonus;
+import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.elements.walls.Wall;
-import fr.umlv.yourobot.physics.collisions.AICollisionListener;
+import fr.umlv.yourobot.elements.walls.WoodWall;
+import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
 import fr.umlv.zen.KeyboardEvent;
 
 public class RobotWorld  {
+	
 	private World jboxWorld;
 	private HashMap<Vec2, Element> elements;
 	private ArrayList<Robot> robotMap;
@@ -47,11 +50,13 @@ public class RobotWorld  {
 	public RobotWorld() {
 		jboxWorld = new World(new Vec2(0, 0), true);
 		jboxWorld.createBody(new BodyDef());		
+		jboxWorld.setContactListener(new CollisionListener(this));
 		robotMap = new ArrayList<>();
 		elements = new HashMap<>();
 		tmpelements = new ArrayList<>();
 		callbacks = new ArrayList<>();
 		players = new ArrayList<>();
+
 	}
 
 
@@ -74,8 +79,8 @@ public class RobotWorld  {
 		elements.put(p.getBody().getPosition(), p);
 	}	
 
-	public Wall addWall(int x, int y) {
-		Wall element = new Wall(this, x, y);
+	public WoodWall addWall(int x, int y) {
+		WoodWall element = new WoodWall(this, x, y);
 		elements.put(element.getBody().getPosition(), element);
 		return element;
 	}	
@@ -89,7 +94,7 @@ public class RobotWorld  {
 	}	
 
 
-	public void addArena(Graphics2D g){
+	public void addArena(Graphics2D g) throws IOException{
 		for (int i = 0; i < WIDTH/Wall.WALL_SIZE; i++){
 			if(i<HEIGHT){
 				// GAUCHE
@@ -129,7 +134,6 @@ public class RobotWorld  {
 		// Draw Interface
 		drawInterface(g);
 		
-		
 	}
 	/**
 	 * @param args
@@ -147,9 +151,15 @@ public class RobotWorld  {
 	
 	public void updateRaycasts(){
 		for (HumanRobot p : players){
-			Vec2 pos = p.getBody().getPosition();
 			for (AICallback a : callbacks){
-				jboxWorld.raycast(a, a.getOrigin(), p.getBody().getPosition());
+				ComputerRobot robot = (ComputerRobot) getRobotFromCurrentPosition(a.getOrigin());
+				float quarter_diagonal = (float) (Math.sqrt((WIDTH*WIDTH)+(HEIGHT*HEIGHT))/4);
+				float x = (robot.getX()-p.getX())*(robot.getX()-p.getX());
+				float y = (robot.getY()-p.getY())*(robot.getY()-p.getY());
+				float distance = (float) Math.sqrt(x+y);
+
+				if(distance<=quarter_diagonal)
+					jboxWorld.raycast(a, a.getOrigin(), p.getBody().getPosition());
 			}
 		}
 	}
@@ -201,8 +211,14 @@ public class RobotWorld  {
 		tmpelements.add(element);
 	}
 
+	public ComputerRobot getRobotFromCurrentPosition(Vec2 pos) {
+		for(Element e : elements.values())
+			if(e.getBody().getPosition().equals(pos))
+				return (ComputerRobot) e;
+		return null;
+	}
 
-	public HumanRobot getPlayer(Vec2 pos) {
+	public HumanRobot getPlayerFromCurrentPosition(Vec2 pos) {
 		for(Element e : players)
 			if(e.getBody().getPosition().equals(pos))
 				return (HumanRobot) e;

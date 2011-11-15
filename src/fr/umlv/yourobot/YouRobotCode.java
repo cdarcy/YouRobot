@@ -22,9 +22,11 @@ public class YouRobotCode implements ApplicationCode{
 	final int HEIGHT = 600;
 	final String[] keysP1 = {"UP","DOWN","LEFT","RIGHT"};
 	final String[] keysP2 = {"Z","S","Q","D"};
-	ComputerRobot e1;
+	ComputerRobot r1;
+	ComputerRobot r2;
+	ComputerRobot r3;
+	HumanRobot e1;
 	HumanRobot e2;
-	HumanRobot e3;
 	Wall w1;
 	Bonus b1;
 	RobotWorld world;
@@ -36,22 +38,30 @@ public class YouRobotCode implements ApplicationCode{
 		world.setMode(RobotGameMod.TWOPLAYER);
 		
 		// Defining ComputerRobots
-		e1 = new ComputerRobot("Computer", world ,300,300);
+		r1 = new ComputerRobot("Computer", world ,300,300);
+		r2 = new ComputerRobot("Computer", world ,300,400);
+		r3 = new ComputerRobot("Computer", world ,300,500);
 		
 		// Defining HumanRobots
-		e2 = new HumanRobot("Camcam", world, keysP1,500, 300);
-		e3 = new HumanRobot("Camcam", world, keysP2,600, 300);
+		e1 = new HumanRobot("Camcam", world, keysP1,500, 300);
+		e2 = new HumanRobot("Camcam", world, keysP2,600, 300);
 
-		world.addPlayer(e3);
+		world.addPlayer(e1);
 		world.addPlayer(e2);
-		world.addRobot(e1);
-		
+		world.addRobot(r1);
+		world.addRobot(r2);
+		world.addRobot(r3);
 		context.render(new ApplicationRenderCode() {
 
 			@Override
 			public void render(final Graphics2D graphics) {
 				// Add borders
-				world.addArena(graphics);
+				try {
+					world.addArena(graphics);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				world.putBonus();
 				world.putBonus();world.putBonus();
 				world.putBonus();world.putBonus();
@@ -72,7 +82,7 @@ public class YouRobotCode implements ApplicationCode{
 				for(;;){
 					world.updateRaycasts();	
 					try {
-						Thread.sleep(5000);
+						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

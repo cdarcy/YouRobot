@@ -31,15 +31,12 @@ abstract public class Bonus extends Element{
 		shapeElem.setAsBox(BONUS_SIZE/2, BONUS_SIZE/2, bodyElem.getLocalCenter(), bodyElem.getAngle());
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = shapeElem;
-		fixtureDef.density = 0;
-		fixtureDef.friction = 0;
-		fixtureDef.restitution = 0;
 		fixture = bodyElem.createFixture(fixtureDef);
 		bodyElem.setType(BodyType.DYNAMIC);
 		bodyElem.setUserData(new ElementData(100, ElementType.BONUS, this));
 		color = Color.BLACK;
 	}
 	
-	abstract public void draw(Graphics2D g) throws IOException;
+
 	abstract public void drawIcon(int x, int y, Graphics2D g) throws IOException;
 }
