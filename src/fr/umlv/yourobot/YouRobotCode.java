@@ -59,7 +59,7 @@ public class YouRobotCode implements ApplicationCode{
 			public void render(final Graphics2D graphics) {
 				// create map
 				try {
-					MapGenerator.mapRandom(graphics);
+					MapGenerator.mapRandom(world, graphics);
 					//MapGenerator.drawArena(graphics, MapStyle.wall.get(MapGenerator.value));
 				} catch (IOException e1) {
 					e1.printStackTrace();

@@ -16,17 +16,11 @@ import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.elements.walls.WoodWall;
 
 public class MapGenerator {
-	public static RobotWorld world = new RobotWorld();
 	public static int value;
 	public final static int WIDTH = 800;
 	public final static int HEIGHT = 600;
 	
-
-	public MapGenerator(RobotWorld world, int level){
-		
-	}
-	
-	public static void drawArena(Graphics2D g, String nameWallPicture) throws IOException{
+	public static void drawArena(Graphics2D g, RobotWorld world, String nameWallPicture) throws IOException{
 		for (int i = 0; i < WIDTH/Wall.WALL_SIZE; i++){
 			if(i<HEIGHT){
 				// GAUCHE
@@ -43,13 +37,13 @@ public class MapGenerator {
 		}
 	}
 	
-	public static void mapRandom (Graphics2D g) throws IOException{
+	public static void mapRandom (RobotWorld world, Graphics2D g) throws IOException{
 		new MapStyle();
 		value =  (int) MathUtils.randomFloat(0, 3);
 		String nameBackgroundPicture = MapStyle.background.get(value);
 		String nameWallPicture = MapStyle.wall.get(value);
 		world.setBackground(nameBackgroundPicture);
-		drawArena(g, nameWallPicture);
+		drawArena(g, world, nameWallPicture);
 	}
 	
 	public static void drawBackground (Graphics2D g, String nameBackground) throws IOException{

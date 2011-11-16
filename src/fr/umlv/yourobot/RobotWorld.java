@@ -21,9 +21,13 @@ import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
+import fr.umlv.yourobot.elements.walls.BorderWall;
+import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.elements.walls.WoodWall;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
+import fr.umlv.yourobot.util.MapGenerator;
+import fr.umlv.yourobot.util.MapStyle;
 import fr.umlv.zen.KeyboardEvent;
 
 public class RobotWorld  {
@@ -91,7 +95,6 @@ public class RobotWorld  {
 
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
 		BorderWall element = new BorderWall(this, x, y, fileName);
-		elements.add(element);
 		return element;
 	}	
 	
@@ -127,7 +130,7 @@ public class RobotWorld  {
 		jboxWorld.step(1/10f, 15, 8);
 		jboxWorld.clearForces();
 		//MapGenerator background
-		MapGenerator.drawBackground(g, MapStyle.background.get(MapGenerator.value));
+		drawBackground(g);
 		// Draw bonuses before drawing other elements (robots, walls)
 		drawBonuses(g);
 		// Draw elements of the game
@@ -135,6 +138,11 @@ public class RobotWorld  {
 		// Draw Interface
 		drawInterface(g);
 	}
+	private void drawBackground(Graphics2D g) {
+		g.drawImage(img, null, Wall.WALL_SIZE, Wall.WALL_SIZE);
+	}
+
+
 	/**
 	 * @param args
 	 */
@@ -262,7 +270,7 @@ public class RobotWorld  {
 				return e;
 		}
 		return null;
-
+	}
 	public void setBackground(String nameBackgroundPicture) throws IOException {
 		System.out.println(nameBackgroundPicture);
 		img = ImageIO.read(new File("images/" + nameBackgroundPicture));	
