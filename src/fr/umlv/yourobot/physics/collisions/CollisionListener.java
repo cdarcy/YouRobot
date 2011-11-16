@@ -41,7 +41,6 @@ public class CollisionListener implements ContactListener {
 			if(typeElementB == ElementType.BOMB){
 				elemB.getBody().setActive(false);
 			}
-			// TODO : set life diminution depending on linear velocity
 			
 			//elemB.getBody().getUserData().setLife();
 		}
