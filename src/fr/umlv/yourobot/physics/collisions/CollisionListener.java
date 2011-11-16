@@ -47,7 +47,7 @@ public class CollisionListener implements ContactListener {
 		}
 
 		if(dataB.getElemClass() == ElementClass.WALL){
-			
+			world.drawElement(elemB);
 		}
 		
 		if(dataB.getElemClass() == ElementClass.BLOCK){

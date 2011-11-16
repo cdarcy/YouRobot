@@ -51,7 +51,6 @@ public class YouRobotCode implements ApplicationCode{
 		world.addRobot(r1);
 		world.addRobot(r2);
 		world.addRobot(r3);
-		world.addWall(400, 150);
 		context.render(new ApplicationRenderCode() {
 
 			@Override
@@ -59,7 +58,6 @@ public class YouRobotCode implements ApplicationCode{
 				// create map
 				try {
 					MapGenerator.mapRandom(world, graphics);
-					//MapGenerator.drawArena(graphics, MapStyle.wall.get(MapGenerator.value));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

@@ -19,20 +19,15 @@ public class WoodWall extends Wall {
 	public WoodWall(RobotWorld world, float x, float y) {
 		super(world, x, y);
 		bodyElem.setUserData(new ElementData(100, ElementType.WOODWALL, this));
-		bodyElem.setType(BodyType.DYNAMIC);
+		bodyElem.setType(BodyType.STATIC);
 	}
 
 	@Override
-	public void draw(Graphics2D g){
+	public void draw(Graphics2D g) throws IOException{
 		Vec2 pos = this.bodyElem.getPosition();
-		g.setColor(Color.BLACK);
 		g.fillRect((int)pos.x, (int)pos.y, WALL_SIZE, WALL_SIZE);
 		if(img == null)
-			try {
-				img = ImageIO.read(new File("images/wall_4.png"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				img = ImageIO.read(new File("images/woodWall.png"));
 		g.drawImage(img, null, getX(), getY());
 	}
 

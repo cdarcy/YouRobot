@@ -1,5 +1,7 @@
 package fr.umlv.yourobot.elements.walls;
 
+import java.util.ArrayList;
+
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
@@ -11,8 +13,7 @@ import fr.umlv.yourobot.util.ElementData.ElementType;
 abstract public class Wall extends Element{
 	public static  int WALL_SIZE = 50;
 	
-	protected FixtureDef fixtureDef;
-	
+	protected FixtureDef fixtureDef;	
 	
 	public Wall(RobotWorld world, float x, float y) {
 		super(world, x, y );
@@ -23,6 +24,7 @@ abstract public class Wall extends Element{
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = 1.f;
 		bodyElem.createFixture(fixtureDef);
+		bodyElem.setType(BodyType.STATIC);
 	}
 
 }

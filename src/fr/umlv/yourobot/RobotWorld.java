@@ -28,6 +28,7 @@ import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.elements.walls.WoodWall;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
+import fr.umlv.yourobot.util.MapGenerator;
 import fr.umlv.zen.KeyboardEvent;
 
 public class RobotWorld  {
@@ -90,10 +91,10 @@ public class RobotWorld  {
 		elements.add(p);
 	}	
 
-	public WoodWall addWall(int x, int y) {
-		WoodWall element = new WoodWall(this, x, y);
-		elements.add(element);
-		return element;
+	public Wall addWall(Wall wall) {
+		elements.add(wall);
+		
+		return wall;
 	}	
 
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
@@ -135,6 +136,8 @@ public class RobotWorld  {
 		drawBackground(g);
 		// Draw bonuses before drawing other elements (robots, walls)
 		drawBonuses(g);
+		//Draw wall
+		MapGenerator.drawWalls(g);
 		// Draw elements of the game
 		draw(g);
 		// Draw Interface
@@ -193,7 +196,6 @@ public class RobotWorld  {
 
 	}
 	public void draw(Graphics2D g) throws IOException {
-
 		elements.removeAll(bonuses);
 		for(Element e : elements){
 			if(e != null){

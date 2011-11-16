@@ -1,23 +1,35 @@
 package fr.umlv.yourobot.elements.walls;
 
 import java.awt.Graphics2D;
+import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.util.ElementData;
+import fr.umlv.yourobot.util.MapGenerator;
+import fr.umlv.yourobot.util.ElementData.ElementType;
 
 
-public class StoneWall extends Element {
+public class StoneWall extends Wall {
 
 	public StoneWall(RobotWorld world, float x, float y) {
 		super(world, x, y);
-		// TODO Auto-generated constructor stub
+		bodyElem.setUserData(new ElementData(100, ElementType.STONEWALL, this));
+		bodyElem.setType(BodyType.STATIC);
 	}
 
 	@Override
 	public void draw(Graphics2D g) throws IOException {
-		// TODO Auto-generated method stub
-		
+		Vec2 pos = bodyElem.getPosition();
+		if(img == null)
+			img = ImageIO.read(new File("images/stoneWall.png"));	
+		g.drawImage(img, null, (int)pos.x, (int)pos.y);
 	}
 
 }
