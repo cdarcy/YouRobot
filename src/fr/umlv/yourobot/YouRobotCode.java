@@ -106,8 +106,11 @@ public class YouRobotCode implements ApplicationCode{
 					//graphics.setColor(Color.GRAY);
 					//graphics.setColor(Color.WHITE);
 					world.doControl(graphics, event);
+					
 					try {
+						
 						world.updateGame(graphics);
+						//world.updateRaycasts();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

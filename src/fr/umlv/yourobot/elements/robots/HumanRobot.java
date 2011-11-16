@@ -50,7 +50,6 @@ public class HumanRobot extends Robot {
 		if(bonuslist.size()==0)
 			return;
 		Bonus b = bonuslist.poll();
-		System.out.println("Run "+ ((ElementData) b.getBody().getUserData()).type().name());
 		b.run(this);
 	}
 }

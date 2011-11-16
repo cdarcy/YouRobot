@@ -20,12 +20,15 @@ public class CollisionListener implements ContactListener {
 	}
 	@Override
 	public void beginContact(Contact contact) {
-		Element elemA = ((ElementData) contact.getFixtureA().getBody().getUserData()).getObj();
-		Element elemB = ((ElementData) contact.getFixtureB().getBody().getUserData()).getObj();
-
+		
+		Element elemA = world.getElementFromPosition(contact.getFixtureA().getBody().getPosition());
+		Element elemB = world.getElementFromPosition(contact.getFixtureB().getBody().getPosition());
+		if(elemB == null)
+			return;
 		ElementData dataA = (ElementData) elemA.getBody().getUserData();
 		ElementData dataB = (ElementData) elemB.getBody().getUserData();
-
+		
+		
 
 		// A player is bodyA
 		if(dataA.type() == ElementType.PLAYER_ROBOT){
@@ -45,7 +48,9 @@ public class CollisionListener implements ContactListener {
 			
 			//elemB.getBody().getUserData().setLife();
 		}
-
+		else if(dataA.type() == ElementType.EFFECT){
+			elemB.getBody().setActive(false);
+		}
 		if(dataB.getElemClass() == ElementClass.WALL){
 			world.drawElement(elemB);
 		}
@@ -57,8 +62,10 @@ public class CollisionListener implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
+		
+		if(world.getElementFromPosition(contact.getFixtureB().getBody().getPosition()) == null)
+			return;
 		Element elemB = ((ElementData) contact.getFixtureB().getBody().getUserData()).getObj();
-
 		elemB.getBody().setActive(true);
 	}
 
