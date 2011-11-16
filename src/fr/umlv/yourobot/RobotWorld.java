@@ -28,21 +28,14 @@ import fr.umlv.yourobot.elements.walls.WoodWall;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
 import fr.umlv.yourobot.util.MapGenerator;
+import fr.umlv.yourobot.util.MapStyle;
 import fr.umlv.zen.KeyboardEvent;
 
 public class RobotWorld  {
 	
+	private BufferedImage img;
 	private World jboxWorld;
 	private ArrayList<Element> elements;
-	private BufferedImage img;
-		private World jboxWorld;
-	private ArrayList<Element> elements;
-	private ArrayList<Robot> robotMap;
-	private ArrayList<Bonus> bonuses;
-	private ArrayList<Element> tmpelements;
-	private ArrayList<RayCastCallback> callbacks;
-	private ArrayList<HumanRobot> players;
-	private BufferedImage img;
 	private ArrayList<Robot> robotMap;
 	private ArrayList<Bonus> bonuses;
 	private ArrayList<Element> tmpelements;
@@ -103,6 +96,7 @@ public class RobotWorld  {
 
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
 		BorderWall element = new BorderWall(this, x, y, fileName);
+		elements.add(element);
 		return element;
 	}	
 	
@@ -133,22 +127,17 @@ public class RobotWorld  {
 	 * @throws IOException 
 	 */
 	public void updateGame(Graphics2D g) throws IOException {
-		// Draw background
-		g.drawImage(img, null, 0, 0);
 		// Steps jbox2d physics world
 		jboxWorld.step(1/10f, 15, 8);
 		jboxWorld.clearForces();
-
-		//MapGenerator.drawBackground(g);
-
-		drawBackground(g);
+		//MapGenerator background
+		MapGenerator.drawBackground(g, MapStyle.background.get(MapGenerator.value));
 		// Draw bonuses before drawing other elements (robots, walls)
 		drawBonuses(g);
 		// Draw elements of the game
 		draw(g);
 		// Draw Interface
 		drawInterface(g);
-		
 	}
 	/**
 	 * @param args
@@ -187,8 +176,6 @@ public class RobotWorld  {
 			}
 		}
 	}
-	public void draw(Graphics2D g) throws IOException {	
-		g.drawImage(img, null, 0, 0);
 	
 	public void drawBonuses(Graphics2D g) throws IOException {
 		for(Bonus b : bonuses){
@@ -213,11 +200,11 @@ public class RobotWorld  {
 		tmpelements.clear();
 	}
 
-	public void drawBackground (Graphics2D g) throws IOException{
+	/*public void drawBackground (Graphics2D g) throws IOException{
 		if(img == null)
 			img = ImageIO.read(new File("images/background_1.png"));	
 		g.drawImage(img, null, 0, 0);
-	}
+	}*/
 	
 	public void drawInterface(Graphics2D g) throws IOException {
 		g.setColor(Color.WHITE);

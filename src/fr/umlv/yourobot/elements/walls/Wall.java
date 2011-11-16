@@ -9,7 +9,7 @@ import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
 abstract public class Wall extends Element{
-	public static  int WALL_SIZE = 56;
+	public static  int WALL_SIZE = 50;
 	
 	protected FixtureDef fixtureDef;
 	

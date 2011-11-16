@@ -10,6 +10,7 @@ import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.util.MapGenerator;
+import fr.umlv.yourobot.util.MapStyle;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
 import fr.umlv.zen.ApplicationRenderCode;
@@ -59,20 +60,14 @@ public class YouRobotCode implements ApplicationCode{
 				// create map
 				try {
 					MapGenerator.mapRandom(graphics);
+					//MapGenerator.drawArena(graphics, MapStyle.wall.get(MapGenerator.value));
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				world.putBonus();
 				world.putBonus();world.putBonus();
 				world.putBonus();world.putBonus();
 				world.putBonus();
-				try {
-					world.draw(graphics);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
 			}
 		});
 
@@ -114,7 +109,6 @@ public class YouRobotCode implements ApplicationCode{
 				public void render(final Graphics2D graphics) {
 					//graphics.setColor(Color.GRAY);
 					//graphics.setColor(Color.WHITE);
-					graphics.fillRect(Wall.WALL_SIZE, Wall.WALL_SIZE, WIDTH-(2*Wall.WALL_SIZE), HEIGHT-(2*Wall.WALL_SIZE));		
 					world.doControl(graphics, event);
 					try {
 						world.updateGame(graphics);
