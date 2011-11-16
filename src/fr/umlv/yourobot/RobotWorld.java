@@ -19,21 +19,23 @@ import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
+import fr.umlv.yourobot.elements.walls.BorderWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.elements.walls.WoodWall;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
+import fr.umlv.yourobot.util.MapGenerator;
 import fr.umlv.zen.KeyboardEvent;
 
 public class RobotWorld  {
 	
 	private World jboxWorld;
 	private ArrayList<Element> elements;
+	private BufferedImage img;
 	private ArrayList<Robot> robotMap;
 	private ArrayList<Element> tmpelements;
 	private ArrayList<AICallback> callbacks;
 	private ArrayList<HumanRobot> players;
-	private BufferedImage img;
 	
 	public int WIDTH = 800;
 	public int HEIGHT = 600;
@@ -86,6 +88,11 @@ public class RobotWorld  {
 		return element;
 	}	
 
+	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
+		BorderWall element = new BorderWall(this, x, y, fileName);
+		return element;
+	}	
+	
 	public Bonus putBonus() {
 		float x = MathUtils.randomFloat(100, WIDTH-100);
 		float y = MathUtils.randomFloat(100, HEIGHT-100);
@@ -96,21 +103,7 @@ public class RobotWorld  {
 	}	
 
 
-	public void addArena(Graphics2D g) throws IOException{
-		for (int i = 0; i < WIDTH/Wall.WALL_SIZE; i++){
-			if(i<HEIGHT){
-				// GAUCHE
-				addWall(0, i*Wall.WALL_SIZE).draw(g);
-				// DROITE
-				addWall(WIDTH-Wall.WALL_SIZE, i*Wall.WALL_SIZE).draw(g);
-			}
-			// HAUT
-			addWall((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, 0).draw(g);
-			// BAS
-			addWall((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, HEIGHT-Wall.WALL_SIZE).draw(g);
-
-		}
-	}
+	
 	/**
 	 * Get the number of bodies in the world
 	 * 
@@ -127,12 +120,13 @@ public class RobotWorld  {
 	 * @throws IOException 
 	 */
 	public void updateGame(Graphics2D g) throws IOException {
-		
+		// Draw background
+		g.drawImage(img, null, 0, 0);
 		// Steps jbox2d physics world
 		jboxWorld.step(1/10f, 15, 8);
 		jboxWorld.clearForces();
 		// Draw background
-		drowBackgroung(g);
+		//MapGenerator.drawBackground(g);
 		// Draw elements of the game
 		draw(g);
 		// Draw Interface
@@ -177,7 +171,8 @@ public class RobotWorld  {
 			}
 		}
 	}
-	public void draw(Graphics2D g) throws IOException {
+	public void draw(Graphics2D g) throws IOException {	
+		g.drawImage(img, null, 0, 0);
 		for(Element e : elements){
 			if(e != null){
 				e.draw(g);
@@ -187,11 +182,7 @@ public class RobotWorld  {
 		tmpelements.clear();
 	}
 
-	public void drowBackgroung (Graphics2D g) throws IOException{
-		if(img == null)
-			img = ImageIO.read(new File("images/background_1.png"));	
-		g.drawImage(img, null, 0, 0);
-	}
+	
 	
 	public void drawInterface(Graphics2D g) throws IOException {
 		g.setColor(Color.WHITE);
@@ -237,5 +228,11 @@ public class RobotWorld  {
 			if(e.getBody().getPosition().equals(pos))
 				return (HumanRobot) e;
 		return null;
+	}
+
+
+	public void setBackground(String nameBackgroundPicture) throws IOException {
+		System.out.println(nameBackgroundPicture);
+		img = ImageIO.read(new File("images/" + nameBackgroundPicture));	
 	}
 }

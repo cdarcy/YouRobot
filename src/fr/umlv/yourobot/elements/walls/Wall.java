@@ -19,7 +19,7 @@ abstract public class Wall extends Element{
 		shapeElem.setAsBox(WALL_SIZE/2, WALL_SIZE/2, bodyElem.getLocalCenter(), bodyElem.getAngle());
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = shapeElem;
-		fixtureDef.density = 1000000.f;
+		fixtureDef.density = 1.f;
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = 1.f;
 		bodyElem.createFixture(fixtureDef);

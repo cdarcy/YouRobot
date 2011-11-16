@@ -6,6 +6,7 @@ public class ElementData {
 	private float life;
 	private ElementType type;
 	private Element obj;
+	
 	public enum ElementType{
 		ROBOT, 
 		WALL, 

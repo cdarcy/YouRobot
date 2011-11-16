@@ -9,6 +9,7 @@ import fr.umlv.yourobot.elements.bonus.Bomb;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
+import fr.umlv.yourobot.util.MapGenerator;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
 import fr.umlv.zen.ApplicationRenderCode;
@@ -54,9 +55,9 @@ public class YouRobotCode implements ApplicationCode{
 
 			@Override
 			public void render(final Graphics2D graphics) {
-				// Add borders
+				// create map
 				try {
-					world.addArena(graphics);
+					MapGenerator.mapRandom(graphics);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
