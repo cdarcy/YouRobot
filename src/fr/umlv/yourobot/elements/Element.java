@@ -52,7 +52,7 @@ abstract public class Element {
 	}
 	
 	public Vec2 getPosition() {
-		return fixture.getBody().getPosition();
+		return getBody().getPosition();
 	}
 
 
@@ -82,6 +82,8 @@ abstract public class Element {
 		return ((ElementData) getBody().getUserData()).type();
 	}
 
-
+	public Fixture getFixture() {
+		return fixture;
+	}
 
 }

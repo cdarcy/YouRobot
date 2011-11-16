@@ -19,7 +19,8 @@ public class ElementData {
 		STONEWALL(ElementClass.WALL),
 		ICEWALL(ElementClass.WALL),
 		BARWALL(ElementClass.WALL),
-		BORDERWALL(ElementClass.BLOCK);
+		BORDERWALL(ElementClass.BLOCK), 
+		EFFECT(ElementClass.EFFECT);
 		
 		private ElementClass eclass;
 		private ElementType(ElementClass c){
@@ -35,7 +36,8 @@ public class ElementData {
 		ROBOT,
 		WALL,
 		BONUS,
-		BLOCK
+		BLOCK,
+		EFFECT
 	}
 
 	public ElementData(float life, ElementType type, Element obj){

@@ -21,7 +21,7 @@ abstract public class Wall extends Element{
 		fixtureDef.shape = shapeElem;
 		fixtureDef.density = 1.f;
 		fixtureDef.friction = 1.f;
-		fixtureDef.restitution = 1.f;
+		fixtureDef.restitution = .5f;
 		bodyElem.createFixture(fixtureDef);
 	}
 

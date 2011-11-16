@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.util.ElementData;
@@ -20,10 +21,14 @@ import fr.umlv.yourobot.util.MapGenerator;
 public class BorderWall extends Wall{
 	private BufferedImage img;
 	String fileName;
-	
+	protected FixtureDef fixtureDef;
 	public BorderWall(RobotWorld world, float x, float y, String name) throws IOException {
 		super(world, x, y);
 		fileName = name;
+		shapeElem.setAsBox(WALL_SIZE/2, WALL_SIZE/2, bodyElem.getLocalCenter(), bodyElem.getAngle());
+		fixtureDef = new FixtureDef();
+		fixtureDef.shape = shapeElem;
+		fixture = bodyElem.createFixture(fixtureDef);
 		bodyElem.setUserData(new ElementData(100, ElementType.BORDERWALL, this));
 		bodyElem.setType(BodyType.STATIC);
 	}

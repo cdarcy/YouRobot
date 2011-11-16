@@ -41,9 +41,10 @@ public class RobotWorld  {
 	private ArrayList<Element> tmpelements;
 	private ArrayList<RayCastCallback> callbacks;
 	private ArrayList<HumanRobot> players;
-
-	public int WIDTH = 800;
-	public int HEIGHT = 600;
+	private ArrayList<Wall> walls ;
+	
+	public static int WIDTH = 800;
+	public static int HEIGHT = 600;
 
 	public enum RobotGameMod{
 		ONEPLAYER,
@@ -67,6 +68,7 @@ public class RobotWorld  {
 		tmpelements = new ArrayList<>();
 		callbacks = new ArrayList<>();
 		players = new ArrayList<>();
+		walls = new ArrayList<>();
 	}
 
 
@@ -93,11 +95,13 @@ public class RobotWorld  {
 	public WoodWall addWall(int x, int y) {
 		WoodWall element = new WoodWall(this, x, y);
 		elements.add(element);
+		walls.add(element);
 		return element;
 	}	
 
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
 		BorderWall element = new BorderWall(this, x, y, fileName);
+		elements.add(element);
 		return element;
 	}	
 
@@ -130,15 +134,15 @@ public class RobotWorld  {
 	public void updateGame(Graphics2D g) throws IOException {
 		// Steps jbox2d physics world
 		jboxWorld.step(1/10f, 15, 8);
-		jboxWorld.clearForces();
 		//MapGenerator background
 		drawBackground(g);
+		g.fillRect(Wall.WALL_SIZE, Wall.WALL_SIZE, WIDTH-(Wall.WALL_SIZE*2), HEIGHT-(Wall.WALL_SIZE*2));
 		// Draw bonuses before drawing other elements (robots, walls)
 		drawBonuses(g);
 		// Draw elements of the game
 		draw(g);
 		// Draw Interface
-		drawInterface(g);
+		//drawInterface(g);
 	}
 	private void drawBackground(Graphics2D g) {
 		g.drawImage(img, null, Wall.WALL_SIZE, Wall.WALL_SIZE);
@@ -159,7 +163,7 @@ public class RobotWorld  {
 		callbacks.add(callback);
 	}	
 
-	public void updateRaycasts() throws InterruptedException{
+	public  void updateRaycasts() throws InterruptedException{
 		for (HumanRobot p : players){
 			for (RayCastCallback a : callbacks){
 				ComputerRobot robot = (ComputerRobot) getElementFromPosition(((AICallback) a).getOrigin());
@@ -193,9 +197,7 @@ public class RobotWorld  {
 
 	}
 	public void draw(Graphics2D g) throws IOException {
-
-		elements.removeAll(bonuses);
-		for(Element e : elements){
+		for(Element e : players){
 			if(e != null){
 				e.draw(g);
 			}
@@ -210,16 +212,19 @@ public class RobotWorld  {
 				e.draw(g);
 			}
 		}
-		elements.addAll(bonuses);
+		for(Element e : walls){
+			if(e != null){
+				e.draw(g);
+			}
+		}
+		for(Element e : robotMap){
+			if(e != null){
+				e.draw(g);
+			}
+		}
 		effects.clear();
 		tmpelements.clear();
 	}
-
-	/*public void drawBackground (Graphics2D g) throws IOException{
-		if(img == null)
-			img = ImageIO.read(new File("images/background_1.png"));	
-		g.drawImage(img, null, 0, 0);
-	}*/
 
 	public void drawInterface(Graphics2D g) throws IOException {
 		g.setColor(Color.BLACK);
@@ -234,7 +239,7 @@ public class RobotWorld  {
 	}
 
 
-	public synchronized void removeBonus(Vec2 pos) {
+	public void removeBonus(Vec2 pos) {
 		Element elem = getBonus(pos);
 		if(elem != null){
 			bonuses.remove(elem);
@@ -284,7 +289,11 @@ public class RobotWorld  {
 		return null;
 	}
 	public void setBackground(String nameBackgroundPicture) throws IOException {
-		System.out.println(nameBackgroundPicture);
 		img = ImageIO.read(new File("images/" + nameBackgroundPicture));	
+	}
+
+
+	public ArrayList<Wall> getWalls() {
+		return walls;
 	}
 }

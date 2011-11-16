@@ -35,7 +35,7 @@ public class Main {
                 float y = random.nextInt(HEIGHT);
 
                 Color color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255), random.nextInt(255));
-                RadialGradientPaint paint = new RadialGradientPaint(x, y, SIZE, new float[]{0f, 1f}, new Color[]{color, Color.WHITE});
+                RadialGradientPaint paint = new RadialGradientPaint(x, y, 100, new float[]{.3f, 1f}, new Color[]{color, Color.WHITE});
                 graphics.setPaint(paint);
                 graphics.fill(new Ellipse2D.Float(x - SIZE/2, y - SIZE/2, SIZE, SIZE));
               }

@@ -59,7 +59,6 @@ public class YouRobotCode implements ApplicationCode{
 				// create map
 				try {
 					MapGenerator.mapRandom(world, graphics);
-					//MapGenerator.drawArena(graphics, MapStyle.wall.get(MapGenerator.value));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -108,8 +107,11 @@ public class YouRobotCode implements ApplicationCode{
 					//graphics.setColor(Color.GRAY);
 					//graphics.setColor(Color.WHITE);
 					world.doControl(graphics, event);
+					
 					try {
+						
 						world.updateGame(graphics);
+						//world.updateRaycasts();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
