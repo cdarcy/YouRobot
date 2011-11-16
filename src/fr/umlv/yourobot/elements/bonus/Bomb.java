@@ -59,15 +59,14 @@ public class Bomb extends Bonus {
 					final Circle c2 = new Circle(world, paint2, BONUS_SIZE+(i*2),x, y);
 					world.drawEffect(c1);
 					world.drawEffect(c2);
-					Wall wall = world.getWalls().get(0);
-					ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+/*					ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 					lock.readLock().lock();
 					world.getJBoxWorld().raycast(new BombWaveCallback(world, robot), c2.getPosition(), wall.getBody().getWorldCenter());
 					lock.readLock().unlock();
 					lock.readLock().lock();
 					world.removeBonus(c1.getPosition());
 					world.removeBonus(c2.getPosition());
-					lock.readLock().unlock();
+					lock.readLock().unlock();*/
 				}
 				
 			}

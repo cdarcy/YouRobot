@@ -85,7 +85,7 @@ public class RobotWorld  {
 		callbacks.add(new AICallback(this, element));
 		
 	}	
-
+ 
 
 
 	public void addPlayer(HumanRobot p) {
@@ -94,18 +94,12 @@ public class RobotWorld  {
 	}	
 
 
-	public Wall addWall(Wall wall) {
+	public void addWall(Wall wall) {
 		elements.add(wall);
-		
-		return wall;
-
-	public WoodWall addWall(int x, int y) {
-		WoodWall element = new WoodWall(this, x, y);
-		elements.add(element);
-		walls.add(element);
-		return element;
-	}	
-
+		walls.add(wall);
+	}
+	
+	
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
 		BorderWall element = new BorderWall(this, x, y, fileName);
 		elements.add(element);
@@ -143,11 +137,10 @@ public class RobotWorld  {
 		jboxWorld.step(1/10f, 15, 8);
 		//MapGenerator background
 		drawBackground(g);
-		g.fillRect(Wall.WALL_SIZE, Wall.WALL_SIZE, WIDTH-(Wall.WALL_SIZE*2), HEIGHT-(Wall.WALL_SIZE*2));
+		//g.fillRect(Wall.WALL_SIZE, Wall.WALL_SIZE, WIDTH-(Wall.WALL_SIZE*2), HEIGHT-(Wall.WALL_SIZE*2));
 		// Draw bonuses before drawing other elements (robots, walls)
 		drawBonuses(g);
 		//Draw wall
-		MapGenerator.drawWalls(g);
 		// Draw elements of the game
 		draw(g);
 		// Draw Interface
@@ -299,10 +292,5 @@ public class RobotWorld  {
 	}
 	public void setBackground(String nameBackgroundPicture) throws IOException {
 		img = ImageIO.read(new File("images/" + nameBackgroundPicture));	
-	}
-
-
-	public ArrayList<Wall> getWalls() {
-		return walls;
 	}
 }

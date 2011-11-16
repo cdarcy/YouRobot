@@ -24,6 +24,7 @@ import fr.umlv.yourobot.elements.walls.WoodWall;
 public class MapGenerator {
 	public static int value;
 	public static Color color;
+	public static RobotWorld world;
 	public final static int WIDTH = 800;
 	public final static int HEIGHT = 600;
 	public static ArrayList<Element> allWall;
@@ -54,15 +55,15 @@ public class MapGenerator {
 		}
 	}
 
-	public static void mapRandom (RobotWorld world, Graphics2D g) throws IOException{
+	public static void mapRandom (RobotWorld w, Graphics2D g) throws IOException{
 		new MapStyle();
 		value =  (int) MathUtils.randomFloat(0, 4);
+		world = w;
 		String nameBackgroundPicture = MapStyle.background.get(value);
 		String nameWallPicture = MapStyle.wall.get(value);
 		world.setBackground(nameBackgroundPicture);
 		drawArena(g, world, nameWallPicture);
 		setWalls(g, 1);
-		drawWalls(g);
 	}
 
 	public static void drawBackground (Graphics2D g, String nameBackground) throws IOException{
@@ -74,7 +75,6 @@ public class MapGenerator {
 
 	public static void setWalls(Graphics2D g, int level) throws IOException{
 		int wallNumber = level + 10;
-		RobotWorld world = new RobotWorld();
 		allWall = new ArrayList<>();
 		ArrayList<Vec2> allPositions = new ArrayList<>();
 		BarWall bW;
@@ -106,14 +106,6 @@ public class MapGenerator {
 			}
 			else
 				i--;
-		}
-	}
-	
-	public static void drawWalls (Graphics2D g) throws IOException{
-		for(Element e : allWall){
-			if(e != null){
-				e.draw(g);
-			}
 		}
 	}
 }
