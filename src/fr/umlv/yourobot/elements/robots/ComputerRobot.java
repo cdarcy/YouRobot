@@ -22,8 +22,6 @@ public class ComputerRobot extends Robot {
 	@Override
 	public void draw(Graphics2D g) throws IOException{
 		Vec2 pos = this.bodyElem.getPosition();
-		g.setColor(Color.WHITE);
-		g.fillOval((int)pos.x, (int)pos.y, ROBOT_SIZE, ROBOT_SIZE);
 		if(img == null)
 			img = ImageIO.read(new File("images/computerrobot.png"));	
 

@@ -31,13 +31,17 @@ public class CollisionListener implements ContactListener {
 			
 			if(typeElementB == ElementType.BOMB){
 				((HumanRobot) elemA).addBonus((Bonus) world.getElement(elemB.getPosition()));
-				world.removeElement(elemB.getPosition());
+				world.removeBonus(elemB.getPosition());
 			}
 
 
 		}
 		// A computer robot is bodyA
 		else if(typeElementA == ElementType.COMPUTER_ROBOT){
+			if(typeElementB == ElementType.BOMB){
+				elemB.getBody().setActive(false);
+			}
+			// TODO : set life diminution depending on linear velocity
 			
 			//elemB.getBody().getUserData().setLife();
 		}
@@ -49,7 +53,9 @@ public class CollisionListener implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
-		// TODO Auto-generated method stub
+		Element elemB = ((ElementData) contact.getFixtureB().getBody().getUserData()).getObj();
+
+		elemB.getBody().setActive(true);
 	}
 
 	@Override

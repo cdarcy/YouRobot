@@ -1,11 +1,35 @@
 package fr.umlv.yourobot.physics.raycasts;
 
-public class SnapCallback {
-	/*// Joint 
+import org.jbox2d.callbacks.QueryCallback;
+import org.jbox2d.callbacks.RayCastCallback;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Fixture;
+import org.jbox2d.dynamics.joints.WeldJointDef;
+
+import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.robots.HumanRobot;
+
+public class SnapCallback implements QueryCallback{
+	// Joint 
+	private RobotWorld world;
+	private HumanRobot robot;
 	WeldJointDef wjd = new WeldJointDef();
-	wjd.initialize(r.getBody(), contacted, r.getBody().getWorldCenter());	 
-	world.getJBoxWorld().createJoint(wjd);
-	if(world.getJBoxWorld().getJointCount() > 0)
-	System.out.println(world.getJBoxWorld().getJointCount());*/
+
+	public SnapCallback(RobotWorld world, HumanRobot robot){
+		this.world = world;
+		this.robot = robot;
+	}
+	@Override
+	public boolean reportFixture(Fixture fixture) {
+		Vec2 pos = fixture.getBody().getPosition();
+		Element detected = world.getPlayerFromCurrentPosition(pos);
+		
+		wjd.initialize(robot.getBody(), detected.getBody(), robot.getBody().getWorldCenter());	 
+		world.getJBoxWorld().createJoint(wjd);
+		if(world.getJBoxWorld().getJointCount() > 0)
+		System.out.println(world.getJBoxWorld().getJointCount());
+		return true;
+	}
 	
 }

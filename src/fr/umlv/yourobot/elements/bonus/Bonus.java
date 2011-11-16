@@ -14,7 +14,7 @@ import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
 abstract public class Bonus extends Element{
-	protected static  int BONUS_SIZE = 20;
+	protected static  int BONUS_SIZE = 30;
 	protected final RobotWorld world;
 	protected BufferedImage img;
 	protected FixtureDef fixtureDef;
@@ -39,4 +39,5 @@ abstract public class Bonus extends Element{
 	
 
 	abstract public void drawIcon(int x, int y, Graphics2D g) throws IOException;
+	abstract public void run();
 }
