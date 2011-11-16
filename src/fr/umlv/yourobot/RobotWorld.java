@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+
+import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
@@ -16,6 +18,7 @@ import org.jbox2d.dynamics.World;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bomb;
 import fr.umlv.yourobot.elements.bonus.Bonus;
+import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
@@ -30,8 +33,9 @@ public class RobotWorld  {
 	private World jboxWorld;
 	private ArrayList<Element> elements;
 	private ArrayList<Robot> robotMap;
+	private ArrayList<Bonus> bonuses;
 	private ArrayList<Element> tmpelements;
-	private ArrayList<AICallback> callbacks;
+	private ArrayList<RayCastCallback> callbacks;
 	private ArrayList<HumanRobot> players;
 	private BufferedImage img;
 	
@@ -55,6 +59,7 @@ public class RobotWorld  {
 		jboxWorld.setContactListener(new CollisionListener(this));
 		robotMap = new ArrayList<>();
 		elements = new ArrayList<>();
+		bonuses = new ArrayList<>();
 		tmpelements = new ArrayList<>();
 		callbacks = new ArrayList<>();
 		players = new ArrayList<>();
@@ -90,8 +95,8 @@ public class RobotWorld  {
 		float x = MathUtils.randomFloat(100, WIDTH-100);
 		float y = MathUtils.randomFloat(100, HEIGHT-100);
 		System.out.println(x + "," +y);
-		final Bomb element = new Bomb(this, x, y);
-		elements.add(element);
+		final Snap element = new Snap(this, x, y);
+		bonuses.add(element);
 		return element;
 	}	
 
@@ -132,7 +137,9 @@ public class RobotWorld  {
 		jboxWorld.step(1/10f, 15, 8);
 		jboxWorld.clearForces();
 		// Draw background
-		drowBackgroung(g);
+		drawBackground(g);
+		// Draw bonuses before drawing other elements (robots, walls)
+		drawBonuses(g);
 		// Draw elements of the game
 		draw(g);
 		// Draw Interface
@@ -149,21 +156,20 @@ public class RobotWorld  {
 	}
 
 
-	public void addCallback(Robot robot){
-		callbacks.add(new AICallback(this, robot));
+	public void addCallback(RayCastCallback callback){
+		callbacks.add(callback);
 	}	
 	
 	public void updateRaycasts(){
 		for (HumanRobot p : players){
-			for (AICallback a : callbacks){
-				ComputerRobot robot = (ComputerRobot) getRobotFromPosition(a.getOrigin());
+			for (RayCastCallback a : callbacks){
+				ComputerRobot robot = (ComputerRobot) getRobotFromPosition(((AICallback) a).getOrigin());
 				float quarter_diagonal = (float) (Math.sqrt((WIDTH*WIDTH)+(HEIGHT*HEIGHT))/4);
 				float x = (robot.getX()-p.getX())*(robot.getX()-p.getX());
 				float y = (robot.getY()-p.getY())*(robot.getY()-p.getY());
 				float distance = (float) Math.sqrt(x+y);
-
 				if(distance<=quarter_diagonal)
-					jboxWorld.raycast(a, a.getOrigin(), p.getBody().getPosition());
+					jboxWorld.raycast(a, ((AICallback) a).getOrigin(), p.getBody().getPosition());
 			}
 		}
 	}
@@ -177,17 +183,30 @@ public class RobotWorld  {
 			}
 		}
 	}
+	
+	public void drawBonuses(Graphics2D g) throws IOException {
+		for(Bonus b : bonuses){
+			if(b != null){
+				b.draw(g);
+			}
+		}
+		
+	}
 	public void draw(Graphics2D g) throws IOException {
 		for(Element e : elements){
 			if(e != null){
 				e.draw(g);
 			}
 		}
-		elements.removeAll(tmpelements);
+		for(Element e : tmpelements){
+			if(e != null){
+				e.draw(g);
+			}
+		}
 		tmpelements.clear();
 	}
 
-	public void drowBackgroung (Graphics2D g) throws IOException{
+	public void drawBackground (Graphics2D g) throws IOException{
 		if(img == null)
 			img = ImageIO.read(new File("images/background_1.png"));	
 		g.drawImage(img, null, 0, 0);
@@ -206,12 +225,22 @@ public class RobotWorld  {
 	}
 
 
-	public synchronized void removeElement(Vec2 pos) {
-		if(getElement(pos) != null){
-			jboxWorld.destroyBody(getElement(pos).getBody());
-			elements.remove(pos);	
+	public synchronized void removeBonus(Vec2 pos) {
+		Element elem = getBonus(pos);
+		if(elem != null){
+			bonuses.remove(elem);
+			jboxWorld.destroyBody(elem.getBody());
 		}
 	}
+	
+	private Element getBonus(Vec2 pos) {
+		for (Bonus b : bonuses)
+			if(b.getBody().getPosition().equals(pos))
+				return b;
+		return null;
+	}
+
+
 	
 	public synchronized Element getElement(Vec2 pos){
 		for(Element e : elements)

@@ -50,6 +50,7 @@ public class YouRobotCode implements ApplicationCode{
 		world.addRobot(r1);
 		world.addRobot(r2);
 		world.addRobot(r3);
+		world.addWall(400, 150);
 		context.render(new ApplicationRenderCode() {
 
 			@Override

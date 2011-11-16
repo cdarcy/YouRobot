@@ -25,7 +25,7 @@ public class WoodWall extends Wall {
 		g.fillRect((int)pos.x, (int)pos.y, WALL_SIZE, WALL_SIZE);
 		if(img == null)
 			try {
-				img = ImageIO.read(new File("images/block.jpg"));
+				img = ImageIO.read(new File("images/wall_4.png"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

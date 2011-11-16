@@ -32,4 +32,10 @@ public class Bomb extends Bonus {
 		g.drawImage(img, null, (int)x, (int)y);
 	}
 
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
