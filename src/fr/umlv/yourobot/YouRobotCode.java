@@ -10,7 +10,6 @@ import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.util.MapGenerator;
-import fr.umlv.yourobot.util.MapStyle;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
 import fr.umlv.zen.ApplicationRenderCode;

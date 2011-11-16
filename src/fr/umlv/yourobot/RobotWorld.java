@@ -28,12 +28,10 @@ import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.elements.walls.WoodWall;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
-import fr.umlv.yourobot.util.MapGenerator;
-import fr.umlv.yourobot.util.MapStyle;
 import fr.umlv.zen.KeyboardEvent;
 
 public class RobotWorld  {
-	
+
 	private BufferedImage img;
 	private World jboxWorld;
 	private ArrayList<Element> elements;
@@ -43,7 +41,7 @@ public class RobotWorld  {
 	private ArrayList<Element> tmpelements;
 	private ArrayList<RayCastCallback> callbacks;
 	private ArrayList<HumanRobot> players;
-	
+
 	public int WIDTH = 800;
 	public int HEIGHT = 600;
 
@@ -84,7 +82,7 @@ public class RobotWorld  {
 		callbacks.add(new AICallback(this, element));
 		
 	}	
-	
+
 
 
 	public void addPlayer(HumanRobot p) {
@@ -102,7 +100,7 @@ public class RobotWorld  {
 		BorderWall element = new BorderWall(this, x, y, fileName);
 		return element;
 	}	
-	
+
 	public Bonus putBonus() {
 		float x = MathUtils.randomFloat(100, WIDTH-100);
 		float y = MathUtils.randomFloat(100, HEIGHT-100);
@@ -113,7 +111,7 @@ public class RobotWorld  {
 	}	
 
 
-	
+
 	/**
 	 * Get the number of bodies in the world
 	 * 
@@ -160,7 +158,7 @@ public class RobotWorld  {
 	public void addCallback(RayCastCallback callback){
 		callbacks.add(callback);
 	}	
-	
+
 	public void updateRaycasts() throws InterruptedException{
 		for (HumanRobot p : players){
 			for (RayCastCallback a : callbacks){
@@ -175,7 +173,7 @@ public class RobotWorld  {
 			}
 		}
 	}
-	
+
 	public void doControl(Graphics2D g, KeyboardEvent event){
 		if (event == null)
 			return;
@@ -185,14 +183,14 @@ public class RobotWorld  {
 			}
 		}
 	}
-	
+
 	public void drawBonuses(Graphics2D g) throws IOException {
 		for(Bonus b : bonuses){
 			if(b != null){
 				b.draw(g);
 			}
 		}
-		
+
 	}
 	public void draw(Graphics2D g) throws IOException {
 
@@ -222,13 +220,13 @@ public class RobotWorld  {
 			img = ImageIO.read(new File("images/background_1.png"));	
 		g.drawImage(img, null, 0, 0);
 	}*/
-	
+
 	public void drawInterface(Graphics2D g) throws IOException {
-		g.setColor(Color.WHITE);
+		g.setColor(Color.BLACK);
 		Robot p1 = players.get(0);
 		int p1Col = 10;
 		g.drawString("Player 1 : " + p1.getpName() + " - " + p1.getLife()+"%", p1Col, 15);
-		
+
 	}
 
 	public void setMode(RobotGameMod mode) {
@@ -244,7 +242,7 @@ public class RobotWorld  {
 			jboxWorld.destroyBody(elem.getBody());
 		}
 	}
-	
+
 	private Element getBonus(Vec2 pos) {
 		for (Bonus b : bonuses)
 			if(b.getBody().getPosition().equals(pos))
@@ -253,7 +251,7 @@ public class RobotWorld  {
 	}
 
 
-	
+
 	public synchronized Element getElement(Vec2 pos){
 		for(Element e : elements)
 			if(e.getBody().getPosition().equals(pos))
@@ -264,11 +262,10 @@ public class RobotWorld  {
 	public void drawElement(Element element) {
 		tmpelements.add(element);
 	}
-	
+
 	public void drawEffect(Element element){
 		effects.add(element);
 	}
-	
 
 	public HumanRobot getPlayerFromCurrentPosition(Vec2 pos) {
 		for(Element e : players)
