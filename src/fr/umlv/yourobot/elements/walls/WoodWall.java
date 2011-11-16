@@ -10,12 +10,14 @@ import javax.imageio.ImageIO;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.util.ElementData;
+import fr.umlv.yourobot.util.ElementData.ElementType;
 
 public class WoodWall extends Wall {
 
 	public WoodWall(RobotWorld world, float x, float y) {
 		super(world, x, y);
-		// TODO Auto-generated constructor stub
+		bodyElem.setUserData(new ElementData(100, ElementType.WOODWALL, this));
 	}
 
 	@Override

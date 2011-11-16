@@ -1,5 +1,7 @@
 package fr.umlv.yourobot.util;
 
+import java.awt.Window.Type;
+
 import fr.umlv.yourobot.elements.Element;
 
 public class ElementData {
@@ -7,25 +9,47 @@ public class ElementData {
 	private ElementType type;
 	private Element obj;
 	public enum ElementType{
-		ROBOT, 
-		WALL, 
-		BONUS, COMPUTER_ROBOT, PLAYER_ROBOT, BOMB, SNAP, LURE
+		COMPUTER_ROBOT(ElementClass.ROBOT), 
+		PLAYER_ROBOT(ElementClass.ROBOT), 
+		BOMB(ElementClass.BONUS), 
+		SNAP(ElementClass.BONUS), 
+		LURE(ElementClass.BONUS),
+		WOODWALL(ElementClass.WALL),
+		STONEWALL(ElementClass.WALL),
+		ICEWALL(ElementClass.WALL),
+		BARWALL(ElementClass.WALL),
+		BORDERWALL(ElementClass.WALL);
+		
+		private ElementClass eclass;
+		private ElementType(ElementClass c){
+			this.eclass = c;
+		}
+		
+		public ElementClass getEClass(){
+			return eclass;
+		}
 	}
-	
+
+	public enum ElementClass{
+		ROBOT,
+		WALL,
+		BONUS
+	}
+
 	public ElementData(float life, ElementType type, Element obj){
 		this.obj = obj;
 		this.life = life;
 		this.type = type;
 	}
-	
+
 	public ElementData(String pName, float life, ElementType type, Element obj){
 		this(life, type, obj);
 	}
-	
+
 	public ElementType type(){
 		return type;
 	}
-	
+
 	public Element getObj(){
 		return obj;
 	}
@@ -36,10 +60,14 @@ public class ElementData {
 		else 
 			// Do die
 			;
-		
+
 	}
 
 	public float life() {
 		return life;
+	}
+	
+	public ElementClass getElemClass(){
+		return type.getEClass();
 	}
 }

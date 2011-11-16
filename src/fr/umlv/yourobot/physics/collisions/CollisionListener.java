@@ -10,6 +10,7 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.util.ElementData;
+import fr.umlv.yourobot.util.ElementData.ElementClass;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
 public class CollisionListener implements ContactListener {
@@ -22,23 +23,23 @@ public class CollisionListener implements ContactListener {
 		Element elemA = ((ElementData) contact.getFixtureA().getBody().getUserData()).getObj();
 		Element elemB = ((ElementData) contact.getFixtureB().getBody().getUserData()).getObj();
 
-		ElementType typeElementA = ((ElementData) elemA.getBody().getUserData()).type();
-		ElementType typeElementB = ((ElementData) elemB.getBody().getUserData()).type();
+		ElementData dataA = (ElementData) elemA.getBody().getUserData();
+		ElementData dataB = (ElementData) elemB.getBody().getUserData();
 
 
 		// A player is bodyA
-		if(typeElementA == ElementType.PLAYER_ROBOT){
+		if(dataA.type() == ElementType.PLAYER_ROBOT){
 			
-			if(typeElementB == ElementType.BOMB){
-				((HumanRobot) elemA).addBonus((Bonus) world.getElement(elemB.getPosition()));
+			if(dataB.getElemClass() == ElementClass.BONUS){
+				((HumanRobot) elemA).addBonus((Bonus) elemB);
 				world.removeBonus(elemB.getPosition());
 			}
 
 
 		}
 		// A computer robot is bodyA
-		else if(typeElementA == ElementType.COMPUTER_ROBOT){
-			if(typeElementB == ElementType.BOMB){
+		else if(dataA.type() == ElementType.COMPUTER_ROBOT){
+			if(dataB.getElemClass() == ElementClass.BONUS){
 				elemB.getBody().setActive(false);
 			}
 			// TODO : set life diminution depending on linear velocity
@@ -46,7 +47,7 @@ public class CollisionListener implements ContactListener {
 			//elemB.getBody().getUserData().setLife();
 		}
 
-		if(typeElementB == ElementType.WALL){
+		if(dataB.getElemClass() == ElementClass.WALL){
 			world.drawElement(elemB);
 		}
 	}

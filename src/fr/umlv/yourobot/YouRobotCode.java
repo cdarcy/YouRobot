@@ -19,8 +19,8 @@ public class YouRobotCode implements ApplicationCode{
 	final Random random = new Random(0);
 	final int WIDTH = 800;
 	final int HEIGHT = 600;
-	final String[] keysP1 = {"UP","DOWN","LEFT","RIGHT"};
-	final String[] keysP2 = {"Z","S","Q","D"};
+	final String[] keysP1 = {"UP","DOWN","LEFT","RIGHT", "SPACE"};
+	final String[] keysP2 = {"Z","S","Q","D","X"};
 	ComputerRobot r1;
 	ComputerRobot r2;
 	ComputerRobot r3;
@@ -80,8 +80,9 @@ public class YouRobotCode implements ApplicationCode{
 			@Override
 			public void run() {
 				for(;;){
-					world.updateRaycasts();	
+						
 					try {
+						world.updateRaycasts();
 						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();

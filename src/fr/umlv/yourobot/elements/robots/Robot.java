@@ -102,6 +102,7 @@ abstract public class Robot extends Element{
 	public float getLife() {
 		return ((ElementData) bodyElem.getUserData()).life();
 	}
+	
 
 
 

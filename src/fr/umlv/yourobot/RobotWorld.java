@@ -97,6 +97,7 @@ public class RobotWorld  {
 		System.out.println(x + "," +y);
 		final Snap element = new Snap(this, x, y);
 		bonuses.add(element);
+		elements.add(element);
 		return element;
 	}	
 
@@ -160,16 +161,17 @@ public class RobotWorld  {
 		callbacks.add(callback);
 	}	
 	
-	public void updateRaycasts(){
+	public void updateRaycasts() throws InterruptedException{
 		for (HumanRobot p : players){
 			for (RayCastCallback a : callbacks){
-				ComputerRobot robot = (ComputerRobot) getRobotFromPosition(((AICallback) a).getOrigin());
+				ComputerRobot robot = (ComputerRobot) getElementFromPosition(((AICallback) a).getOrigin());
 				float quarter_diagonal = (float) (Math.sqrt((WIDTH*WIDTH)+(HEIGHT*HEIGHT))/4);
 				float x = (robot.getX()-p.getX())*(robot.getX()-p.getX());
 				float y = (robot.getY()-p.getY())*(robot.getY()-p.getY());
 				float distance = (float) Math.sqrt(x+y);
 				if(distance<=quarter_diagonal)
 					jboxWorld.raycast(a, ((AICallback) a).getOrigin(), p.getBody().getPosition());
+				Thread.sleep(1000);
 			}
 		}
 	}
@@ -229,6 +231,7 @@ public class RobotWorld  {
 		Element elem = getBonus(pos);
 		if(elem != null){
 			bonuses.remove(elem);
+			elements.remove(elem);
 			jboxWorld.destroyBody(elem.getBody());
 		}
 	}
@@ -254,17 +257,20 @@ public class RobotWorld  {
 	}
 	
 	
-	public ComputerRobot getRobotFromPosition(Vec2 pos) {
-		for(Element e : elements)
-			if(e.getBody().getPosition().equals(pos))
-				return (ComputerRobot) e;
-		return null;
-	}
 
 	public HumanRobot getPlayerFromCurrentPosition(Vec2 pos) {
 		for(Element e : players)
 			if(e.getBody().getPosition().equals(pos))
 				return (HumanRobot) e;
+		return null;
+	}
+
+
+	public Element getElementFromPosition(Vec2 pos) {
+		for(Element e : elements){
+			if(e.getBody().getPosition().equals(pos))
+				return e;
+		}
 		return null;
 	}
 }

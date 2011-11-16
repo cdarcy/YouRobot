@@ -24,7 +24,6 @@ abstract public class Wall extends Element{
 		fixtureDef.restitution = 1.f;
 		bodyElem.createFixture(fixtureDef);
 		bodyElem.setType(BodyType.STATIC);
-		bodyElem.setUserData(new ElementData(100, ElementType.WALL, this));
 	}
 
 }

@@ -10,6 +10,7 @@ import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
@@ -33,11 +34,10 @@ abstract public class Bonus extends Element{
 		fixtureDef.shape = shapeElem;
 		fixture = bodyElem.createFixture(fixtureDef);
 		bodyElem.setType(BodyType.DYNAMIC);
-		bodyElem.setUserData(new ElementData(100, ElementType.BONUS, this));
 		color = Color.BLACK;
 	}
 	
 
 	abstract public void drawIcon(int x, int y, Graphics2D g) throws IOException;
-	abstract public void run();
+	abstract public void run(final HumanRobot robot);
 }
