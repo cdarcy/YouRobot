@@ -23,12 +23,13 @@ public class SnapCallback implements QueryCallback{
 	@Override
 	public boolean reportFixture(Fixture fixture) {
 		Vec2 pos = fixture.getBody().getPosition();
-		Element detected = world.getPlayerFromCurrentPosition(pos);
-		
+		Element detected = world.getElementFromPosition(pos);
+		System.out.println(detected);
+		System.out.println("snap fixture detected");
+		if(detected == null)
+			return false;
 		wjd.initialize(robot.getBody(), detected.getBody(), robot.getBody().getWorldCenter());	 
 		world.getJBoxWorld().createJoint(wjd);
-		if(world.getJBoxWorld().getJointCount() > 0)
-		System.out.println(world.getJBoxWorld().getJointCount());
 		return true;
 	}
 	

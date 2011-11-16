@@ -3,7 +3,9 @@ package fr.umlv.yourobot.elements.robots;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Queue;
 
 import javax.imageio.ImageIO;
 
@@ -16,10 +18,10 @@ import fr.umlv.yourobot.util.ElementData.ElementType;
 import fr.umlv.yourobot.util.KeyController;
 
 public class HumanRobot extends Robot {
-	private ArrayList<Bonus> bonuslist;	
+	private Queue<Bonus> bonuslist;	
 	public HumanRobot(String pName, RobotWorld world, String[] k, float x, float y) {
 		super(pName, world,  x, y);
-		bonuslist = new ArrayList<>();
+		bonuslist = new ArrayDeque<>();
 		controller = new KeyController(this, k);
 		bodyElem.setUserData(new ElementData(100, ElementType.PLAYER_ROBOT, this));
 	}
@@ -35,12 +37,21 @@ public class HumanRobot extends Robot {
 	public void drawBonusList()  {
 		
 		for (int i = 0;i < bonuslist.size();  i++){
-			System.out.println(bonuslist.get(i));
+			System.out.println(bonuslist.peek());
 		}
 	}
 	public void addBonus(Bonus b) {
 		if(b == null || bonuslist.contains(b))
 			return;
-		bonuslist.add(b);
+		bonuslist.offer(b);
+	}
+	
+	public void runBonus() {
+		System.out.println("Run bonus");
+		System.out.println(bonuslist.size());
+		if(bonuslist.size()==0)
+			return;
+		Bonus b = bonuslist.poll();
+		b.run(this);
 	}
 }

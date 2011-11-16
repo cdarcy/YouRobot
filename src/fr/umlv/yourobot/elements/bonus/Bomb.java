@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
@@ -33,7 +34,7 @@ public class Bomb extends Bonus {
 	}
 
 	@Override
-	public void run() {
+	public void run(HumanRobot robot) {
 		// TODO Auto-generated method stub
 		
 	}

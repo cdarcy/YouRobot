@@ -16,7 +16,6 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.bonus.Bomb;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
@@ -96,7 +95,6 @@ public class RobotWorld  {
 
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
 		BorderWall element = new BorderWall(this, x, y, fileName);
-		elements.add(element);
 		return element;
 	}	
 	
@@ -106,6 +104,7 @@ public class RobotWorld  {
 		System.out.println(x + "," +y);
 		final Snap element = new Snap(this, x, y);
 		bonuses.add(element);
+		elements.add(element);
 		return element;
 	}	
 
@@ -131,7 +130,7 @@ public class RobotWorld  {
 		jboxWorld.step(1/10f, 15, 8);
 		jboxWorld.clearForces();
 		//MapGenerator background
-		MapGenerator.drawBackground(g, MapStyle.background.get(MapGenerator.value));
+		drawBackground(g);
 		// Draw bonuses before drawing other elements (robots, walls)
 		drawBonuses(g);
 		// Draw elements of the game
@@ -139,6 +138,11 @@ public class RobotWorld  {
 		// Draw Interface
 		drawInterface(g);
 	}
+	private void drawBackground(Graphics2D g) {
+		g.drawImage(img, null, Wall.WALL_SIZE, Wall.WALL_SIZE);
+	}
+
+
 	/**
 	 * @param args
 	 */
@@ -153,16 +157,17 @@ public class RobotWorld  {
 		callbacks.add(callback);
 	}	
 	
-	public void updateRaycasts(){
+	public void updateRaycasts() throws InterruptedException{
 		for (HumanRobot p : players){
 			for (RayCastCallback a : callbacks){
-				ComputerRobot robot = (ComputerRobot) getRobotFromPosition(((AICallback) a).getOrigin());
+				ComputerRobot robot = (ComputerRobot) getElementFromPosition(((AICallback) a).getOrigin());
 				float quarter_diagonal = (float) (Math.sqrt((WIDTH*WIDTH)+(HEIGHT*HEIGHT))/4);
 				float x = (robot.getX()-p.getX())*(robot.getX()-p.getX());
 				float y = (robot.getY()-p.getY())*(robot.getY()-p.getY());
 				float distance = (float) Math.sqrt(x+y);
 				if(distance<=quarter_diagonal)
 					jboxWorld.raycast(a, ((AICallback) a).getOrigin(), p.getBody().getPosition());
+				Thread.sleep(1000);
 			}
 		}
 	}
@@ -223,6 +228,7 @@ public class RobotWorld  {
 		Element elem = getBonus(pos);
 		if(elem != null){
 			bonuses.remove(elem);
+			elements.remove(elem);
 			jboxWorld.destroyBody(elem.getBody());
 		}
 	}
@@ -248,12 +254,6 @@ public class RobotWorld  {
 	}
 	
 	
-	public ComputerRobot getRobotFromPosition(Vec2 pos) {
-		for(Element e : elements)
-			if(e.getBody().getPosition().equals(pos))
-				return (ComputerRobot) e;
-		return null;
-	}
 
 	public HumanRobot getPlayerFromCurrentPosition(Vec2 pos) {
 		for(Element e : players)
@@ -263,6 +263,14 @@ public class RobotWorld  {
 	}
 
 
+
+	public Element getElementFromPosition(Vec2 pos) {
+		for(Element e : elements){
+			if(e.getBody().getPosition().equals(pos))
+				return e;
+		}
+		return null;
+	}
 	public void setBackground(String nameBackgroundPicture) throws IOException {
 		System.out.println(nameBackgroundPicture);
 		img = ImageIO.read(new File("images/" + nameBackgroundPicture));	

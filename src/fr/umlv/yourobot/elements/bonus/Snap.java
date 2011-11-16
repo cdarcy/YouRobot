@@ -18,10 +18,10 @@ import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
 public class Snap  extends Bonus  {
-	private HumanRobot robot;
+
 	public Snap(RobotWorld world, float x, float y) {
 		super(world, x, y);
-		bodyElem.setUserData(new ElementData(100, ElementType.BOMB, this));
+		bodyElem.setUserData(new ElementData(100, ElementType.SNAP, this));
 	}
 	
 	public void draw(Graphics2D g) throws IOException{
@@ -37,17 +37,27 @@ public class Snap  extends Bonus  {
 		g.drawImage(img, null, (int)x, (int)y);
 	}
 
-	public void run(){
+	@Override
+	public void run(final HumanRobot robot){
+		System.out.println("Raycasting area");
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				boolean stop = false;
-				/*AABB aabb = new AABB();
-				aabb.lowerBound = robot.getBody().getWorldCenter().add(new Vec2());*/
-				while(!stop){
+				AABB aabb = new AABB();
+				Vec2 center = robot.getBody().getWorldCenter();
+				aabb.lowerBound.x = center.x-100;
+				aabb.lowerBound.y = center.y-100;
+				aabb.upperBound.x = center.x+100;
+				aabb.upperBound.y = center.y+100;
+				world.getJBoxWorld().queryAABB(new SnapCallback(world, robot), aabb);
+				
+				//while(!stop){
 					//world.getJBoxWorld().queryAABB(new SnapCallback(world, robot), aabb);
-				}
+					
+				//}
 			}
 		}).start();
 	}
+
 }
