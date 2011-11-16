@@ -23,7 +23,6 @@ abstract public class Wall extends Element{
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = 1.f;
 		bodyElem.createFixture(fixtureDef);
-		bodyElem.setType(BodyType.STATIC);
 	}
 
 }

@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.util.ElementData;
@@ -23,6 +24,7 @@ public class BorderWall extends Wall{
 		super(world, x, y);
 		fileName = name;
 		bodyElem.setUserData(new ElementData(100, ElementType.BORDERWALL, this));
+		bodyElem.setType(BodyType.STATIC);
 	}
 
 

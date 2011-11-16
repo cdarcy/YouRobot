@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.util.ElementData;
@@ -18,6 +19,7 @@ public class WoodWall extends Wall {
 	public WoodWall(RobotWorld world, float x, float y) {
 		super(world, x, y);
 		bodyElem.setUserData(new ElementData(100, ElementType.WOODWALL, this));
+		bodyElem.setType(BodyType.DYNAMIC);
 	}
 
 	@Override

@@ -15,7 +15,9 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 
+import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.bonus.Bomb;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
@@ -35,6 +37,7 @@ public class RobotWorld  {
 	private BufferedImage img;
 	private World jboxWorld;
 	private ArrayList<Element> elements;
+	private ArrayList<Element> effects;
 	private ArrayList<Robot> robotMap;
 	private ArrayList<Bonus> bonuses;
 	private ArrayList<Element> tmpelements;
@@ -61,6 +64,7 @@ public class RobotWorld  {
 		jboxWorld.setContactListener(new CollisionListener(this));
 		robotMap = new ArrayList<>();
 		elements = new ArrayList<>();
+		effects = new ArrayList<>();
 		bonuses = new ArrayList<>();
 		tmpelements = new ArrayList<>();
 		callbacks = new ArrayList<>();
@@ -78,6 +82,7 @@ public class RobotWorld  {
 		robotMap.add(element);
 		elements.add(element);
 		callbacks.add(new AICallback(this, element));
+		
 	}	
 	
 
@@ -101,8 +106,7 @@ public class RobotWorld  {
 	public Bonus putBonus() {
 		float x = MathUtils.randomFloat(100, WIDTH-100);
 		float y = MathUtils.randomFloat(100, HEIGHT-100);
-		System.out.println(x + "," +y);
-		final Snap element = new Snap(this, x, y);
+		final Bomb element = new Bomb(this, x, y);
 		bonuses.add(element);
 		elements.add(element);
 		return element;
@@ -192,6 +196,7 @@ public class RobotWorld  {
 	}
 	public void draw(Graphics2D g) throws IOException {
 
+		elements.removeAll(bonuses);
 		for(Element e : elements){
 			if(e != null){
 				e.draw(g);
@@ -202,6 +207,13 @@ public class RobotWorld  {
 				e.draw(g);
 			}
 		}
+		for(Element e : effects){
+			if(e != null){
+				e.draw(g);
+			}
+		}
+		elements.addAll(bonuses);
+		effects.clear();
 		tmpelements.clear();
 	}
 
@@ -253,6 +265,9 @@ public class RobotWorld  {
 		tmpelements.add(element);
 	}
 	
+	public void drawEffect(Element element){
+		effects.add(element);
+	}
 	
 
 	public HumanRobot getPlayerFromCurrentPosition(Vec2 pos) {

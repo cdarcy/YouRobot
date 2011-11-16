@@ -65,8 +65,6 @@ public class YouRobotCode implements ApplicationCode{
 					e1.printStackTrace();
 				}
 				world.putBonus();
-				world.putBonus();world.putBonus();
-				world.putBonus();world.putBonus();
 				world.putBonus();
 			}
 		});

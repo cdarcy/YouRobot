@@ -9,6 +9,8 @@ import org.jbox2d.dynamics.joints.WeldJointDef;
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
+import fr.umlv.yourobot.util.ElementData;
+import fr.umlv.yourobot.util.ElementData.ElementClass;
 
 public class SnapCallback implements QueryCallback{
 	// Joint 
@@ -25,12 +27,13 @@ public class SnapCallback implements QueryCallback{
 		Vec2 pos = fixture.getBody().getPosition();
 		Element detected = world.getElementFromPosition(pos);
 		System.out.println(detected);
-		System.out.println("snap fixture detected");
 		if(detected == null)
 			return false;
-		wjd.initialize(robot.getBody(), detected.getBody(), robot.getBody().getWorldCenter());	 
-		world.getJBoxWorld().createJoint(wjd);
+		if(((ElementData) detected.getBody().getUserData()).getElemClass() == ElementClass.WALL){
+			wjd.initialize(robot.getBody(), detected.getBody(), robot.getBody().getWorldCenter());	 
+			world.getJBoxWorld().createJoint(wjd);
+		}
 		return true;
 	}
-	
+
 }
