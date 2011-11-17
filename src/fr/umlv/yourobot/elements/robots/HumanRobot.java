@@ -29,7 +29,7 @@ public class HumanRobot extends Robot {
 	public void draw(Graphics2D g) throws IOException{
 		Vec2 pos = this.bodyElem.getPosition();
 		if(img == null)
-			img = ImageIO.read(new File("images/robot.png"));	
+			img = ImageIO.read(new File("images/robot_game.png"));	
 
 		g.drawImage(img, null, (int)pos.x, (int)pos.y);
 	}

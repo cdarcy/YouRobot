@@ -10,6 +10,7 @@ import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.util.MapGenerator;
+import fr.umlv.yourobot.welcome.LoadingGame;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
 import fr.umlv.zen.ApplicationRenderCode;
@@ -30,100 +31,116 @@ public class YouRobotCode implements ApplicationCode{
 	Wall w1;
 	Bomb b1;
 	RobotWorld world;
+	LoadingGame welcome;
+
 
 	@Override
-	public void run(ApplicationContext context) {
-		// Defining World
-		world = new RobotWorld();
-		world.setMode(RobotGameMod.TWOPLAYER);
-		
-		// Defining ComputerRobots
-		r1 = new ComputerRobot("Computer", world ,300,300);
-		r2 = new ComputerRobot("Computer", world ,300,400);
-		r3 = new ComputerRobot("Computer", world ,300,500);
-		
-		// Defining HumanRobots
-		e1 = new HumanRobot("Camcam", world, keysP1,500, 300);
-		e2 = new HumanRobot("Camcam", world, keysP2,600, 300);
-
-		world.addPlayer(e1);
-		world.addPlayer(e2);
-		world.addRobot(r1);
-		world.addRobot(r2);
-		world.addRobot(r3);
+	public void run(final ApplicationContext context) {
+		//welcome page
 		context.render(new ApplicationRenderCode() {
-
 			@Override
 			public void render(final Graphics2D graphics) {
-				// create map
 				try {
-					MapGenerator.mapRandom(world, graphics);
-				} catch (IOException e1) {
-					e1.printStackTrace();
+					LoadingGame.menu(welcome, graphics);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-				world.putBonus();
-				world.putBonus();
 			}
 		});
+		
 
-		// Thread that update player searching (ray-casts) from enemy robot every 5sec
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				for(;;){
-						
-					try {
-						world.updateRaycasts();
-						Thread.sleep(2000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+	// Defining World
+	world = new RobotWorld();
+	world.setMode(RobotGameMod.TWOPLAYER);
+
+	// Defining ComputerRobots
+	r1 = new ComputerRobot("Computer", world ,300,300);
+	r2 = new ComputerRobot("Computer", world ,300,400);
+	r3 = new ComputerRobot("Computer", world ,300,500);
+
+	// Defining HumanRobots
+	e1 = new HumanRobot("Camcam", world, keysP1,500, 300);
+	e2 = new HumanRobot("Camcam", world, keysP2,600, 300);
+
+	world.addPlayer(e1);
+	world.addPlayer(e2);
+	world.addRobot(r1);
+	world.addRobot(r2);
+	world.addRobot(r3);
+	context.render(new ApplicationRenderCode() {
+		@Override
+		public void render(final Graphics2D graphics) {
+			// create map
+			try {
+				MapGenerator.mapRandom(world, graphics);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			world.putBonus();
+			world.putBonus();
+		}
+	});
+
+	// Thread that update player searching (ray-casts) from enemy robot every 5sec
+	new Thread(new Runnable() {
+		@Override
+		public void run() {
+			for(;;){
+
+				try {
+					world.updateRaycasts();
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
-		}).start();
-		
-		
-		for(;;) {
+		}
+	}).start();
 
-			/*new Runnable() {
+
+	for(;;) {
+
+		/*new Runnable() {
 
 				@Override
 				public void run() {
 					for(;;){
 						world.updateRaycasts();
-						
+
 					}
 				}
-			
+
 			}.run();*/
-			
-			final KeyboardEvent event = context.pollKeyboard();
 
-			context.render(new ApplicationRenderCode() {
+		final KeyboardEvent event = context.pollKeyboard();
 
-				@Override
-				public void render(final Graphics2D graphics) {
-					//graphics.setColor(Color.GRAY);
-					//graphics.setColor(Color.WHITE);
-					world.doControl(graphics, event);
-					
-					try {
-						
-						world.updateGame(graphics);
-						//world.updateRaycasts();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+		context.render(new ApplicationRenderCode() {
 
-				} 
-			});
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
+			@Override
+			public void render(final Graphics2D graphics) {
+				//graphics.setColor(Color.GRAY);
+				//graphics.setColor(Color.WHITE);
+				world.doControl(graphics, event);
+
+				try {
+
+					world.updateGame(graphics);
+					//world.updateRaycasts();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			} 
+		});
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
 		}
 	}
+}
 
 
 }

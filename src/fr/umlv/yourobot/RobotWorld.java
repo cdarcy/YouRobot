@@ -144,7 +144,7 @@ public class RobotWorld  {
 		// Draw elements of the game
 		draw(g);
 		// Draw Interface
-		//drawInterface(g);
+		drawInterface(g);
 	}
 	private void drawBackground(Graphics2D g) {
 		g.drawImage(img, null, Wall.WALL_SIZE, Wall.WALL_SIZE);

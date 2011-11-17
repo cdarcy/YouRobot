@@ -63,7 +63,7 @@ public class MapGenerator {
 		String nameWallPicture = MapStyle.wall.get(value);
 		world.setBackground(nameBackgroundPicture);
 		drawArena(g, world, nameWallPicture);
-		setWalls(g, 1);
+		setWalls(g, 4);
 	}
 
 	public static void drawBackground (Graphics2D g, String nameBackground) throws IOException{
