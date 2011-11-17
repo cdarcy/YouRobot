@@ -1,6 +1,5 @@
 package fr.umlv.yourobot.elements.robots;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;

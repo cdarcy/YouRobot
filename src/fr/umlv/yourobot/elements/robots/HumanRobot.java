@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Queue;
 
 import javax.imageio.ImageIO;

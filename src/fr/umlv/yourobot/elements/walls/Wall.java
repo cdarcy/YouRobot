@@ -1,14 +1,10 @@
 package fr.umlv.yourobot.elements.walls;
 
-import java.util.ArrayList;
-
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.util.ElementData;
-import fr.umlv.yourobot.util.ElementData.ElementType;
 
 abstract public class Wall extends Element{
 	public static  int WALL_SIZE = 50;

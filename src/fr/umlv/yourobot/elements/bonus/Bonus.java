@@ -11,8 +11,6 @@ import org.jbox2d.dynamics.FixtureDef;
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.util.ElementData;
-import fr.umlv.yourobot.util.ElementData.ElementType;
 
 abstract public class Bonus extends Element{
 	protected static  int BONUS_SIZE = 30;

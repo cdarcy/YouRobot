@@ -1,7 +1,5 @@
 package fr.umlv.yourobot.util;
 
-import java.awt.Window.Type;
-
 import fr.umlv.yourobot.elements.Element;
 
 public class ElementData {

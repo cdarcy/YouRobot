@@ -3,8 +3,6 @@ package fr.umlv.yourobot.elements.bonus;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 

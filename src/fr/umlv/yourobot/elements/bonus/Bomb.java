@@ -1,14 +1,10 @@
 package fr.umlv.yourobot.elements.bonus;
 
 import java.awt.Color;
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Ellipse2D.Float;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.imageio.ImageIO;
 
@@ -17,8 +13,6 @@ import org.jbox2d.common.Vec2;
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.elements.walls.Wall;
-import fr.umlv.yourobot.physics.raycasts.BombWaveCallback;
 import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 

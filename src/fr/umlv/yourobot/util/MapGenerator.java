@@ -14,7 +14,6 @@ import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.walls.BarWall;
 import fr.umlv.yourobot.elements.walls.IceWall;
 import fr.umlv.yourobot.elements.walls.StoneWall;
