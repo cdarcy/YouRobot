@@ -29,7 +29,6 @@ public class HumanRobot extends Robot {
 		Vec2 pos = this.bodyElem.getPosition();
 		if(img == null)
 			img = ImageIO.read(new File("images/robot_game.png"));	
-
 		g.drawImage(img, null, (int)pos.x, (int)pos.y);
 	}
 
@@ -39,6 +38,7 @@ public class HumanRobot extends Robot {
 			System.out.println(bonuslist.peek());
 		}
 	}
+	
 	public void addBonus(Bonus b) {
 		if(b == null || bonuslist.contains(b))
 			return;

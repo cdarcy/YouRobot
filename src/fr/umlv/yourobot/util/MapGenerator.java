@@ -2,6 +2,7 @@ package fr.umlv.yourobot.util;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,9 @@ import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.BarWall;
 import fr.umlv.yourobot.elements.walls.IceWall;
 import fr.umlv.yourobot.elements.walls.StoneWall;
@@ -106,6 +109,30 @@ public class MapGenerator {
 			else
 				i--;
 		}
+		/*
+		public void run(final RobotWorld world){
+			new Thread(new Runnable(){
+
+				@Override
+				public void run() {
+					for(int i=0;i<100;i++)
+					{
+
+						
+						
+						/*float x = world.getBody().getWorldCenter().x+(BONUS_SIZE/2);
+						float y = robot.getBody().getWorldCenter().y+(BONUS_SIZE/2);
+						RadialGradientPaint paint1 = new RadialGradientPaint(x, y, BONUS_SIZE+i, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.ORANGE});
+						RadialGradientPaint paint2 = new RadialGradientPaint(x, y, BONUS_SIZE+(i*2), new float[]{0f, 1f}, new Color[]{Color.YELLOW, Color.YELLOW});
+						final Circle c1 = new Circle(world, paint1, BONUS_SIZE+i, x, y);
+						final Circle c2 = new Circle(world, paint2, BONUS_SIZE+(i*2),x, y);
+						world.drawEffect(c1);
+						world.drawEffect(c2);
+					}
+					
+				}
+			}).run();
+		}*/
 	}
 }
 

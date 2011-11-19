@@ -19,7 +19,7 @@ import fr.umlv.zen.KeyboardEvent;
 
 abstract public class Robot extends Element{
 	private String pName;
-	protected int ROBOT_SIZE = 46;
+	protected int ROBOT_SIZE = 35;
 	private final static int SPEED = 1000000;
 	protected FixtureDef fixtureDef;
 	protected Fixture fixture;
@@ -36,7 +36,7 @@ abstract public class Robot extends Element{
 		this.pName = pName;
 		fixtureDef = new FixtureDef();
 		//shapeElem.setAsBox(ROBOT_SIZE/2, ROBOT_SIZE/2);
-		shapeElem.setAsBox(ROBOT_SIZE/2, ROBOT_SIZE/2, bodyElem.getLocalCenter(), bodyElem.getAngle());
+		shapeElem.setAsBox(ROBOT_SIZE/2, ROBOT_SIZE/3, bodyElem.getLocalCenter(), bodyElem.getAngle());
 		fixtureDef.shape = shapeElem;
 		fixtureDef.density = 1.f;
 		fixtureDef.friction = .7f;

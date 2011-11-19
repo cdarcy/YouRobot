@@ -13,7 +13,7 @@ abstract public class Wall extends Element{
 	
 	public Wall(RobotWorld world, float x, float y) {
 		super(world, x, y );
-		shapeElem.setAsBox(WALL_SIZE/2, WALL_SIZE/2, bodyElem.getLocalCenter(), bodyElem.getAngle());
+		shapeElem.setAsBox(WALL_SIZE/2, WALL_SIZE/4);
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = shapeElem;
 		fixtureDef.density = 1.f;
