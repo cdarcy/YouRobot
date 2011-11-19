@@ -2,28 +2,72 @@ package fr.umlv.yourobot.physics.raycasts;
 
 import java.util.ArrayList;
 
+import org.jbox2d.callbacks.QueryCallback;
 import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.util.ElementData;
+import fr.umlv.yourobot.util.ElementData.ElementClass;
 import fr.umlv.yourobot.util.ElementData.ElementType;
+import fr.umlv.yourobot.util.MapGenerator;
 
-public class BombWaveCallback implements RayCastCallback {
+public class BombWaveCallback implements QueryCallback {
 	private RobotWorld world;
-	private Robot robot;
+	private HumanRobot robot;
 	private ArrayList<Element> raycasted;
-	private Vec2 distance; 
+	private Vec2 distance;
+	private float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
 	
-	public BombWaveCallback(RobotWorld world, Robot robot){
+	
+	public BombWaveCallback(RobotWorld world, HumanRobot robot){
 		this.world = world;
 		this.robot = robot;
 		this.raycasted = new ArrayList<>();
 	}
+
+	@Override
+	public boolean reportFixture(Fixture fixture) {
+		Element p = (Element) fixture.getBody().getUserData();
+		if(p == null)
+			return false;
+		
+		if(p.typeElem() == ElementType.BORDERWALL){
+			if(!raycasted.contains(p))
+				raycasted.add(p);
+			return false;
+		}
+		float x = (robot.getX()-p.getX())*(robot.getX()-p.getX());
+		float y = (robot.getY()-p.getY())*(robot.getY()-p.getY());
+		float distance = (float) Math.sqrt(x+y);
+		
+		if(p.classElem() != ElementClass.WALL)
+			return false;
+		
+		if(distance <= quarter_diagonal){
+			System.out.println("bomb wave");
+			p.getBody().setType(BodyType.DYNAMIC);	
+			Vec2 pos = new Vec2(robot.getPosition());
+			Vec2 force = pos.sub(p.getBody().getPosition()).negate();
+			p.getBody().applyForce(new Vec2(force.x*10000,force.y*10000), p.getPosition());
+			p.getBody().setAwake(true);
+			//world.removeBonus(p.getPosition());
+			//robot.clearBonus();
+			System.out.println(p);
+
+			return true;
+		}
+		return false;
+	}
 	
+	public ArrayList<Element> getRaycastedBorder(){
+		return raycasted;
+	}
 	/*
 	 * return -1: ignore this fixture and continue 
 	 * return 0: terminate the ray cast return fraction: clip the ray to this point 
@@ -31,7 +75,7 @@ public class BombWaveCallback implements RayCastCallback {
 	 * 
 	 */
 	
-	@Override
+	/*@Override
 	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
 		
 		Vec2 pos = fixture.getBody().getPosition();
@@ -58,5 +102,7 @@ public class BombWaveCallback implements RayCastCallback {
 			return fraction;
 		}
 		return -1;
-	}
+	}*/
+	
+	
 }

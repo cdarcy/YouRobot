@@ -5,29 +5,34 @@ import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Circle;
+import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
+import fr.umlv.yourobot.physics.raycasts.BombWaveCallback;
 import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
 public class Bomb extends Bonus {
 
 	public Bomb(RobotWorld world, float x, float y) {
-		super(world, x, y);
-		bodyElem.setUserData(new ElementData(100, ElementType.BOMB, this));
+		super(x, y);
+		type = ElementType.BOMB;
 	}
 
-	public void draw(Graphics2D g) throws IOException{
+	public Element draw(Graphics2D g) throws IOException{
 		Vec2 pos = this.bodyElem.getPosition();
 		if(img == null)
 			img = ImageIO.read(new File("images/bombicon.png"));	
 		g.drawImage(img, null, (int)pos.x, (int)pos.y);
+		return this;
 	}
 
 	public void drawIcon(int x, int y, Graphics2D g) throws IOException {
@@ -36,8 +41,8 @@ public class Bomb extends Bonus {
 		g.drawImage(img, null, (int)x, (int)y);
 	}
 
-	@Override
-	public void run(final HumanRobot robot) {
+	public ArrayList<Element> run(final RobotWorld world, final HumanRobot robot) {
+		final BombWaveCallback b = new BombWaveCallback(world, robot);
 		new Thread(new Runnable(){
 
 			@Override
@@ -51,19 +56,18 @@ public class Bomb extends Bonus {
 					RadialGradientPaint paint2 = new RadialGradientPaint(x, y, BONUS_SIZE+(i*2), new float[]{0f, 1f}, new Color[]{Color.YELLOW, Color.YELLOW});
 					final Circle c1 = new Circle(world, paint1, BONUS_SIZE+i, x, y);
 					final Circle c2 = new Circle(world, paint2, BONUS_SIZE+(i*2),x, y);
+					// Make a small box.
+					
+					Vec2 pos = new Vec2(x, y);
+					Vec2 d = new Vec2(BONUS_SIZE+(i*2), BONUS_SIZE+(i*2));
+					AABB aabb = new AABB(pos.sub(d), pos.add(d));
+					world.getJBoxWorld().queryAABB(b, aabb);
 					world.drawEffect(c1);
 					world.drawEffect(c2);
-/*					ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
-					lock.readLock().lock();
-					world.getJBoxWorld().raycast(new BombWaveCallback(world, robot), c2.getPosition(), wall.getBody().getWorldCenter());
-					lock.readLock().unlock();
-					lock.readLock().lock();
-					world.removeBonus(c1.getPosition());
-					world.removeBonus(c2.getPosition());
-					lock.readLock().unlock();*/
 				}
 				
 			}
 		}).run();
+		return b.getRaycastedBorder();
 	}
 }

@@ -5,13 +5,18 @@ import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.geom.Ellipse2D;
 import java.io.IOException;
+
+import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.Filter;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.KeyController;
@@ -20,37 +25,32 @@ import fr.umlv.zen.KeyboardEvent;
 abstract public class Robot extends Element{
 	private String pName;
 	protected int ROBOT_SIZE = 35;
-	private final static int SPEED = 1000000;
-	protected FixtureDef fixtureDef;
-	protected Fixture fixture;
-	protected KeyController controller;
-	private double direction = 0.;
-	
+	protected float SPEED = 10000;
+	protected float RADIUS = ROBOT_SIZE/2;
+	protected float direction = 1.f;
+	protected CircleShape shapeElem;
 
 	/*
 	 * Public contructor for human players
 	 * 
 	 */
-	public Robot(String pName, RobotWorld world, float x, float y) {
-		super(world, x, y);
-		this.pName = pName;
+	public Robot(float x, float y) {
+		super(x, y);
+		shapeElem = new CircleShape();
+		shapeElem.m_radius = RADIUS;
 		fixtureDef = new FixtureDef();
-		//shapeElem.setAsBox(ROBOT_SIZE/2, ROBOT_SIZE/2);
-		shapeElem.setAsBox(ROBOT_SIZE/2, ROBOT_SIZE/3, bodyElem.getLocalCenter(), bodyElem.getAngle());
 		fixtureDef.shape = shapeElem;
 		fixtureDef.density = 1.f;
-		fixtureDef.friction = .7f;
-		fixtureDef.restitution = .3f;
-		bodyElem.createFixture(fixtureDef);
-		bodyElem.resetMassData();
-		bodyElem.setType(BodyType.DYNAMIC);
-		
+		fixtureDef.friction = .3f;
+		fixtureDef.restitution = .5f;
+		//fixtureDef.filter = this.filter;
+
 	}
+	
 	public void setBody(Body bodyElem){
 		super.setBody(bodyElem);
 	}
 
-	abstract public void draw(Graphics2D g) throws IOException;
 
 	public void fireBomb(final Graphics2D g){
 		final float x = bodyElem.getWorldCenter().x;
@@ -62,44 +62,40 @@ abstract public class Robot extends Element{
 			@Override
 			public void run() {
 				for (int i = 0 ;i < 100; i++){
-					g.fill(new Ellipse2D.Float(x - bodyElem.getWorldCenter().x, bodyElem.getWorldCenter().y, ROBOT_SIZE+i, ROBOT_SIZE+i));
+					g.fill(new Ellipse2D.Float(x-bodyElem.getWorldCenter().x, bodyElem.getWorldCenter().y, ROBOT_SIZE+i, ROBOT_SIZE+i));
 				}
 			}
 		}.run();
 	}
 
-	public void rotateLeft() {
-		//TODO get direction from this.body.getVelocity() ???
-		direction = (direction - 10.)%360;
-		if(direction<0) direction = 360;
-		Vec2 vec = new Vec2();
-		vec.x = (float)Math.cos(Math.toRadians(direction))*SPEED;
-		vec.y = (float)Math.sin(Math.toRadians(direction))*SPEED;
-		bodyElem.setLinearVelocity(vec);
-		//TODO need to check dimension of the PolygonShape because I think something is wrong collision are a little bit weird sometimes
-		shapeElem.setAsBox(ROBOT_SIZE/2, ROBOT_SIZE/2, new Vec2(vec.x-ROBOT_SIZE/2, vec.y-ROBOT_SIZE/2), (int)direction);
-		}
+
+
+	public void rotate(float inc){
+		direction = (direction + inc)%360;
+		bodyElem.setType(BodyType.DYNAMIC);
+		bodyElem.setLinearDamping(.05f);
+	}
 	
-	public void rotateRight() {
-		//TODO get direction from this.body.getVelocity() ???
-		direction = (direction + 10.)%360;
-		Vec2 vec = new Vec2();
-		vec.x = (float)Math.cos(Math.toRadians(direction))*SPEED;
-		vec.y = (float)Math.sin(Math.toRadians(direction))*SPEED;
-		bodyElem.setLinearVelocity(vec);
-		//TODO need to check dimension of the PolygonShape, I think something is wrong collision are a little bit weird sometimes
-		shapeElem.setAsBox(ROBOT_SIZE/2, ROBOT_SIZE/2, new Vec2(vec.x-ROBOT_SIZE/2, vec.y-ROBOT_SIZE/2), (int)direction);
-		}
-	
-	
-	public void control(Graphics2D g, KeyboardEvent event){
-		controller.control(event);
+	public void impulse(RobotWorld world) {
+		Vec2 imp = new Vec2();
+		imp.x = (float)Math.cos(Math.toRadians(direction))*SPEED;
+		imp.y = (float)Math.sin(Math.toRadians(direction))*SPEED;
+		bodyElem.applyLinearImpulse(imp, bodyElem.getLocalCenter());
+		Vec2 pos = bodyElem.getPosition();
+		RadialGradientPaint paint = new RadialGradientPaint(pos.x, pos.y, 10, new float[]{0f, 1f}, new Color[]{Color.BLACK, Color.BLACK });
+		Circle c = new Circle(world,paint,10,pos.x,pos.y);
+		
+		System.out.println("impulse");
+		world.drawEffect(c);
 	}
 
 	public String getpName() {
 		return pName;
 	}
-	public float getLife() {
-		return ((ElementData) bodyElem.getUserData()).life();
-	}
+
+	
+
+
+
+
 }

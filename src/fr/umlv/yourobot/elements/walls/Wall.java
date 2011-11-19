@@ -1,5 +1,18 @@
 package fr.umlv.yourobot.elements.walls;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
+
+import javax.imageio.ImageIO;
+
+import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.collision.shapes.ShapeType;
+import org.jbox2d.common.Transform;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
@@ -8,19 +21,19 @@ import fr.umlv.yourobot.elements.Element;
 
 abstract public class Wall extends Element{
 	public static  int WALL_SIZE = 50;
+	public static  int RADIUS = WALL_SIZE/2;
 	
-	protected FixtureDef fixtureDef;	
+	protected PolygonShape shapeElem;
 	
-	public Wall(RobotWorld world, float x, float y) {
-		super(world, x, y );
-		shapeElem.setAsBox(WALL_SIZE/2, WALL_SIZE/4);
+	public Wall(float x, float y) {
+		super(x, y);
+
+		shapeElem = new PolygonShape();
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = shapeElem;
 		fixtureDef.density = 1.f;
-		fixtureDef.friction = 1.f;
+		fixtureDef.friction = .3f;
 		fixtureDef.restitution = .5f;
-		bodyElem.createFixture(fixtureDef);
-		bodyElem.setType(BodyType.STATIC);
+		shapeElem.setAsBox(RADIUS, RADIUS);
 	}
-
 }

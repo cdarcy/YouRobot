@@ -1,7 +1,6 @@
 package fr.umlv.yourobot;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,7 +12,9 @@ import javax.imageio.ImageIO;
 import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
 import fr.umlv.yourobot.elements.Element;
@@ -26,6 +27,13 @@ import fr.umlv.yourobot.elements.walls.BorderWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
+import fr.umlv.yourobot.physics.raycasts.GameDetectionCallback;
+import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
+import fr.umlv.yourobot.util.ElementData;
+import fr.umlv.yourobot.util.MapGenerator;
+import fr.umlv.yourobot.util.ElementData.ElementType;
+import fr.umlv.zen.ApplicationCode;
+import fr.umlv.zen.ApplicationRenderCode;
 import fr.umlv.zen.KeyboardEvent;
 
 public class RobotWorld  {
@@ -34,21 +42,24 @@ public class RobotWorld  {
 	private World jboxWorld;
 	private ArrayList<Element> elements;
 	private ArrayList<Element> effects;
-	private ArrayList<Robot> robotMap;
+	private ArrayList<Robot> robots;
 	private ArrayList<Bonus> bonuses;
 	private ArrayList<Element> tmpelements;
-	private ArrayList<RayCastCallback> callbacks;
+	private ArrayList<GameDetectionCallback> callbacks;
 	private ArrayList<HumanRobot> players;
 	private ArrayList<Wall> walls ;
 	
 	public static int WIDTH = 800;
 	public static int HEIGHT = 600;
-
+	final String[] keysP1 = {"UP","LEFT","RIGHT", "SPACE"};
+	final String[] keysP2 = {"Z","Q","D","X"};
+	
 	public enum RobotGameMod{
 		ONEPLAYER,
 		TWOPLAYER
 	}
 
+	Body body;
 	RobotGameMod mode;
 	/**
 	 * Create a new world simulation
@@ -57,9 +68,11 @@ public class RobotWorld  {
 	 */
 	public RobotWorld() {
 		jboxWorld = new World(new Vec2(0, 0), true);
-		jboxWorld.createBody(new BodyDef());		
+		body = jboxWorld.createBody(new BodyDef());
+		body.setUserData(this);
 		jboxWorld.setContactListener(new CollisionListener(this));
-		robotMap = new ArrayList<>();
+		jboxWorld.setContinuousPhysics(true);
+		robots = new ArrayList<>();
 		elements = new ArrayList<>();
 		effects = new ArrayList<>();
 		bonuses = new ArrayList<>();
@@ -70,36 +83,40 @@ public class RobotWorld  {
 	}
 
 
-	/**
-	 * Add a body to the world
-	 * 
-	 * @param body The body to be added to the world
-	 */
+	public void addElement(Element element, BodyType type, boolean createFixture){
+		elements.add(element);
+		Body body = jboxWorld.createBody(element.getBodyDef());
+		element.setBody(body);
+		body.setUserData(element);
+		body.setType(type);
+		if(createFixture)
+			body.createFixture(element.getFixtureDef());
+	}
 
 	public void addRobot(Robot element) {
-		robotMap.add(element);
-		elements.add(element);
 		callbacks.add(new AICallback(this, element));
-		
+		robots.add(element);
+		addElement(element, BodyType.DYNAMIC, true);
 	}	
  
 
 
-	public void addPlayer(HumanRobot p) {
-		players.add(p);
-		elements.add(p);
+	public void addPlayer(HumanRobot element) {
+		players.add(element);
+		addElement(element, BodyType.DYNAMIC, true);
 	}	
 
 
-	public void addWall(Wall wall) {
-		elements.add(wall);
-		walls.add(wall);
+	public void addWall(Wall element) {
+		walls.add(element);
+		addElement(element, BodyType.STATIC, true);
 	}
 	
 	
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
-		BorderWall element = new BorderWall(this, x, y, fileName);
-		elements.add(element);
+		BorderWall element = new BorderWall(x, y, fileName);
+		addElement(element, BodyType.STATIC, true);
+		element.getBody().setAngularDamping(.0f);
 		return element;
 	}	
 
@@ -108,12 +125,11 @@ public class RobotWorld  {
 		float y = MathUtils.randomFloat(100, HEIGHT-100);
 		final Bomb element = new Bomb(this, x, y);
 		bonuses.add(element);
-		elements.add(element);
+		
+		addElement(element, BodyType.STATIC, true);
 		return element;
 	}	
-
-
-
+	
 	/**
 	 * Get the number of bodies in the world
 	 * 
@@ -129,9 +145,11 @@ public class RobotWorld  {
 	 * @param timeStep The amount of time to simulate
 	 * @throws IOException 
 	 */
-	public void updateGame(Graphics2D g) throws IOException {
+	public void updateGame(Graphics2D g, KeyboardEvent event) throws IOException {
+		doControl(g, event);
 		// Steps jbox2d physics world
-		jboxWorld.step(1/10f, 15, 8);
+		jboxWorld.step(1/30f, 15, 8);
+		jboxWorld.clearForces();
 		//MapGenerator background
 		drawBackground(g);
 		//g.fillRect(Wall.WALL_SIZE, Wall.WALL_SIZE, WIDTH-(Wall.WALL_SIZE*2), HEIGHT-(Wall.WALL_SIZE*2));
@@ -142,9 +160,11 @@ public class RobotWorld  {
 		draw(g);
 		// Draw Interface
 		drawInterface(g);
+		
+		
 	}
 	private void drawBackground(Graphics2D g) {
-		g.drawImage(img, null, Wall.WALL_SIZE, Wall.WALL_SIZE);
+		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
 	}
 
 
@@ -158,21 +178,15 @@ public class RobotWorld  {
 	}
 
 
-	public void addCallback(RayCastCallback callback){
+	public void addCallback(GameDetectionCallback callback){
 		callbacks.add(callback);
 	}	
 
 	public  void updateRaycasts() throws InterruptedException{
-		for (HumanRobot p : players){
-			for (RayCastCallback a : callbacks){
-				ComputerRobot robot = (ComputerRobot) getElementFromPosition(((AICallback) a).getOrigin());
-				float quarter_diagonal = (float) (Math.sqrt((WIDTH*WIDTH)+(HEIGHT*HEIGHT))/4);
-				float x = (robot.getX()-p.getX())*(robot.getX()-p.getX());
-				float y = (robot.getY()-p.getY())*(robot.getY()-p.getY());
-				float distance = (float) Math.sqrt(x+y);
-				if(distance<=quarter_diagonal)
-					jboxWorld.raycast(a, ((AICallback) a).getOrigin(), p.getBody().getPosition());
-				Thread.sleep(1000);
+		
+		for (Robot p : players){
+			for (GameDetectionCallback a : callbacks){
+				a.raycast(p);
 			}
 		}
 	}
@@ -206,17 +220,17 @@ public class RobotWorld  {
 				e.draw(g);
 			}
 		}
-		for(Element e : effects){
-			if(e != null){
-				e.draw(g);
-			}
-		}
 		for(Element e : walls){
 			if(e != null){
 				e.draw(g);
 			}
 		}
-		for(Element e : robotMap){
+		for(Element e : robots){
+			if(e != null){
+				e.draw(g);
+			}
+		}
+		for(Element e : effects){
 			if(e != null){
 				e.draw(g);
 			}
@@ -227,11 +241,10 @@ public class RobotWorld  {
 
 	public void drawInterface(Graphics2D g) throws IOException {
 		g.setColor(Color.BLACK);
-		Font fonte = new Font(Font.SERIF,Font.BOLD, 15);
-		g.setFont(fonte);
-		Robot p1 = players.get(0);
+		HumanRobot p1 = players.get(0);
 		int p1Col = 10;
 		g.drawString("Player 1 : " + p1.getpName() + " - " + p1.getLife()+"%", p1Col, 15);
+
 	}
 
 	public void setMode(RobotGameMod mode) {
@@ -291,4 +304,58 @@ public class RobotWorld  {
 	public void setBackground(String nameBackgroundPicture) throws IOException {
 		img = ImageIO.read(new File("images/" + nameBackgroundPicture));	
 	}
+
+
+	public void init(Graphics2D g) {
+		setMode(RobotGameMod.TWOPLAYER);
+
+		ComputerRobot r1;
+		ComputerRobot r2;
+		ComputerRobot r3;
+		HumanRobot e1;
+		HumanRobot e2;
+		Wall w1;
+		Bomb b1;
+
+		// Defining ComputerRobots
+		r1 = new ComputerRobot(this, 300,300);
+		r2 = new ComputerRobot(this, 300,400);
+		r3 = new ComputerRobot(this, 300,500);
+
+		// Defining HumanRobots
+		e1 = new HumanRobot(this,"Camcam",keysP1,500, 300);
+		e2 = new HumanRobot(this,"Camcam",keysP2,600, 300);
+
+		addPlayer(e1);
+		addPlayer(e2);
+		addRobot(r1);
+		addRobot(r2);
+		addRobot(r3);
+		
+		// create map
+		try {
+			MapGenerator.mapRandom(this, g);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		putBonus();
+		putBonus();
+	}
+
+
+	public ArrayList<Bonus> getBonusList() {
+		return bonuses;
+	}
+
+
+	public void drawArena() {
+		tmpelements.addAll(MapGenerator.getArena());
+	}
+
+
+	public void drawElements(ArrayList<Element> torepaint) {
+		tmpelements.addAll(torepaint);		
+	}
 }
+
+

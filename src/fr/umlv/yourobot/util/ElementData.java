@@ -1,6 +1,7 @@
 package fr.umlv.yourobot.util;
 
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.util.ElementData.ElementType;
 
 public class ElementData {
 	private float life;

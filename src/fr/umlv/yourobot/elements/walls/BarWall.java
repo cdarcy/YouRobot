@@ -1,34 +1,36 @@
 package fr.umlv.yourobot.elements.walls;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.jbox2d.common.Settings;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.util.ElementData;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
 
 public class BarWall extends Wall {
 
-	public BarWall(RobotWorld world, float x, float y) {
-		super(world, x, y);
-		bodyElem.setUserData(new ElementData(100, ElementType.BARWALL, this));
-		bodyElem.setType(BodyType.STATIC);
+	public BarWall(float x, float y) {
+		super(x, y);
+		type = ElementType.BARWALL;
 	}
 
 	@Override
-	public void draw(Graphics2D g) throws IOException {
-		Vec2 pos = bodyElem.getPosition();
+	public Element draw(Graphics2D g) throws IOException {
 		if(img == null)
 			img = ImageIO.read(new File("images/barrierWall.png"));	
-		g.drawImage(img, null, (int)pos.x, (int)pos.y);
-		
+		g.drawImage(img, null, getX()-8, getY()-8);	
+		shapeElem.setAsBox(WALL_SIZE, WALL_SIZE);
+		return this;
 	}
 
 }

@@ -12,10 +12,13 @@ import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.Filter;
 import org.jbox2d.dynamics.Fixture;
+import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.util.ElementData;
+import fr.umlv.yourobot.util.ElementData.ElementClass;
 import fr.umlv.yourobot.util.ElementData.ElementType;
 
 abstract public class Element {
@@ -24,32 +27,32 @@ abstract public class Element {
 	final ArrayList<Shape> jbox2DShapes = new ArrayList<>();
 	protected BufferedImage img;
 	protected Body bodyElem;
-	protected PolygonShape shapeElem;
 	protected BodyDef bodyDef;
 	protected Fixture fixture;
+	protected FixtureDef fixtureDef;
+	protected Filter filter;
+	protected ElementType type;
 	public Color color = Color.RED;
 	int size;
 	
 
-	abstract public void draw(Graphics2D g) throws IOException;
+	abstract public Element draw(Graphics2D g) throws IOException;
 
 	/*
 	 * Creates body and shape. Sets element position 
 	 */
-	public Element(RobotWorld world, float x, float y){
-		shapeElem = new PolygonShape();
+	public Element(float x, float y){
 		bodyDef = new BodyDef();
 		bodyDef.position.set(x, y);
-		bodyElem = world.getJBoxWorld().createBody(bodyDef);
 	}
 	
 	public Body getBody() {
 		return bodyElem;
 	}
-
-	public PolygonShape getShape() {
-		return shapeElem;
+	public FixtureDef getFixtureDef() {
+		return fixtureDef;
 	}
+
 	
 	public Vec2 getPosition() {
 		return getBody().getPosition();
@@ -77,13 +80,15 @@ abstract public class Element {
 		this.bodyElem.applyForce(force, bodyElem.getLocalCenter());
 	}
 
-
-	public ElementType getType() {
-		return ((ElementData) getBody().getUserData()).type();
-	}
-
 	public Fixture getFixture() {
 		return fixture;
+	}
+	
+	public ElementType typeElem() {
+		return type;
+	}
+	public ElementClass classElem() {
+		return type.getEClass();
 	}
 
 }
