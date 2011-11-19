@@ -21,7 +21,7 @@ public class YouRobotCode implements ApplicationCode{
 	final Random random = new Random(0);
 	final int WIDTH = 800;
 	final int HEIGHT = 600;
-	final String[] keysP1 = {"UP","DOWN","LEFT","RIGHT", "SPACE", "ENTER"};
+	final String[] keysP1 = {"UP","DOWN","LEFT","RIGHT", "SPACE"};
 	final String[] keysP2 = {"Z","S","Q","D","X"};
 	ComputerRobot r1;
 	ComputerRobot r2;
@@ -36,6 +36,11 @@ public class YouRobotCode implements ApplicationCode{
 
 	@Override
 	public void run(final ApplicationContext context) {
+		// Defining World
+		world = new RobotWorld();
+		e1 = new HumanRobot("Camcam", world, keysP1,75, 75);
+		world.addPlayer(e1);
+
 		//welcome page
 		context.render(new ApplicationRenderCode() {
 			@Override
@@ -50,41 +55,110 @@ public class YouRobotCode implements ApplicationCode{
 			}
 		});
 
-		
-	// Defining World
-	world = new RobotWorld();
-	world.setMode(RobotGameMod.TWOPLAYER);
+		for(;;) {
+			final KeyboardEvent event = context.pollKeyboard();
+			context.render(new ApplicationRenderCode() {
+				@Override
+				public void render(final Graphics2D graphics) {
+					//graphics.setColor(Color.GRAY);
+					//graphics.setColor(Color.WHITE);
+					//world.doControl(graphics, event);
+					try {
+						world.doControlMenu(graphics, event, world);
+						//System.out.println("mode de jeu: "+world.getMode());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
-	// Defining ComputerRobots
-	r1 = new ComputerRobot("Computer", world ,300,300);
-	r2 = new ComputerRobot("Computer", world ,300,400);
-	r3 = new ComputerRobot("Computer", world ,300,500);
+					/*try {
 
-	// Defining HumanRobots
-	e1 = new HumanRobot("Camcam", world, keysP1,500, 300);
-	e2 = new HumanRobot("Camcam", world, keysP2,600, 300);
+					world.updateGame(graphics);
+					//world.updateRaycasts();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}*/
 
-	world.addPlayer(e1);
-	world.addPlayer(e2);
-	world.addRobot(r1);
-	world.addRobot(r2);
-	world.addRobot(r3);
-	context.render(new ApplicationRenderCode() {
-		@Override
-		public void render(final Graphics2D graphics) {
-			// create map
+				} 
+			});
 			try {
-				MapGenerator.mapRandom(world, graphics);
-			} catch (IOException e1) {
+				Thread.sleep(20);
+			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			world.putBonus();
-			world.putBonus();
+			if (world.getMode() != null)
+				break;
 		}
-	});
 
-	// Thread that update player searching (ray-casts) from enemy robot every 5sec
-	new Thread(new Runnable() {
+		if (world.getMode() == RobotGameMod.TWOPLAYER){
+			// Defining HumanRobots
+			e2 = new HumanRobot("Loulou", world, keysP2,600, 300);
+			world.addPlayer(e2);
+		}
+
+		// Defining ComputerRobots
+		r1 = new ComputerRobot("Computer", world ,300,300);
+		r2 = new ComputerRobot("Computer", world ,300,400);
+		r3 = new ComputerRobot("Computer", world ,300,500);
+		world.addRobot(r1);
+		world.addRobot(r2);
+		world.addRobot(r3);
+
+		context.render(new ApplicationRenderCode() {
+			@Override
+			public void render(final Graphics2D graphics) {
+				// create map
+				try {
+					MapGenerator.mapRandom(world, graphics);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				world.putBonus();
+				world.putBonus();
+			}
+		});
+
+
+		new Runnable() {
+			@Override
+			public void run() {
+				for(;;){
+					try {
+						world.updateRaycasts();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					final KeyboardEvent event = context.pollKeyboard();
+					context.render(new ApplicationRenderCode() {
+						@Override
+						public void render(final Graphics2D graphics) {
+							System.out.println("plop");
+							world.doControl(graphics, event);
+							try {
+
+								world.updateGame(graphics);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+
+						} 
+					});
+				}
+			}
+		}.run();
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+	}
+}
+
+
+
+
+// Thread that update player searching (ray-casts) from enemy robot every 5sec
+/*new Thread(new Runnable() {
 		@Override
 		public void run() {
 			for(;;){
@@ -99,48 +173,8 @@ public class YouRobotCode implements ApplicationCode{
 		}
 	}).start();
 
-
-	for(;;) {
-
-		/*new Runnable() {
-
-				@Override
-				public void run() {
-					for(;;){
-						world.updateRaycasts();
-
-					}
-				}
-
-			}.run();*/
-
-		final KeyboardEvent event = context.pollKeyboard();
-
-		context.render(new ApplicationRenderCode() {
-
-			@Override
-			public void render(final Graphics2D graphics) {
-				//graphics.setColor(Color.GRAY);
-				//graphics.setColor(Color.WHITE);
-				world.doControl(graphics, event);
-
-				try {
-
-					world.updateGame(graphics);
-					//world.updateRaycasts();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-			} 
-		});
-		try {
-			Thread.sleep(20);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-	}
-}
+	}*/
 
 
-}
+
+

@@ -95,6 +95,10 @@ abstract public class Robot extends Element{
 	public void control(Graphics2D g, KeyboardEvent event){
 		controller.control(event);
 	}
+	
+	public void controlMenu(Graphics2D g, KeyboardEvent event, RobotWorld world) throws IOException{
+		controller.controlMenu(event, g, world);			
+	}
 
 	public String getpName() {
 		return pName;

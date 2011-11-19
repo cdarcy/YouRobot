@@ -13,9 +13,13 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 
+import fr.umlv.yourobot.util.KeyController;
+import fr.umlv.zen.KeyboardEvent;
+
 public class LoadingGame {
 	protected static BufferedImage img;
 	private World jboxWorld;
+	protected static KeyController controller;
 	
 	public LoadingGame() {
 		jboxWorld = new World(new Vec2(0, 0), true);
@@ -32,7 +36,7 @@ public class LoadingGame {
 		if(img == null)
 			img = ImageIO.read(new File("images/accueil.png"));	
 		g.drawImage(img, null, 0, 0);
-		drawSelectMenuMP(g);
+		drawSelectMenuSP(g);
 	}
 
 	public static void drawSelectMenuSP(Graphics2D g) throws IOException {
@@ -52,4 +56,6 @@ public class LoadingGame {
 		g.setColor(Color.WHITE);
 		g.drawString("Multi players", 330, 550);
 	}
+	
+	
 }

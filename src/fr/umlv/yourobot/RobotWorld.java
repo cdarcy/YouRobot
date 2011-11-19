@@ -16,6 +16,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 
+import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bomb;
 import fr.umlv.yourobot.elements.bonus.Bonus;
@@ -26,6 +27,8 @@ import fr.umlv.yourobot.elements.walls.BorderWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
+import fr.umlv.yourobot.util.MapGenerator;
+import fr.umlv.yourobot.welcome.LoadingGame;
 import fr.umlv.zen.KeyboardEvent;
 
 public class RobotWorld  {
@@ -40,6 +43,7 @@ public class RobotWorld  {
 	private ArrayList<RayCastCallback> callbacks;
 	private ArrayList<HumanRobot> players;
 	private ArrayList<Wall> walls ;
+	private ArrayList<Circle> IOMap ;
 	
 	public static int WIDTH = 800;
 	public static int HEIGHT = 600;
@@ -67,6 +71,7 @@ public class RobotWorld  {
 		callbacks = new ArrayList<>();
 		players = new ArrayList<>();
 		walls = new ArrayList<>();
+		IOMap = new ArrayList<>();
 	}
 
 
@@ -186,6 +191,13 @@ public class RobotWorld  {
 			}
 		}
 	}
+	
+	public void doControlMenu(Graphics2D g, KeyboardEvent event, RobotWorld world) throws IOException{
+		if (event == null)
+			return;
+		HumanRobot r;
+		players.get(0).controlMenu(g, event, world);
+	}
 
 	public void drawBonuses(Graphics2D g) throws IOException {
 		for(Bonus b : bonuses){
@@ -216,6 +228,11 @@ public class RobotWorld  {
 				e.draw(g);
 			}
 		}
+		for (Element e : IOMap){
+			if(e!=null){
+				e.draw(g);
+			}
+		}
 		for(Element e : robotMap){
 			if(e != null){
 				e.draw(g);
@@ -236,6 +253,10 @@ public class RobotWorld  {
 
 	public void setMode(RobotGameMod mode) {
 		this.mode = mode;
+	}
+	
+	public RobotGameMod getMode(){
+		return this.mode;
 	}
 
 
@@ -266,6 +287,10 @@ public class RobotWorld  {
 
 	public void drawElement(Element element) {
 		tmpelements.add(element);
+	}
+	
+	public void drawIOMap(Circle circle) {
+		IOMap.add(circle);
 	}
 
 	public void drawEffect(Element element){
