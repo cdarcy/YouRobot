@@ -21,7 +21,7 @@ public class YouRobotCode implements ApplicationCode{
 	final Random random = new Random(0);
 	final int WIDTH = 800;
 	final int HEIGHT = 600;
-	final String[] keysP1 = {"UP","DOWN","LEFT","RIGHT", "SPACE"};
+	final String[] keysP1 = {"UP","DOWN","LEFT","RIGHT", "SPACE", "ENTER"};
 	final String[] keysP2 = {"Z","S","Q","D","X"};
 	ComputerRobot r1;
 	ComputerRobot r2;
@@ -49,8 +49,8 @@ public class YouRobotCode implements ApplicationCode{
 				}
 			}
 		});
-		
 
+		
 	// Defining World
 	world = new RobotWorld();
 	world.setMode(RobotGameMod.TWOPLAYER);

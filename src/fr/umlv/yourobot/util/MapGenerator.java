@@ -3,6 +3,7 @@ package fr.umlv.yourobot.util;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +31,9 @@ public class MapGenerator {
 	public final static int WIDTH = 800;
 	public final static int HEIGHT = 600;
 	public static ArrayList<Element> allWall;
+	public static Circle circle1;
+	public static Circle circle2;
+	public static Circle circle3;
 
 	public static void drawArena(Graphics2D g, RobotWorld world, String nameWallPicture) throws IOException{
 		if (value == 0)	color = new Color(0, 0, 100); //BLUE
@@ -69,9 +73,10 @@ public class MapGenerator {
 	}
 
 	public static void drawBackground (Graphics2D g, String nameBackground) throws IOException{
-
-		BufferedImage img = ImageIO.read(new File("images/" + nameBackground));	
+		BufferedImage img = ImageIO.read(new File("images/" + nameBackground));
+		RadialGradientPaint p = new RadialGradientPaint(80f, 80f, 20f, 1.0, Color.BLUE);
 		g.drawImage(img, null, Wall.WALL_SIZE, Wall.WALL_SIZE);
+		
 
 	}
 

@@ -1,6 +1,7 @@
 package fr.umlv.yourobot;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -226,10 +227,11 @@ public class RobotWorld  {
 
 	public void drawInterface(Graphics2D g) throws IOException {
 		g.setColor(Color.BLACK);
+		Font fonte = new Font(Font.SERIF,Font.BOLD, 15);
+		g.setFont(fonte);
 		Robot p1 = players.get(0);
 		int p1Col = 10;
 		g.drawString("Player 1 : " + p1.getpName() + " - " + p1.getLife()+"%", p1Col, 15);
-
 	}
 
 	public void setMode(RobotGameMod mode) {
