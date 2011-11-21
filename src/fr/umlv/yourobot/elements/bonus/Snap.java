@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
 
 import javax.imageio.ImageIO;
 
@@ -18,6 +19,7 @@ import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
+import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
 import fr.umlv.yourobot.physics.raycasts.SnapCallback;
 import fr.umlv.yourobot.util.ElementType;
 
@@ -38,12 +40,17 @@ public class Snap  extends Bonus  {
 	@Override
 	public ArrayList<Element> run(final RobotWorld world, final HumanRobot robot){
 		System.out.println("Raycasting area");
-
+		SnapCallback callback = new SnapCallback(world, robot);
 		Vec2 center = robot.getBody().getWorldCenter();
-		Vec2 d = new Vec2(200,200);
+		Vec2 d = new Vec2(100,100);
 		AABB aabb = new AABB(center.sub(d), center.add(d));
-		world.getJBoxWorld().queryAABB(new SnapCallback(world, robot), aabb);
-
+		long start = System.nanoTime();
+		while((System.nanoTime()-start)/10000<(length*1000)){
+			
+			world.getJBoxWorld().queryAABB(callback, aabb);
+			System.out.println((System.nanoTime()-start)/10000);
+		}
+		callback.clearJoints();
 		return null;
 	}
 

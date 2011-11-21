@@ -32,9 +32,9 @@ abstract public class Wall extends Element{
 		shapeElem = new PolygonShape();
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = shapeElem;
-		fixtureDef.density = 1.f;
-		fixtureDef.friction = .3f;
-		fixtureDef.restitution = .5f;
+		fixtureDef.density = 0.f;
+		fixtureDef.friction = 0.f;
+		fixtureDef.restitution = 0.f;
 		shapeElem.setAsBox(RADIUS, RADIUS);
 	}
 	

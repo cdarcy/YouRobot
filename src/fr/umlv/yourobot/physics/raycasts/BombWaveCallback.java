@@ -42,9 +42,6 @@ public class BombWaveCallback implements QueryCallback {
 			return false;
 		}
 
-		if(p.classElem() != ElementClass.WALL)
-			return false;
-
 
 		System.out.println("bomb wave");
 		p.getBody().setType(BodyType.DYNAMIC);	
