@@ -2,11 +2,19 @@ package fr.umlv.yourobot.util;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RadialGradientPaint;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import java.util.Collection;
+
+import java.awt.geom.Ellipse2D.Float;
+
 
 import javax.imageio.ImageIO;
 
@@ -14,6 +22,7 @@ import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.walls.BarWall;
 import fr.umlv.yourobot.elements.walls.BorderWall;
@@ -21,17 +30,21 @@ import fr.umlv.yourobot.elements.walls.IceWall;
 import fr.umlv.yourobot.elements.walls.StoneWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.elements.walls.WoodWall;
+import fr.umlv.zen.KeyboardEvent;
 
 public class MapGenerator {
+
 	private static int value;
 	private static Color color;
 	private static RobotWorld world;
 	private static BufferedImage img;
-	private final static int WIDTH = 800;
-	private final static int HEIGHT = 600;
-	public static ArrayList<Element> allWall;
 	private static ArrayList<BorderWall> arena;
-	
+	public final static int WIDTH = 800;
+	public final static int HEIGHT = 600;
+	private static final Point2D Point2D = null;
+	public static ArrayList<Element> allWall;
+
+
 	public static void drawArena(Graphics2D g, RobotWorld world, String nameWallPicture) throws IOException{
 		arena = new ArrayList<>();
 		if (value == 0)	color = new Color(0, 0, 100); //BLUE
@@ -43,19 +56,23 @@ public class MapGenerator {
 			if(i<HEIGHT){
 				// GAUCHE
 				g.setColor(color);
-				arena.add(world.addBorder(0, i*Wall.WALL_SIZE, nameWallPicture).draw(g));
+				Element element = world.addBorder(0, i*Wall.WALL_SIZE, nameWallPicture);
+				arena.add((BorderWall) element.draw(g, world.getApi()));
 				
 				// DROITE
 				//g.rotate(Math.PI, WIDTH-(Wall.WALL_SIZE/2), i*(Wall.WALL_SIZE/2));
 				g.setColor(color);
-				arena.add(world.addBorder(WIDTH-(Wall.WALL_SIZE-10), i*Wall.WALL_SIZE, nameWallPicture).draw(g));
+			    element =  world.addBorder(WIDTH-(Wall.WALL_SIZE-10), i*Wall.WALL_SIZE, nameWallPicture);
+				arena.add((BorderWall) element.draw(g, world.getApi()));
 			}
 			// HAUT
 			g.setColor(color);
-			arena.add(world.addBorder((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, 0, nameWallPicture).draw(g));
+			Element element = world.addBorder((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, 0, nameWallPicture);
+			arena.add((BorderWall) element.draw(g, world.getApi()));
 			// BAS
 			g.setColor(color);
-			arena.add(world.addBorder((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, HEIGHT-(Wall.WALL_SIZE-10), nameWallPicture).draw(g));
+			element = world.addBorder((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, HEIGHT-(Wall.WALL_SIZE-10), nameWallPicture);
+			arena.add((BorderWall) element.draw(g, world.getApi()));
 			
 		}
 		
@@ -76,7 +93,7 @@ public class MapGenerator {
 		System.out.println("draw arena");
 		for(int i=0;i<arena.size();i++)
 			try {
-				arena.get(i).draw(g);
+				arena.get(i).draw(g, world.getApi());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -88,16 +105,29 @@ public class MapGenerator {
 		if(img == null)
 			img = ImageIO.read(new File("images/" + nameBackground));	
 		g.drawImage(img, null, Wall.WALL_SIZE-10, Wall.WALL_SIZE-10);
+		BufferedImage img = ImageIO.read(new File("images/" + nameBackground));
+		g.drawImage(img, null, Wall.WALL_SIZE, Wall.WALL_SIZE);
 	}
 
 	public static void setWalls(Graphics2D g, int level) throws IOException{
 		int wallNumber = level + 10;
 		allWall = new ArrayList<>();
 		ArrayList<Vec2> allPositions = new ArrayList<>();
-		BarWall bW;
-		WoodWall wW;
-		IceWall iW;
-		StoneWall sW;
+		
+		RadialGradientPaint paint1 = new RadialGradientPaint(75, 75, 40, new float[]{0f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
+		Circle circle1 = new Circle (world, paint1, 40, 80, 80);
+		allPositions.add(new Vec2(80, 80));
+		RadialGradientPaint paint2 = new RadialGradientPaint(75, 515, 40, new float[]{0f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
+		Circle circle2 = new Circle (world, paint2, 40, 80, 520);
+		allPositions.add(new Vec2(80, 520));
+		RadialGradientPaint paint3 = new RadialGradientPaint(710, 300, 40, new float[]{0f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
+		Circle circle3 = new Circle (world, paint3, 40, 720, 300);
+		allPositions.add(new Vec2(720, 300));
+		
+		world.drawIOMap(circle1);
+		world.drawIOMap(circle2);
+		world.drawIOMap(circle3);
+		
 		for (int i=0 ; i<wallNumber ; i++){
 			//give a position in the map between the border
 			//the map is represented like a matrix
@@ -133,5 +163,6 @@ public class MapGenerator {
 	public static ArrayList<BorderWall> getArena() {
 		return arena;
 	}
+
 }
 

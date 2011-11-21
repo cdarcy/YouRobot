@@ -8,13 +8,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.BodyType;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.util.ElementData;
-import fr.umlv.yourobot.util.ElementData.ElementType;
-
+import fr.umlv.yourobot.util.ElementType;
 
 public class IceWall extends Wall {
 
@@ -24,15 +21,14 @@ public class IceWall extends Wall {
 	}
 
 	@Override
-	public Element draw(Graphics2D g) throws IOException {
-		Vec2 pos = bodyElem.getPosition();
-		if(img == null)
-			img = ImageIO.read(new File("images/iceWall.png"));	
-		g.drawImage(img, null, (int)pos.x-8, (int)pos.y-8);
+	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+		final Vec2 pos = bodyElem.getPosition();
+		if (img == null) {
+			img = ImageIO.read(new File("images/iceWall.png"));
+		}
+		api.drawWall(pos, img, Color.BLUE, g);
 		shapeElem.setAsBox(WALL_SIZE, WALL_SIZE);
 		return this;
 	}
-	
-	
 
 }

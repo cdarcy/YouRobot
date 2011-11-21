@@ -17,9 +17,8 @@ import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.util.ElementData;
-import fr.umlv.yourobot.util.ElementData.ElementClass;
-import fr.umlv.yourobot.util.ElementData.ElementType;
+import fr.umlv.yourobot.util.ElementClass;
+import fr.umlv.yourobot.util.ElementType;
 
 abstract public class Element {
 
@@ -36,7 +35,7 @@ abstract public class Element {
 	int size;
 	
 
-	abstract public Element draw(Graphics2D g) throws IOException;
+	abstract public Element draw(Graphics2D g, DrawAPI api) throws IOException;
 
 	/*
 	 * Creates body and shape. Sets element position 

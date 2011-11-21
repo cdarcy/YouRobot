@@ -12,9 +12,9 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.util.ElementData;
-import fr.umlv.yourobot.util.ElementData.ElementType;
+import fr.umlv.yourobot.util.ElementType;
 
 
 public class BarWall extends Wall {
@@ -24,11 +24,13 @@ public class BarWall extends Wall {
 		type = ElementType.BARWALL;
 	}
 
+
+
 	@Override
-	public Element draw(Graphics2D g) throws IOException {
+	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
 		if(img == null)
 			img = ImageIO.read(new File("images/barrierWall.png"));	
-		g.drawImage(img, null, getX()-8, getY()-8);	
+		g.drawImage(img, null, getX(), getY());	
 		shapeElem.setAsBox(WALL_SIZE, WALL_SIZE);
 		return this;
 	}

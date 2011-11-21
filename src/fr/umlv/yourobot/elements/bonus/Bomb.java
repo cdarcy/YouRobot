@@ -14,25 +14,17 @@ import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Circle;
+import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.physics.raycasts.BombWaveCallback;
-import fr.umlv.yourobot.util.ElementData;
-import fr.umlv.yourobot.util.ElementData.ElementType;
+import fr.umlv.yourobot.util.ElementType;
 
 public class Bomb extends Bonus {
 
 	public Bomb(RobotWorld world, float x, float y) {
 		super(x, y);
 		type = ElementType.BOMB;
-	}
-
-	public Element draw(Graphics2D g) throws IOException{
-		Vec2 pos = this.bodyElem.getPosition();
-		if(img == null)
-			img = ImageIO.read(new File("images/bombicon.png"));	
-		g.drawImage(img, null, (int)pos.x, (int)pos.y);
-		return this;
 	}
 
 	public void drawIcon(int x, int y, Graphics2D g) throws IOException {
@@ -63,11 +55,16 @@ public class Bomb extends Bonus {
 					AABB aabb = new AABB(pos.sub(d), pos.add(d));
 					world.getJBoxWorld().queryAABB(b, aabb);
 					world.drawEffect(c1);
-					world.drawEffect(c2);
+					
 				}
 				
 			}
 		}).run();
 		return b.getRaycastedBorder();
+	}
+
+	@Override
+	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+		return super.draw("bombicon.png", g, api);
 	}
 }

@@ -15,8 +15,9 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.util.ElementData;
-import fr.umlv.yourobot.util.ElementData.ElementType;
+import fr.umlv.yourobot.elements.DrawAPI;
+import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.util.ElementType;
 
 public class BorderWall extends Wall{
 	private BufferedImage img;
@@ -30,12 +31,16 @@ public class BorderWall extends Wall{
 	}
 
 
+	public BorderWall(BorderWall borderWall) throws IOException {
+		this(borderWall.getBody().getPosition().x, borderWall.getBody().getPosition().y, "");
+	}
+
+
 	@Override
-	public BorderWall draw(Graphics2D g) throws IOException {
-		if(img == null)
-			img = ImageIO.read(new File("images/" + fileName));
-		g.drawImage(img, null, getX()-8, getY()-8);	
-		shapeElem.setAsBox(WALL_SIZE, WALL_SIZE);
+	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+		super.draw(this, fileName, g, api);
 		return this;
 	}
+
+
 }

@@ -17,6 +17,7 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
 
 abstract public class Wall extends Element{
@@ -35,5 +36,13 @@ abstract public class Wall extends Element{
 		fixtureDef.friction = .3f;
 		fixtureDef.restitution = .5f;
 		shapeElem.setAsBox(RADIUS, RADIUS);
+	}
+	
+	public Wall draw(Element wall, String fileName, Graphics2D g, DrawAPI api) throws IOException {
+		if(img == null)
+			img = ImageIO.read(new File("images/" + fileName));
+		api.drawWall(wall.getBody().getPosition(), img, Color.lightGray, g);
+		shapeElem.setAsBox(RADIUS, RADIUS);
+		return this;
 	}
 }

@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
 
-import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -17,9 +17,14 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
+import fr.umlv.yourobot.elements.Circle;
+import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.TexturedDrawAPI;
 import fr.umlv.yourobot.elements.bonus.Bomb;
 import fr.umlv.yourobot.elements.bonus.Bonus;
+import fr.umlv.yourobot.elements.bonus.Lure;
+import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
@@ -28,12 +33,8 @@ import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
 import fr.umlv.yourobot.physics.raycasts.GameDetectionCallback;
-import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
-import fr.umlv.yourobot.util.ElementData;
+import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.MapGenerator;
-import fr.umlv.yourobot.util.ElementData.ElementType;
-import fr.umlv.zen.ApplicationCode;
-import fr.umlv.zen.ApplicationRenderCode;
 import fr.umlv.zen.KeyboardEvent;
 
 public class RobotWorld  {
@@ -48,12 +49,13 @@ public class RobotWorld  {
 	private ArrayList<GameDetectionCallback> callbacks;
 	private ArrayList<HumanRobot> players;
 	private ArrayList<Wall> walls ;
-	
+	private ArrayList<Circle> IOMap ;
+	private TexturedDrawAPI api;
 	public static int WIDTH = 800;
 	public static int HEIGHT = 600;
-	final String[] keysP1 = {"UP","LEFT","RIGHT", "SPACE"};
+	final String[] keysP1 = {"UP","LEFT","RIGHT","SPACE"};
 	final String[] keysP2 = {"Z","Q","D","X"};
-	
+
 	public enum RobotGameMod{
 		ONEPLAYER,
 		TWOPLAYER
@@ -70,6 +72,7 @@ public class RobotWorld  {
 		jboxWorld = new World(new Vec2(0, 0), true);
 		body = jboxWorld.createBody(new BodyDef());
 		body.setUserData(this);
+		mode = RobotGameMod.ONEPLAYER;
 		jboxWorld.setContactListener(new CollisionListener(this));
 		jboxWorld.setContinuousPhysics(true);
 		robots = new ArrayList<>();
@@ -80,6 +83,9 @@ public class RobotWorld  {
 		callbacks = new ArrayList<>();
 		players = new ArrayList<>();
 		walls = new ArrayList<>();
+		IOMap = new ArrayList<>();
+		if(api == null)
+			api = new TexturedDrawAPI();
 	}
 
 
@@ -98,7 +104,7 @@ public class RobotWorld  {
 		robots.add(element);
 		addElement(element, BodyType.DYNAMIC, true);
 	}	
- 
+
 
 
 	public void addPlayer(HumanRobot element) {
@@ -111,8 +117,11 @@ public class RobotWorld  {
 		walls.add(element);
 		addElement(element, BodyType.STATIC, true);
 	}
-	
-	
+
+	public void addBonus(Bonus b){
+		addElement(b, BodyType.STATIC, true);
+		bonuses.add(b);
+	}
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
 		BorderWall element = new BorderWall(x, y, fileName);
 		addElement(element, BodyType.STATIC, true);
@@ -120,16 +129,30 @@ public class RobotWorld  {
 		return element;
 	}	
 
-	public Bonus putBonus() {
-		float x = MathUtils.randomFloat(100, WIDTH-100);
-		float y = MathUtils.randomFloat(100, HEIGHT-100);
-		final Bomb element = new Bomb(this, x, y);
-		bonuses.add(element);
-		
-		addElement(element, BodyType.STATIC, true);
-		return element;
+	public void putBonus() {
+		ArrayList<ElementType> list = new ArrayList<>();
+		Bonus b ;
+		list.add(ElementType.BOMB);
+		list.add(ElementType.SNAP);
+		list.add(ElementType.LURE);
+		for (int i=0;i<5;i++){
+			float x = MathUtils.randomFloat(100, WIDTH-100);
+			float y = MathUtils.randomFloat(100, HEIGHT-100);			
+			int value = Math.round(MathUtils.randomFloat(0,list.size()-1));
+			switch (list.get(value)){
+			case BOMB:
+				addBonus(new Bomb(this, x, y));
+				break;
+			case SNAP:
+				addBonus(new Snap(this, x, y));
+				break;
+			case LURE:
+				addBonus(new Lure(this, x, y));
+				break;
+			}
+		}
 	}	
-	
+
 	/**
 	 * Get the number of bodies in the world
 	 * 
@@ -147,6 +170,7 @@ public class RobotWorld  {
 	 */
 	public void updateGame(Graphics2D g, KeyboardEvent event) throws IOException {
 		doControl(g, event);
+
 		// Steps jbox2d physics world
 		jboxWorld.step(1/30f, 15, 8);
 		jboxWorld.clearForces();
@@ -160,8 +184,8 @@ public class RobotWorld  {
 		draw(g);
 		// Draw Interface
 		drawInterface(g);
-		
-		
+
+
 	}
 	private void drawBackground(Graphics2D g) {
 		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
@@ -183,7 +207,7 @@ public class RobotWorld  {
 	}	
 
 	public  void updateRaycasts() throws InterruptedException{
-		
+System.out.println("up");
 		for (Robot p : players){
 			for (GameDetectionCallback a : callbacks){
 				a.raycast(p);
@@ -201,38 +225,52 @@ public class RobotWorld  {
 		}
 	}
 
+	public void doControlMenu(Graphics2D g, KeyboardEvent event, RobotWorld world) throws IOException{
+		if (event == null)
+			return;
+		players.get(0).controlMenu(g, event, world);
+	}
+
 	public void drawBonuses(Graphics2D g) throws IOException {
 		for(Bonus b : bonuses){
 			if(b != null){
-				b.draw(g);
+				b.draw(g,api);
 			}
 		}
 
 	}
 	public void draw(Graphics2D g) throws IOException {
+		if(api==null)
+			api = new TexturedDrawAPI();
+
 		for(Element e : players){
 			if(e != null){
-				e.draw(g);
+				e.draw(g,api);
 			}
 		}
 		for(Element e : tmpelements){
 			if(e != null){
-				e.draw(g);
+				e.draw(g,api);
 			}
 		}
 		for(Element e : walls){
 			if(e != null){
-				e.draw(g);
+				e.draw(g,api);
+			}
+		}
+		for(Element e : effects){
+			if(e!=null){
+				e.draw(g,api);
+			}
+		}
+		for (Element e : IOMap){
+			if(e!=null){
+				e.draw(g,api);
 			}
 		}
 		for(Element e : robots){
 			if(e != null){
-				e.draw(g);
-			}
-		}
-		for(Element e : effects){
-			if(e != null){
-				e.draw(g);
+				e.draw(g,api);
 			}
 		}
 		effects.clear();
@@ -249,6 +287,10 @@ public class RobotWorld  {
 
 	public void setMode(RobotGameMod mode) {
 		this.mode = mode;
+	}
+
+	public RobotGameMod getMode(){
+		return this.mode;
 	}
 
 
@@ -279,6 +321,10 @@ public class RobotWorld  {
 
 	public void drawElement(Element element) {
 		tmpelements.add(element);
+	}
+
+	public void drawIOMap(Circle circle) {
+		IOMap.add(circle);
 	}
 
 	public void drawEffect(Element element){
@@ -314,8 +360,6 @@ public class RobotWorld  {
 		ComputerRobot r3;
 		HumanRobot e1;
 		HumanRobot e2;
-		Wall w1;
-		Bomb b1;
 
 		// Defining ComputerRobots
 		r1 = new ComputerRobot(this, 300,300);
@@ -331,14 +375,13 @@ public class RobotWorld  {
 		addRobot(r1);
 		addRobot(r2);
 		addRobot(r3);
-		
+
 		// create map
 		try {
 			MapGenerator.mapRandom(this, g);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		putBonus();
 		putBonus();
 	}
 
@@ -356,6 +399,13 @@ public class RobotWorld  {
 	public void drawElements(ArrayList<Element> torepaint) {
 		tmpelements.addAll(torepaint);		
 	}
+
+
+	public DrawAPI getApi() {
+		return api;
+	}
+
+
 }
 
 

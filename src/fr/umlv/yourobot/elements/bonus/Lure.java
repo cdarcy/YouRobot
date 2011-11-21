@@ -1,26 +1,25 @@
 package fr.umlv.yourobot.elements.bonus;
 
 import java.awt.Graphics2D;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
+import org.jbox2d.common.Vec2;
+
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.util.ElementData;
-import fr.umlv.yourobot.util.ElementData.ElementType;
+import fr.umlv.yourobot.util.ElementType;
 
 public class Lure extends Bonus {
 
 	public Lure(RobotWorld world, float x, float y) {
 		super(x, y);
-		bodyElem.setUserData(new ElementData(100, ElementType.LURE, this));
-	}
-
-	@Override
-	public Element draw(Graphics2D g) throws IOException {
-		// TODO Auto-generated method stub
-		return this;
+		type = ElementType.LURE;
 	}
 
 	@Override
@@ -31,8 +30,14 @@ public class Lure extends Bonus {
 
 	@Override
 	public ArrayList<Element> run(RobotWorld world, HumanRobot robot) {
-		// TODO Auto-generated method stub
+		world.addBonus(new Lure(world, robot.getPosition().x+10, robot.getPosition().y));
 		return null;
+	}
+
+	@Override
+	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+		super.draw("lure.png", g, api);
+		return this;
 	}
 
 

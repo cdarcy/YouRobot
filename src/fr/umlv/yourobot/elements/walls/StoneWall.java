@@ -11,9 +11,9 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.util.ElementData;
-import fr.umlv.yourobot.util.ElementData.ElementType;
+import fr.umlv.yourobot.util.ElementType;
 
 
 public class StoneWall extends Wall {
@@ -23,13 +23,13 @@ public class StoneWall extends Wall {
 		type = ElementType.STONEWALL;
 	}
 
+
 	@Override
-	public Element draw(Graphics2D g) throws IOException {
+	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
 		Vec2 pos = bodyElem.getPosition();
 		if(img == null)
 			img = ImageIO.read(new File("images/stoneWall.png"));	
-		g.drawImage(img, null, (int)pos.x-8, (int)pos.y-8);
-		g.setColor(Color.BLACK);
+		api.drawWall(pos, img, Color.WHITE, g);
 		shapeElem.setAsBox(WALL_SIZE, WALL_SIZE);
 		return this;
 	}
