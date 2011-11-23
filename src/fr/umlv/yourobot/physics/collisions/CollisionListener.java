@@ -9,6 +9,8 @@ import org.jbox2d.dynamics.contacts.Contact;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.robots.ComputerRobot;
+import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.util.ElementType;
 
@@ -31,10 +33,11 @@ public class CollisionListener implements ContactListener {
 			
 			if(elemB.typeElem() == ElementType.PLAYER_ROBOT){
 				final Vec2 force = elemA.getPosition().sub(elemB.getPosition());	
-
-				Robot elem = (Robot)elemA;
+				System.out.println("robot dans joueur");
+				ComputerRobot elem = (ComputerRobot)elemA;
 				elem.rotate(MathUtils.randomFloat(15, 180));
 				elem.move(new Vec2(force.x * 10000, force.y * 10000));
+				elem.setDetect(false);
 			}
 			else{
 				Robot elem = (Robot)elemA;
@@ -45,8 +48,8 @@ public class CollisionListener implements ContactListener {
 		case PLAYER_ROBOT:
 			if(elemB.typeElem() == ElementType.COMPUTER_ROBOT){
 				final Vec2 force = elemB.getPosition().sub(elemA.getPosition());	
-
 				Robot elem = (Robot)elemB;
+				System.out.println("joueur dans robot");
 				elem.rotate(MathUtils.randomFloat(15, 180));
 				elem.move(new Vec2(force.x * 10000, force.y * 10000));
 			}

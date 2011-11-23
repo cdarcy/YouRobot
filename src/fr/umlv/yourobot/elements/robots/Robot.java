@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyType;
@@ -19,6 +20,7 @@ import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.physics.raycasts.AICallback;
 
 abstract public class Robot extends Element {
 	private String pName;
@@ -105,4 +107,5 @@ abstract public class Robot extends Element {
 		api.drawCircle(robot.getBody().getPosition(), direction, Color.lightGray, img, g);
 		return this;
 	}
+
 }

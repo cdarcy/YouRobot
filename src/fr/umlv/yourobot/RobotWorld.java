@@ -6,7 +6,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadPoolExecutor;
+
 import javax.imageio.ImageIO;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
+
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -29,6 +33,7 @@ import fr.umlv.yourobot.elements.walls.BorderWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
+import fr.umlv.yourobot.physics.raycasts.GameDetectionCallback;
 import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.MapGenerator;
 import fr.umlv.zen.KeyboardEvent;
@@ -378,9 +383,9 @@ public class RobotWorld  {
 		HumanRobot e2;
 
 		// Defining ComputerRobots
-		r1 = new ComputerRobot(this, 500,300);
-		r2 = new ComputerRobot(this, 500,400);
-		r3 = new ComputerRobot(this, 500,500);
+		r1 = new ComputerRobot(500,300);
+		r2 = new ComputerRobot(500,400);
+		r3 = new ComputerRobot(500,500);
 
 		// Defining HumanRobots
 		e1 = new HumanRobot(this,"Camcam",keysP1,70, HEIGHT-100);

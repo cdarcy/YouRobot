@@ -35,14 +35,6 @@ public class SnapCallback implements RayCastCallback{
 			final Vec2 force = detected.getPosition().sub(robot.getPosition());	
 			detected.move(new Vec2(force.x * MathUtils.randomFloat(6000, 10000), force.y * MathUtils.randomFloat(6000, 10000)));
 			
-			/*System.out.println("SNAP");
-			DistanceJointDef djd = new DistanceJointDef();
-			BodyType oldType = detected.getBody().getType();
-			detected.getBody().setType(BodyType.DYNAMIC);
-			djd.initialize(robot.getBody(), detected.getBody(), new Vec2(100,100), new Vec2(100,100));
-			Joint j = world.getJBoxWorld().createJoint(djd);
-			world.getJBoxWorld().destroyJoint(j);
-			detected.getBody().setType(oldType);*/
 			return false;
 		}
 		System.out.println(joints);

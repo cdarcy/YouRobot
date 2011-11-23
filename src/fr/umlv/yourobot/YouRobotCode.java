@@ -80,15 +80,9 @@ public class YouRobotCode implements ApplicationCode{
 
 		});
 
-		try {
-			world.updateRaycasts();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		// Game loop. Updates world and manages control.
 		for(;;) {
+			System.out.println("loop");
 			final KeyboardEvent event = context.pollKeyboard();
 			context.render(new ApplicationRenderCode() {
 				@Override

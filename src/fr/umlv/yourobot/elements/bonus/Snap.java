@@ -20,6 +20,7 @@ import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
+import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 
 public class Snap  extends Bonus  {
@@ -41,11 +42,48 @@ public class Snap  extends Bonus  {
 	@Override
 	public ArrayList<Element> run(final RobotWorld world, final HumanRobot robot){
 		System.out.println("Raycasting area");
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				long start = System.nanoTime();
+				while((System.nanoTime()-start)/1000000<(length*1000)){
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					final Vec2 pos = robot.getPosition();
+					for (Wall elem : world.getWalls()){
+						System.out.println((System.nanoTime()-start)/1000000+"/"+(length*1000));
+						if (elem.classElem() != ElementClass.WALL) {
+							robot.getBody().setAwake(true);
+							return;
+						}  
+						if(MathUtils.distance(robot.getPosition(), elem.getPosition())>100 ){
+							elem.getBody().setType(BodyType.DYNAMIC);
+							final Vec2 force = pos.sub(elem.getPosition());
+							elem.getBody().setLinearVelocity(new Vec2(force.x * 6000, force.y * 6000));
+						}
+						else{
+							elem.getBody().setType(BodyType.DYNAMIC);
+							final Vec2 force = elem.getPosition().sub(pos);
+							elem.getBody().setLinearVelocity(new Vec2(force.x * 6000, force.y * 6000));
+						}
+					}
+				}
+				for (Wall elem : world.getWalls()){
+					elem.getBody().setType(BodyType.STATIC);
+				}
+			}
+		}).start();
+		/*
 
 		final float quarter_diagonal = (float) (Math.sqrt(RobotWorld.WIDTH * RobotWorld.WIDTH + RobotWorld.HEIGHT * RobotWorld.HEIGHT) / 4);
 
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 					long start = System.nanoTime();
@@ -53,7 +91,7 @@ public class Snap  extends Bonus  {
 						for(final Wall wall : world.getWalls()){
 							float distance = MathUtils.distance(robot.getPosition(), wall.getPosition());
 							if(distance < quarter_diagonal && (elements.indexOf(wall)==-1)){
-								
+
 								wall.getBody().setType(BodyType.DYNAMIC);
 								System.out.println(wall);
 								//wall.getBody().destroyFixture(wall.getFixture());
@@ -74,7 +112,7 @@ public class Snap  extends Bonus  {
 					clearJoints(world.getJBoxWorld());
 				}
 		}).start();
-
+		 */
 		System.out.println("end");
 
 		return null;
@@ -89,18 +127,18 @@ public class Snap  extends Bonus  {
 		drawTime(gr);
 		return this;
 	}
-	
+
 	public void drawTime(Graphics gr){
 		gr.drawString(length+"s", (int) bodyElem.getPosition().x, (int)bodyElem.getPosition().y);
 	}
-	
+
 	public void clearJoints(World world){
-				for(Joint j : joints){
-					if(j!=null)
-						world.destroyJoint(j);
-				}
-				for(Element d : elements)
-					d.getBody().setType(BodyType.STATIC);
-			}
+		for(Joint j : joints){
+			if(j!=null)
+				world.destroyJoint(j);
+		}
+		for(Element d : elements)
+			d.getBody().setType(BodyType.STATIC);
+	}
 
 }

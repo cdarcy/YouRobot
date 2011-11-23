@@ -26,7 +26,7 @@ public class AICallback implements RayCastCallback, GameDetectionCallback {
 	@Override
 	public void raycast(Element elem) {
 		synchronized (world.getMonitor()) {
-		world.getJBoxWorld().raycast(this, robot.getBody().getPosition(), elem.getBody().getPosition());
+			world.getJBoxWorld().raycast(this, robot.getBody().getPosition(), elem.getBody().getPosition());
 		}
 	}
 
@@ -39,21 +39,17 @@ public class AICallback implements RayCastCallback, GameDetectionCallback {
 	@Override
 	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
 		final Vec2 pos = fixture.getBody().getPosition();
-
 		final Element elem = (Element) fixture.getBody().getUserData();
 
-		if (elem.typeElem() != ElementType.PLAYER_ROBOT) {
+		if (elem.typeElem() != ElementType.PLAYER_ROBOT && elem.typeElem() != ElementType.LURE_ROBOT) {
 			return 0;
 		}
 		
-		final Vec2 force = pos.sub(point);		
-		robot.move(new Vec2(force.x * MathUtils.randomFloat(6000, 10000), force.y * MathUtils.randomFloat(6000, 10000)));
-		robot.move(new Vec2(force.x * 100000, force.y * 100000));
 		
-		if (elem.typeElem() == ElementType.LURE_ROBOT){
-			robot.move(new Vec2(robot.getPosition()));
-		}
-
+		final Vec2 force = pos.sub(point);		
+		float inc = MathUtils.randomFloat(6000, 7000);
+		robot.move(new Vec2(force.x * inc, force.y * inc));
+		
 		return 0;
 	}
 

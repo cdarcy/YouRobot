@@ -42,11 +42,10 @@ public class Lure extends Bonus {
 		final LureCallback c = new LureCallback(world, robot);
 		long start = System.nanoTime();
 		while ((System.nanoTime()-start)/1000000<(length*1000)){
-			for (int i=0 ; i<world.getRobots().size()-1 ; i++){
+			for (int i=0 ; i<world.getRobots().size() ; i++){
 				c.raycast(world.getRobots().get(i));
 				//world.addBonus(new Lure(robot.getPosition().x+10, robot.getPosition().y));
 			}
-			length--;
 		}
 		//world.delLureRobot(world.getRobots().size()-1);
 		return null;
