@@ -46,10 +46,14 @@ public class AICallback implements RayCastCallback, GameDetectionCallback {
 			return 0;
 		}
 		
-		final Vec2 force = pos.sub(point);
-		
+		final Vec2 force = pos.sub(point);		
 		robot.move(new Vec2(force.x * MathUtils.randomFloat(6000, 10000), force.y * MathUtils.randomFloat(6000, 10000)));
+		robot.move(new Vec2(force.x * 100000, force.y * 100000));
 		
+		if (elem.typeElem() == ElementType.LURE_ROBOT){
+			robot.move(new Vec2(robot.getPosition()));
+		}
+
 		return 0;
 	}
 

@@ -1,7 +1,8 @@
 package fr.umlv.yourobot.util;
 public enum ElementType{
 	COMPUTER_ROBOT(ElementClass.ROBOT), 
-	PLAYER_ROBOT(ElementClass.ROBOT), 
+	PLAYER_ROBOT(ElementClass.ROBOT),
+	LURE_ROBOT(ElementClass.ROBOT),
 	BOMB(ElementClass.BONUS), 
 	SNAP(ElementClass.BONUS), 
 	LURE(ElementClass.BONUS),

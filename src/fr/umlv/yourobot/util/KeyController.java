@@ -57,6 +57,7 @@ public class KeyController {
 			e.rotate(10);
 		if(keyFire.equals(event.getKey().name())){
 			if(e.getBonus() == null){
+				
 				PlayerCallback c = new PlayerCallback(world, e);
 				@SuppressWarnings("unchecked")
 				ArrayList<Bonus> bonus = (ArrayList<Bonus>) world.getBonusList().clone();

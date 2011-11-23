@@ -125,6 +125,16 @@ public class RobotWorld  {
 		addElement(b, BodyType.STATIC, true);
 		bonuses.add(b);
 	}
+	
+	public void addLureRobot(Robot lureRobot){
+		robots.add(lureRobot);
+		addElement(lureRobot, BodyType.STATIC, true);
+	}
+	
+	public void delLureRobot(int index){
+		robots.remove(index);
+	}
+	
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
 		BorderWall element = new BorderWall(x, y, fileName);
 		addElement(element, BodyType.STATIC, true);
@@ -136,7 +146,7 @@ public class RobotWorld  {
 		ArrayList<ElementType> list = new ArrayList<>();
 		list.add(ElementType.BOMB);
 		list.add(ElementType.SNAP);
-		list.add(ElementType.LURE);
+		list.add(ElementType.LURE_ROBOT);
 		for (int i=0;i<5;i++){
 			float x = MathUtils.randomFloat(100, WIDTH-100);
 			float y = MathUtils.randomFloat(100, HEIGHT-100);			
@@ -148,10 +158,15 @@ public class RobotWorld  {
 			case SNAP:
 				addBonus(new Snap(x, y));
 				break;
+<<<<<<< HEAD
 			case LURE:
+=======
+			case LURE_ROBOT:
+>>>>>>> 7bd1c76fa15fc4c08098995eb8f501f8db183940
 				addBonus(new Lure(x, y));
 				break;
 			}
+			System.out.println(list.get(value));
 		}
 	}	
 
@@ -303,6 +318,7 @@ public class RobotWorld  {
 
 	public void removeBonus(Vec2 pos) {
 		Element elem = getBonus(pos);
+		System.out.println(elem);
 		if(elem != null){
 			bonuses.remove(elem);
 			elements.remove(elem);
@@ -374,8 +390,13 @@ public class RobotWorld  {
 		r3 = new ComputerRobot(this, 500,500);
 
 		// Defining HumanRobots
+<<<<<<< HEAD
 		e1 = new HumanRobot(this,"Camcam",keysP1,70, HEIGHT-100);
 		e2 = new HumanRobot(this,"Camcam",keysP2,70, HEIGHT-150);
+=======
+		e1 = new HumanRobot(this,"Camcam",keysP1,500, 300);
+		e2 = new HumanRobot(this,"Loulou",keysP2,600, 300);
+>>>>>>> 7bd1c76fa15fc4c08098995eb8f501f8db183940
 
 		addPlayer(e1);
 		addPlayer(e2);
@@ -416,6 +437,7 @@ public class RobotWorld  {
 	}
 
 
+<<<<<<< HEAD
 	public ArrayList<Wall> getWalls() {
 		return walls;
 	}
@@ -432,6 +454,13 @@ public class RobotWorld  {
 
 
 
+=======
+	public ArrayList<Robot> getRobots() {
+		return robots;
+	}
+
+
+>>>>>>> 7bd1c76fa15fc4c08098995eb8f501f8db183940
 }
 
 

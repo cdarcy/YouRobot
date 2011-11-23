@@ -86,6 +86,7 @@ abstract public class Element {
 	public ElementType typeElem() {
 		return type;
 	}
+	
 	public ElementClass classElem() {
 		return type.getEClass();
 	}
