@@ -13,15 +13,12 @@ import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.util.ElementType;
 
 public class BombWaveCallback implements QueryCallback {
-	private RobotWorld world;
 	private HumanRobot robot;
 	private ArrayList<Element> raycasted;
-	private Vec2 distance;
 	private float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
 
 
 	public BombWaveCallback(RobotWorld world, HumanRobot robot){
-		this.world = world;
 		this.robot = robot;
 		this.raycasted = new ArrayList<>();
 	}
@@ -45,9 +42,6 @@ public class BombWaveCallback implements QueryCallback {
 		Vec2 force = pos.sub(p.getBody().getPosition()).negate();
 		p.getBody().applyForce(new Vec2(force.x*10000,force.y*10000), p.getPosition());
 		p.getBody().setAwake(true);
-		//world.removeBonus(p.getPosition());
-		//robot.clearBonus();
-
 		return true;
 
 	}

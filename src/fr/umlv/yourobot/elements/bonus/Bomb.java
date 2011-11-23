@@ -47,8 +47,7 @@ public class Bomb extends Bonus {
 					RadialGradientPaint paint1 = new RadialGradientPaint(x, y, BONUS_SIZE+i, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.ORANGE});
 					RadialGradientPaint paint2 = new RadialGradientPaint(x, y, BONUS_SIZE+(i*2), new float[]{0f, 1f}, new Color[]{Color.YELLOW, Color.YELLOW});
 					final Circle c1 = new Circle(world, paint1, BONUS_SIZE+i, x, y);
-					final Circle c2 = new Circle(world, paint2, BONUS_SIZE+(i*2),x, y);
-					// Make a small box.
+					new Circle(world, paint2, BONUS_SIZE+(i*2),x, y);
 					
 					Vec2 pos = new Vec2(x, y);
 					Vec2 d = new Vec2(BONUS_SIZE+(i*2), BONUS_SIZE+(i*2));

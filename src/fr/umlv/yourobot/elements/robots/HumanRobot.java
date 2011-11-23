@@ -13,14 +13,12 @@ import fr.umlv.yourobot.util.KeyController;
 import fr.umlv.zen.KeyboardEvent;
 
 public class HumanRobot extends Robot {
-	private String name;
 	private float life;
 	private Bonus currentBonus = null;
 	protected KeyController controller;
 	
 	public HumanRobot(RobotWorld world, String name, String[] k, float x, float y) {
 		super(x, y);
-		this.name = name;
 		controller = new KeyController(world, this, k);
 		type = ElementType.PLAYER_ROBOT;
 	}

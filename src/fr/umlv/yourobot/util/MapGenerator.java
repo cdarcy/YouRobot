@@ -3,18 +3,12 @@ package fr.umlv.yourobot.util;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import java.util.Collection;
-
-import java.awt.geom.Ellipse2D.Float;
-
 
 import javax.imageio.ImageIO;
 
@@ -30,7 +24,6 @@ import fr.umlv.yourobot.elements.walls.IceWall;
 import fr.umlv.yourobot.elements.walls.StoneWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.elements.walls.WoodWall;
-import fr.umlv.zen.KeyboardEvent;
 
 public class MapGenerator {
 
@@ -41,7 +34,6 @@ public class MapGenerator {
 	private static ArrayList<BorderWall> arena;
 	public final static int WIDTH = 800;
 	public final static int HEIGHT = 600;
-	private static final Point2D Point2D = null;
 	public static ArrayList<Element> allWall;
 
 
@@ -51,7 +43,6 @@ public class MapGenerator {
 		else if (value == 1)	color = new Color(100, 0, 0); //RED
 		else if (value == 2)	color = new Color(0, 100, 0); //GREEN
 		else if (value == 3)	color = new Color(255, 91, 0); //ORANGE
-		int idx = 0;
 		for (int i = 0; i < WIDTH/Wall.WALL_SIZE; i++){
 			if(i<HEIGHT){
 				// GAUCHE

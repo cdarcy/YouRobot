@@ -2,28 +2,16 @@ package fr.umlv.yourobot.util;
 
 import java.util.ArrayList;
 
-import org.jbox2d.collision.AABB;
-import org.jbox2d.common.MathUtils;
-import org.jbox2d.common.Vec2;
-
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
-import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
 
 import java.awt.Graphics2D;
 import java.io.IOException;
-import java.security.spec.KeySpec;
-
-import org.jbox2d.common.Vec2;
-
-import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.RobotWorld.RobotGameMod;
-import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.welcome.LoadingGame;
 
 import fr.umlv.zen.KeyboardEvent;
@@ -36,9 +24,6 @@ public class KeyController {
 	private String keyLeft;
 	private String keyRight;
 	private String keyFire;
-	private String keySpace;
-	private RobotGameMod gameMode = RobotGameMod.ONEPLAYER;
-
 	public KeyController(RobotWorld world, Robot e, String[] keys){
 		this.e = (HumanRobot) e;
 		this.keyUp = keys[0];
@@ -85,11 +70,9 @@ public class KeyController {
 	public void controlMenu(KeyboardEvent event, Graphics2D g, RobotWorld world) throws IOException{
 		if(keyUp.equals(event.getKey().name())){
 			LoadingGame.drawSelectMenuSP(g);
-			gameMode = RobotGameMod.ONEPLAYER;
 		}
 		if(keyDown.equals(event.getKey().name())){
 			LoadingGame.drawSelectMenuMP(g);
-			gameMode = RobotGameMod.TWOPLAYER;
 		}
 	}
 }

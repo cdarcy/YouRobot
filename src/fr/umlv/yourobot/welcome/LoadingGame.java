@@ -14,7 +14,6 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 
 import fr.umlv.yourobot.util.KeyController;
-import fr.umlv.zen.KeyboardEvent;
 
 public class LoadingGame {
 	protected static BufferedImage img;

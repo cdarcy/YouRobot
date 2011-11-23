@@ -9,7 +9,6 @@ import org.jbox2d.dynamics.contacts.Contact;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.util.ElementType;
 

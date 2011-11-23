@@ -6,11 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ThreadPoolExecutor;
-
 import javax.imageio.ImageIO;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
-
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -33,7 +29,6 @@ import fr.umlv.yourobot.elements.walls.BorderWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
-import fr.umlv.yourobot.physics.raycasts.GameDetectionCallback;
 import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.MapGenerator;
 import fr.umlv.zen.KeyboardEvent;
@@ -44,7 +39,7 @@ public class RobotWorld  {
 	private World jboxWorld;
 	private ArrayList<Element> elements;
 	private ArrayList<Element> effects;
-	private ArrayList<ComputerRobot> robots;
+	private ArrayList<Robot> robots;
 	private ArrayList<Bonus> bonuses;
 	private ArrayList<Element> tmpelements;
 	private ArrayList<AICallback> callbacks;
@@ -158,11 +153,9 @@ public class RobotWorld  {
 			case SNAP:
 				addBonus(new Snap(x, y));
 				break;
-<<<<<<< HEAD
 			case LURE:
-=======
+
 			case LURE_ROBOT:
->>>>>>> 7bd1c76fa15fc4c08098995eb8f501f8db183940
 				addBonus(new Lure(x, y));
 				break;
 			}
@@ -230,8 +223,8 @@ public class RobotWorld  {
 
 	public void updateRaycasts() throws InterruptedException{
 		final RobotWorld rw = (RobotWorld) this;
-		for(final ComputerRobot e : robots){
-				e.run(rw);
+		for(final Robot e : robots){
+				((ComputerRobot) e).run(rw);
 		}
 	}
 
@@ -390,20 +383,14 @@ public class RobotWorld  {
 		r3 = new ComputerRobot(this, 500,500);
 
 		// Defining HumanRobots
-<<<<<<< HEAD
 		e1 = new HumanRobot(this,"Camcam",keysP1,70, HEIGHT-100);
 		e2 = new HumanRobot(this,"Camcam",keysP2,70, HEIGHT-150);
-=======
-		e1 = new HumanRobot(this,"Camcam",keysP1,500, 300);
-		e2 = new HumanRobot(this,"Loulou",keysP2,600, 300);
->>>>>>> 7bd1c76fa15fc4c08098995eb8f501f8db183940
-
-		addPlayer(e1);
-		addPlayer(e2);
 		addRobot(r1);
 		addRobot(r2);
 		addRobot(r3);
 
+		addPlayer(e1);
+		addPlayer(e2);
 		// create map
 		try {
 			MapGenerator.mapRandom(this, g);
@@ -437,7 +424,6 @@ public class RobotWorld  {
 	}
 
 
-<<<<<<< HEAD
 	public ArrayList<Wall> getWalls() {
 		return walls;
 	}
@@ -454,13 +440,11 @@ public class RobotWorld  {
 
 
 
-=======
 	public ArrayList<Robot> getRobots() {
 		return robots;
 	}
 
 
->>>>>>> 7bd1c76fa15fc4c08098995eb8f501f8db183940
 }
 
 

@@ -10,27 +10,17 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import org.jbox2d.common.Vec2;
-
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.TexturedDrawAPI;
-import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.LureRobot;
-import fr.umlv.yourobot.elements.robots.Robot;
-import fr.umlv.yourobot.physics.raycasts.AICallback;
 import fr.umlv.yourobot.physics.raycasts.LureCallback;
-import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
 import fr.umlv.yourobot.util.ElementType;
 
 public class Lure extends Bonus {
-<<<<<<< HEAD
 
-=======
 	private int length;
->>>>>>> 7bd1c76fa15fc4c08098995eb8f501f8db183940
 	public Lure(float x, float y) {
 		super(x, y);
 		type = ElementType.LURE;
@@ -45,10 +35,6 @@ public class Lure extends Bonus {
 	}
 
 	@Override
-<<<<<<< HEAD
-	public ArrayList<Element> run(RobotWorld world, HumanRobot robot) {
-		world.addBonus(new Lure(robot.getPosition().x+10, robot.getPosition().y));
-=======
 	public ArrayList<Element> run(final RobotWorld world, final HumanRobot robot) {
 		System.out.println("use bonus");
 		LureRobot lureRobot = new LureRobot(robot.getPosition().x+10, robot.getPosition().y);
@@ -63,7 +49,6 @@ public class Lure extends Bonus {
 			length--;
 		}
 		//world.delLureRobot(world.getRobots().size()-1);
->>>>>>> 7bd1c76fa15fc4c08098995eb8f501f8db183940
 		return null;
 	}
 
