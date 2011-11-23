@@ -122,6 +122,16 @@ public class RobotWorld  {
 		addElement(b, BodyType.STATIC, true);
 		bonuses.add(b);
 	}
+	
+	public void addLureRobot(Robot lureRobot){
+		robots.add(lureRobot);
+		addElement(lureRobot, BodyType.STATIC, true);
+	}
+	
+	public void delLureRobot(int index){
+		robots.remove(index);
+	}
+	
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
 		BorderWall element = new BorderWall(x, y, fileName);
 		addElement(element, BodyType.STATIC, true);
@@ -134,7 +144,7 @@ public class RobotWorld  {
 		Bonus b ;
 		list.add(ElementType.BOMB);
 		list.add(ElementType.SNAP);
-		list.add(ElementType.LURE);
+		list.add(ElementType.LURE_ROBOT);
 		for (int i=0;i<5;i++){
 			float x = MathUtils.randomFloat(100, WIDTH-100);
 			float y = MathUtils.randomFloat(100, HEIGHT-100);			
@@ -146,10 +156,11 @@ public class RobotWorld  {
 			case SNAP:
 				addBonus(new Snap(this, x, y));
 				break;
-			case LURE:
-				addBonus(new Lure(this, x, y));
+			case LURE_ROBOT:
+				addBonus(new Lure(x, y));
 				break;
 			}
+			System.out.println(list.get(value));
 		}
 	}	
 
@@ -296,6 +307,7 @@ System.out.println("up");
 
 	public void removeBonus(Vec2 pos) {
 		Element elem = getBonus(pos);
+		System.out.println(elem);
 		if(elem != null){
 			bonuses.remove(elem);
 			elements.remove(elem);
@@ -368,7 +380,7 @@ System.out.println("up");
 
 		// Defining HumanRobots
 		e1 = new HumanRobot(this,"Camcam",keysP1,500, 300);
-		e2 = new HumanRobot(this,"Camcam",keysP2,600, 300);
+		e2 = new HumanRobot(this,"Loulou",keysP2,600, 300);
 
 		addPlayer(e1);
 		addPlayer(e2);
@@ -403,6 +415,11 @@ System.out.println("up");
 
 	public DrawAPI getApi() {
 		return api;
+	}
+
+
+	public ArrayList<Robot> getRobots() {
+		return robots;
 	}
 
 

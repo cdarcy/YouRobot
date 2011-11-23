@@ -52,12 +52,15 @@ System.out.println("raycast");
 		final Element elem = (Element) fixture.getBody().getUserData();
 		System.out.println("raycats");
 		if (elem.typeElem() != ElementType.PLAYER_ROBOT) {
-			
 			robot.getBody().setAwake(true);
 			return -1;
 		}
 		final Vec2 force = pos.sub(point);
 		robot.move(new Vec2(force.x * 100000, force.y * 100000));
+		
+		if (elem.typeElem() == ElementType.LURE_ROBOT){
+			robot.move(new Vec2(robot.getPosition()));
+		}
 
 		return 0;
 	}
