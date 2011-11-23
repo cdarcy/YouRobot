@@ -22,7 +22,7 @@ import fr.umlv.yourobot.util.ElementType;
 
 public class Bomb extends Bonus {
 
-	public Bomb(RobotWorld world, float x, float y) {
+	public Bomb(float x, float y) {
 		super(x, y);
 		type = ElementType.BOMB;
 	}

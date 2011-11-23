@@ -69,21 +69,8 @@ public class YouRobotCode implements ApplicationCode{
 				break;
 		}*/
 
-		new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				for(;;){
-					try {
-						world.updateRaycasts();
-						Thread.sleep(2000);	
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}	
-				}
-			}
-		});
-		
+
 		context.render(new ApplicationRenderCode(){
 
 			@Override
@@ -92,6 +79,13 @@ public class YouRobotCode implements ApplicationCode{
 			}
 
 		});
+
+		try {
+			world.updateRaycasts();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Game loop. Updates world and manages control.
 		for(;;) {
@@ -109,6 +103,7 @@ public class YouRobotCode implements ApplicationCode{
 			});
 			try {
 				Thread.sleep(20);
+				world.updateRaycasts();
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}

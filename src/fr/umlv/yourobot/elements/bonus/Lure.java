@@ -17,7 +17,7 @@ import fr.umlv.yourobot.util.ElementType;
 
 public class Lure extends Bonus {
 
-	public Lure(RobotWorld world, float x, float y) {
+	public Lure(float x, float y) {
 		super(x, y);
 		type = ElementType.LURE;
 	}
@@ -30,7 +30,7 @@ public class Lure extends Bonus {
 
 	@Override
 	public ArrayList<Element> run(RobotWorld world, HumanRobot robot) {
-		world.addBonus(new Lure(world, robot.getPosition().x+10, robot.getPosition().y));
+		world.addBonus(new Lure(robot.getPosition().x+10, robot.getPosition().y));
 		return null;
 	}
 

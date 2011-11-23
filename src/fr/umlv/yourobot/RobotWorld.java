@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.imageio.ImageIO;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
@@ -43,19 +44,21 @@ public class RobotWorld  {
 	private World jboxWorld;
 	private ArrayList<Element> elements;
 	private ArrayList<Element> effects;
-	private ArrayList<Robot> robots;
+	private ArrayList<ComputerRobot> robots;
 	private ArrayList<Bonus> bonuses;
 	private ArrayList<Element> tmpelements;
-	private ArrayList<GameDetectionCallback> callbacks;
+	private ArrayList<AICallback> callbacks;
 	private ArrayList<HumanRobot> players;
 	private ArrayList<Wall> walls ;
 	private ArrayList<Circle> IOMap ;
+	private Object monitor = new Object();
 	private TexturedDrawAPI api;
 	public static int WIDTH = 800;
 	public static int HEIGHT = 600;
 	final String[] keysP1 = {"UP","LEFT","RIGHT","SPACE"};
 	final String[] keysP2 = {"Z","Q","D","X"};
-
+	final Vec2 startCoordsP1 = new Vec2(Wall.WALL_SIZE+30, HEIGHT-100);
+	final Vec2 startCoordsP2 = new Vec2(Wall.WALL_SIZE+30, HEIGHT-200);
 	public enum RobotGameMod{
 		ONEPLAYER,
 		TWOPLAYER
@@ -90,18 +93,18 @@ public class RobotWorld  {
 
 
 	public void addElement(Element element, BodyType type, boolean createFixture){
-		elements.add(element);
 		Body body = jboxWorld.createBody(element.getBodyDef());
+		elements.add(element);
 		element.setBody(body);
 		body.setUserData(element);
 		body.setType(type);
 		if(createFixture)
-			body.createFixture(element.getFixtureDef());
+			element.setFixture(body.createFixture(element.getFixtureDef()));
 	}
 
 	public void addRobot(Robot element) {
 		callbacks.add(new AICallback(this, element));
-		robots.add(element);
+		robots.add((ComputerRobot) element);
 		addElement(element, BodyType.DYNAMIC, true);
 	}	
 
@@ -131,7 +134,6 @@ public class RobotWorld  {
 
 	public void putBonus() {
 		ArrayList<ElementType> list = new ArrayList<>();
-		Bonus b ;
 		list.add(ElementType.BOMB);
 		list.add(ElementType.SNAP);
 		list.add(ElementType.LURE);
@@ -141,13 +143,13 @@ public class RobotWorld  {
 			int value = Math.round(MathUtils.randomFloat(0,list.size()-1));
 			switch (list.get(value)){
 			case BOMB:
-				addBonus(new Bomb(this, x, y));
+				addBonus(new Bomb(x, y));
 				break;
 			case SNAP:
-				addBonus(new Snap(this, x, y));
+				addBonus(new Snap(x, y));
 				break;
 			case LURE:
-				addBonus(new Lure(this, x, y));
+				addBonus(new Lure(x, y));
 				break;
 			}
 		}
@@ -169,24 +171,25 @@ public class RobotWorld  {
 	 * @throws IOException 
 	 */
 	public void updateGame(Graphics2D g, KeyboardEvent event) throws IOException {
-		doControl(g, event);
+		synchronized (monitor){
+			doControl(g, event);
 
-		// Steps jbox2d physics world
-		jboxWorld.step(1/30f, 15, 8);
-		jboxWorld.clearForces();
-		//MapGenerator background
-		drawBackground(g);
-		//g.fillRect(Wall.WALL_SIZE, Wall.WALL_SIZE, WIDTH-(Wall.WALL_SIZE*2), HEIGHT-(Wall.WALL_SIZE*2));
-		// Draw bonuses before drawing other elements (robots, walls)
-		drawBonuses(g);
-		//Draw wall
-		// Draw elements of the game
-		draw(g);
-		// Draw Interface
-		drawInterface(g);
-
-
+			// Steps jbox2d physics world
+			jboxWorld.step(1/30f, 15, 8);
+			jboxWorld.clearForces();
+			//MapGenerator background
+			drawBackground(g);
+			//g.fillRect(Wall.WALL_SIZE, Wall.WALL_SIZE, WIDTH-(Wall.WALL_SIZE*2), HEIGHT-(Wall.WALL_SIZE*2));
+			// Draw bonuses before drawing other elements (robots, walls)
+			drawBonuses(g);
+			//Draw wall
+			// Draw elements of the game
+			draw(g);
+			// Draw Interface
+			drawInterface(g);
+		}
 	}
+
 	private void drawBackground(Graphics2D g) {
 		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
 	}
@@ -202,18 +205,22 @@ public class RobotWorld  {
 	}
 
 
-	public void addCallback(GameDetectionCallback callback){
+	public void addCircle(Element circle){
+		addElement(circle, BodyType.STATIC, false);
+	}
+
+	public void addCallback(AICallback callback){
 		callbacks.add(callback);
 	}	
 
-	public  void updateRaycasts() throws InterruptedException{
-System.out.println("up");
-		for (Robot p : players){
-			for (GameDetectionCallback a : callbacks){
-				a.raycast(p);
-			}
+	public void updateRaycasts() throws InterruptedException{
+		final RobotWorld rw = (RobotWorld) this;
+		for(final ComputerRobot e : robots){
+				e.run(rw);
 		}
 	}
+
+
 
 	public void doControl(Graphics2D g, KeyboardEvent event){
 		if (event == null)
@@ -362,13 +369,13 @@ System.out.println("up");
 		HumanRobot e2;
 
 		// Defining ComputerRobots
-		r1 = new ComputerRobot(this, 300,300);
-		r2 = new ComputerRobot(this, 300,400);
-		r3 = new ComputerRobot(this, 300,500);
+		r1 = new ComputerRobot(this, 500,300);
+		r2 = new ComputerRobot(this, 500,400);
+		r3 = new ComputerRobot(this, 500,500);
 
 		// Defining HumanRobots
-		e1 = new HumanRobot(this,"Camcam",keysP1,500, 300);
-		e2 = new HumanRobot(this,"Camcam",keysP2,600, 300);
+		e1 = new HumanRobot(this,"Camcam",keysP1,70, HEIGHT-100);
+		e2 = new HumanRobot(this,"Camcam",keysP2,70, HEIGHT-150);
 
 		addPlayer(e1);
 		addPlayer(e2);
@@ -383,6 +390,8 @@ System.out.println("up");
 			e.printStackTrace();
 		}
 		putBonus();
+
+		addBonus(new Snap(80, HEIGHT-150));
 	}
 
 
@@ -401,9 +410,26 @@ System.out.println("up");
 	}
 
 
+
 	public DrawAPI getApi() {
 		return api;
 	}
+
+
+	public ArrayList<Wall> getWalls() {
+		return walls;
+	}
+
+
+	public Object getMonitor() {
+		return this.monitor;
+	}
+
+
+	public ArrayList<HumanRobot> getPlayers() {
+		return players;
+	}
+
 
 
 }

@@ -90,7 +90,6 @@ public class MapGenerator {
 	}
 
 	public static void drawArena(Graphics2D g){
-		System.out.println("draw arena");
 		for(int i=0;i<arena.size();i++)
 			try {
 				arena.get(i).draw(g, world.getApi());
@@ -133,13 +132,11 @@ public class MapGenerator {
 			//the map is represented like a matrix
 			int posX = Wall.WALL_SIZE + Wall.WALL_SIZE * (int) MathUtils.randomFloat(0, ((WIDTH-100)/Wall.WALL_SIZE)-2);
 			int posY = Wall.WALL_SIZE + Wall.WALL_SIZE * (int) MathUtils.randomFloat(0, ((HEIGHT-100)/Wall.WALL_SIZE)-2);
-			System.out.println("i : "+i+" x "+posX+" y "+posY);
 			Vec2 vec2 = new Vec2(posX, posY);
 
 			if(!allPositions.contains(vec2)){
 				allPositions.add(vec2);
 				int randomNumber = (int) MathUtils.randomFloat(0, 4);
-				System.out.println(randomNumber);
 				switch (randomNumber){
 					case (0) : 	world.addWall(new WoodWall(posX, posY));
 								break;

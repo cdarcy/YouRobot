@@ -87,7 +87,6 @@ abstract public class Robot extends Element {
 						Color.YELLOW });
 		final Circle c = new Circle(world, paint, 10, pos.x, pos.y);
 
-		System.out.println("impulse");
 		world.drawEffect(c);
 	}
 

@@ -38,6 +38,6 @@ public class PlayerCallback implements GameDetectionCallback, RayCastCallback {
 			world.removeBonus(elem.getPosition());
 			robot.setBonus((Bonus) elem);
 		}
-		return 0;
+		return 1;
 	}
 }

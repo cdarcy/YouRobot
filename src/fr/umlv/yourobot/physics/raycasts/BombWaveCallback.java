@@ -3,7 +3,6 @@ package fr.umlv.yourobot.physics.raycasts;
 import java.util.ArrayList;
 
 import org.jbox2d.callbacks.QueryCallback;
-import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
@@ -11,10 +10,7 @@ import org.jbox2d.dynamics.Fixture;
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.elements.robots.Robot;
-import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
-import fr.umlv.yourobot.util.MapGenerator;
 
 public class BombWaveCallback implements QueryCallback {
 	private RobotWorld world;
@@ -51,7 +47,6 @@ public class BombWaveCallback implements QueryCallback {
 		p.getBody().setAwake(true);
 		//world.removeBonus(p.getPosition());
 		//robot.clearBonus();
-		System.out.println(p);
 
 		return true;
 

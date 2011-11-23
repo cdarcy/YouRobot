@@ -90,4 +90,8 @@ abstract public class Element {
 		return type.getEClass();
 	}
 
+	public void setFixture(Fixture fixture) {
+		this.fixture = fixture;
+	}
+
 }

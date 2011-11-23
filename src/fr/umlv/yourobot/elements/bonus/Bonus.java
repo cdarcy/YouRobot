@@ -36,9 +36,9 @@ abstract public class Bonus extends Element{
 		fixtureDef = new FixtureDef();
 		shapeElem = new CircleShape();
 		fixtureDef.shape = shapeElem;
-		fixtureDef.density = 1.f;
-		fixtureDef.friction = 1.f;
-		fixtureDef.restitution = 1.f;
+		fixtureDef.density = 0.f;
+		fixtureDef.friction = 0.f;
+		fixtureDef.restitution = 0.f;
 		color = Color.BLACK;
 	}
 	

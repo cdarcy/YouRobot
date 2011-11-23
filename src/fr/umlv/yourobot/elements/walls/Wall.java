@@ -28,13 +28,12 @@ abstract public class Wall extends Element{
 	
 	public Wall(float x, float y) {
 		super(x, y);
-
 		shapeElem = new PolygonShape();
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = shapeElem;
-		fixtureDef.density = 0.f;
-		fixtureDef.friction = 0.f;
-		fixtureDef.restitution = 0.f;
+		fixtureDef.density = 1.f;
+		fixtureDef.friction = .5f;
+		fixtureDef.restitution = .3f;
 		shapeElem.setAsBox(RADIUS, RADIUS);
 	}
 	

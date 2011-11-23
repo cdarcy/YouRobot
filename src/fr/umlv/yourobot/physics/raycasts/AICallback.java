@@ -25,17 +25,9 @@ public class AICallback implements RayCastCallback, GameDetectionCallback {
 
 	@Override
 	public void raycast(Element elem) {
-System.out.println("raycast");
-		final float quarter_diagonal = (float) (Math.sqrt(RobotWorld.WIDTH
-				* RobotWorld.WIDTH + RobotWorld.HEIGHT * RobotWorld.HEIGHT) / 4);
-		final float x = (robot.getX() - elem.getX())* (robot.getX() - elem.getX());
-		final float y = (robot.getY() - elem.getY())* (robot.getY() - elem.getY());
-		final float distance = (float) Math.sqrt(x + y);
-		if (distance <= quarter_diagonal) {
-			world.getJBoxWorld().raycast(this, robot.getBody().getPosition(),
-					elem.getBody().getPosition());
+		synchronized (world.getMonitor()) {
+		world.getJBoxWorld().raycast(this, robot.getBody().getPosition(), elem.getBody().getPosition());
 		}
-		
 	}
 
 	/*
@@ -45,20 +37,19 @@ System.out.println("raycast");
 	 */
 
 	@Override
-	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal,
-			float fraction) {
+	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
 		final Vec2 pos = fixture.getBody().getPosition();
 
 		final Element elem = (Element) fixture.getBody().getUserData();
-		System.out.println("raycats");
-		if (elem.typeElem() != ElementType.PLAYER_ROBOT) {
-			
-			robot.getBody().setAwake(true);
-			return -1;
-		}
-		final Vec2 force = pos.sub(point);
-		robot.move(new Vec2(force.x * 100000, force.y * 100000));
 
+		if (elem.typeElem() != ElementType.PLAYER_ROBOT) {
+			return 0;
+		}
+		
+		final Vec2 force = pos.sub(point);
+		
+		robot.move(new Vec2(force.x * MathUtils.randomFloat(6000, 10000), force.y * MathUtils.randomFloat(6000, 10000)));
+		
 		return 0;
 	}
 
