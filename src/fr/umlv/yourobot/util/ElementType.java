@@ -3,7 +3,6 @@ public enum ElementType{
 	COMPUTER_ROBOT(ElementClass.ROBOT), 
 	PLAYER_ROBOT(ElementClass.ROBOT),
 	LURE_ROBOT(ElementClass.ROBOT),
-	BOMB(ElementClass.BONUS), 
 	SNAP(ElementClass.BONUS), 
 	LURE(ElementClass.BONUS),
 	WOODWALL(ElementClass.WALL),
@@ -11,7 +10,10 @@ public enum ElementType{
 	ICEWALL(ElementClass.WALL),
 	BARWALL(ElementClass.WALL),
 	BORDERWALL(ElementClass.BLOCK), 
-	EFFECT(ElementClass.EFFECT);
+	EFFECT(ElementClass.EFFECT), 
+	ICEBOMB(ElementClass.BONUS),
+	STONEBOMB(ElementClass.BONUS), 
+	WOODBOMB(ElementClass.BONUS);
 
 	private ElementClass eclass;
 	private ElementType(ElementClass c){

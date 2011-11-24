@@ -33,7 +33,6 @@ public class CollisionListener implements ContactListener {
 			
 			if(elemB.typeElem() == ElementType.PLAYER_ROBOT){
 				final Vec2 force = elemA.getPosition().sub(elemB.getPosition());	
-				System.out.println("robot dans joueur");
 				ComputerRobot elem = (ComputerRobot)elemA;
 				elem.rotate(MathUtils.randomFloat(15, 180));
 				elem.move(new Vec2(force.x * 10000, force.y * 10000));
@@ -49,7 +48,6 @@ public class CollisionListener implements ContactListener {
 			if(elemB.typeElem() == ElementType.COMPUTER_ROBOT){
 				final Vec2 force = elemB.getPosition().sub(elemA.getPosition());	
 				Robot elem = (Robot)elemB;
-				System.out.println("joueur dans robot");
 				elem.rotate(MathUtils.randomFloat(15, 180));
 				elem.move(new Vec2(force.x * 10000, force.y * 10000));
 			}

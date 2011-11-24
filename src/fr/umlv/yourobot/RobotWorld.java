@@ -24,8 +24,11 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.TexturedDrawAPI;
 import fr.umlv.yourobot.elements.bonus.Bomb;
 import fr.umlv.yourobot.elements.bonus.Bonus;
+import fr.umlv.yourobot.elements.bonus.IceBomb;
 import fr.umlv.yourobot.elements.bonus.Lure;
 import fr.umlv.yourobot.elements.bonus.Snap;
+import fr.umlv.yourobot.elements.bonus.StoneBomb;
+import fr.umlv.yourobot.elements.bonus.WoodBomb;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
@@ -144,26 +147,33 @@ public class RobotWorld  {
 
 	public void putBonus() {
 		ArrayList<ElementType> list = new ArrayList<>();
-		list.add(ElementType.BOMB);
 		list.add(ElementType.SNAP);
-		list.add(ElementType.LURE_ROBOT);
+		list.add(ElementType.WOODBOMB);
+		list.add(ElementType.STONEBOMB);
+		list.add(ElementType.ICEBOMB);
+		list.add(ElementType.LURE);
+		
 		for (int i=0;i<5;i++){
 			float x = MathUtils.randomFloat(100, WIDTH-100);
 			float y = MathUtils.randomFloat(100, HEIGHT-100);			
 			int value = Math.round(MathUtils.randomFloat(0,list.size()-1));
 			switch (list.get(value)){
-			case BOMB:
-				addBonus(new Bomb(x, y));
-				break;
-			case SNAP:
-				addBonus(new Snap(x, y));
-				break;
-			case LURE:
-
-			case LURE_ROBOT:
-				addBonus(new Lure(x, y));
-				break;
+				case WOODBOMB:
+					addBonus(new WoodBomb(x, y));
+					break;
+				case STONEBOMB:
+					addBonus(new StoneBomb(x, y));
+					break;
+				case ICEBOMB:
+					addBonus(new IceBomb(x, y));
+					break;
+				case SNAP:
+					addBonus(new Snap(x, y));
+					break;
+				case LURE:
+					addBonus(new Lure(x, y));
 			}
+			
 			System.out.println(list.get(value));
 		}
 	}	

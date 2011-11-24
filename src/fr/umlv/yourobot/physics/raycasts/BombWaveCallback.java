@@ -15,33 +15,47 @@ import fr.umlv.yourobot.util.ElementType;
 public class BombWaveCallback implements QueryCallback {
 	private HumanRobot robot;
 	private ArrayList<Element> raycasted;
+	private ElementType maxEffectType;
 	private float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
 
 
-	public BombWaveCallback(RobotWorld world, HumanRobot robot){
+	public BombWaveCallback(RobotWorld world, HumanRobot robot, ElementType typeEffectMax){
 		this.robot = robot;
 		this.raycasted = new ArrayList<>();
+		this.maxEffectType = typeEffectMax;
 	}
 
 	@Override
 	public boolean reportFixture(Fixture fixture) {
 		Element p = (Element) fixture.getBody().getUserData();
-		if(p == null)
+		if(p == null || raycasted.contains(p))
 			return false;
 
-		if(p.typeElem() == ElementType.BORDERWALL){
-			if(!raycasted.contains(p))
-				raycasted.add(p);
-			return false;
-		}
-
-
-		System.out.println("bomb wave");
 		p.getBody().setType(BodyType.DYNAMIC);	
 		Vec2 pos = new Vec2(robot.getPosition());
-		Vec2 force = pos.sub(p.getBody().getPosition()).negate();
-		p.getBody().applyForce(new Vec2(force.x*10000,force.y*10000), p.getPosition());
+		Vec2 force = pos.sub(p.getPosition()).negate();
+		int factor = 30000;
+		switch (p.typeElem() ) {
+		case WOODWALL:
+			if(maxEffectType == ElementType.WOODWALL)
+				factor = 100000;
+			break;
+		case ICEWALL:
+			if(maxEffectType == ElementType.ICEWALL)
+				factor = 100000;
+			break;
+		case STONEWALL:
+			if(maxEffectType == ElementType.STONEWALL)
+				factor = 100000;		
+			break;
+		default:
+			break;
+		}
+		System.out.println(factor+" "+p+"="+maxEffectType);
+		p.getBody().applyForce(new Vec2(force.x*factor,force.y*factor), p.getBody().getWorldCenter());
 		p.getBody().setAwake(true);
+		if(!raycasted.contains(p))
+			raycasted.add(p);
 		return true;
 
 	}

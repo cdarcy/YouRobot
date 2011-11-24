@@ -43,21 +43,24 @@ public class Snap  extends Bonus  {
 	public ArrayList<Element> run(final RobotWorld world, final HumanRobot robot){
 		System.out.println("Raycasting area");
 		new Thread(new Runnable() {
+			private float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
+
 
 			@Override
 			public void run() {
 				long start = System.nanoTime();
 				while((System.nanoTime()-start)/1000000<(length*1000)){
 					try {
-						Thread.sleep(2000);
+						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					final Vec2 pos = robot.getPosition();
 					for (Wall elem : world.getWalls()){
-						System.out.println((System.nanoTime()-start)/1000000+"/"+(length*1000));
-						if (elem.classElem() != ElementClass.WALL) {
+						if (elem.classElem() != ElementClass.WALL ||
+								MathUtils.distance(elem.getBody().getPosition(), 
+										robot.getBody().getPosition()) > quarter_diagonal) {
 							robot.getBody().setAwake(true);
 							return;
 						}  

@@ -33,11 +33,11 @@ public class PlayerCallback implements GameDetectionCallback, RayCastCallback {
 	@Override
 	public float reportFixture(Fixture arg0, Vec2 arg1, Vec2 arg2, float arg3) {
 		final Element elem = (Element) arg0.getBody().getUserData();
-		
-		if (elem.classElem() == ElementClass.BONUS && MathUtils.distance(robot.getPosition(), elem.getPosition()) < 40) {
-			world.removeBonus(elem.getPosition());
-			robot.setBonus((Bonus) elem);
-		}
+		if(elem != null)
+			if (elem.classElem() == ElementClass.BONUS && MathUtils.distance(robot.getPosition(), elem.getPosition()) < 40) {
+				world.removeBonus(elem.getPosition());
+				robot.setBonus((Bonus) elem);
+			}
 		return 1;
 	}
 }
