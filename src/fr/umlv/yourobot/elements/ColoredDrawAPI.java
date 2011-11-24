@@ -18,7 +18,7 @@ public class ColoredDrawAPI implements DrawAPI {
 		g.setColor(c);
 		g.drawImage(img, null, (int)pos.x-8, (int)pos.y-8);
 	}
-	
+
 
 	@Override
 	public void drawCircle(Vec2 pos,float direction,  Color c,  BufferedImage img, Graphics2D g) throws IOException {
@@ -40,8 +40,8 @@ public class ColoredDrawAPI implements DrawAPI {
 	public void drawEffect(Vec2 pos, Paint p, Color c, BufferedImage img,
 			Graphics2D g) throws IOException {
 		// TODO Auto-generated method stub
-		
-	}
-	}
 
-	
+	}
+}
+
+

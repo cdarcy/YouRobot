@@ -29,6 +29,14 @@ public class Circle extends Element {
 		this.circle = new Ellipse2D.Float(x - size/2, y - size/2, size, size);
 		this.paint = paint;
 	}
+	
+	public Circle(Graphics2D g, RobotWorld world, RadialGradientPaint paint, float size,float x, float y) {
+		super(x, y);
+		fixtureDef = new FixtureDef();
+		fixtureDef.shape = shapeElem;
+		this.circle = new Ellipse2D.Float(x - size/2, y - size/2, size, size);
+		this.paint = paint;
+	}
 
 	@Override
 	public Element draw(Graphics2D g, DrawAPI api) throws IOException {

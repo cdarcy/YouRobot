@@ -82,7 +82,6 @@ public class YouRobotCode implements ApplicationCode{
 
 		// Game loop. Updates world and manages control.
 		for(;;) {
-			System.out.println("loop");
 			final KeyboardEvent event = context.pollKeyboard();
 			context.render(new ApplicationRenderCode() {
 				@Override
