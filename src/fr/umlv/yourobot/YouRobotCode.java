@@ -68,18 +68,24 @@ public class YouRobotCode implements ApplicationCode{
 			if (world.getMode() != null)
 				break;
 		}*/
-
-
+		
 
 		context.render(new ApplicationRenderCode(){
 
 			@Override
 			public void render(Graphics2D graphics) {
 				world.init(graphics);
+
+				try {
+					world.updateRobots();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		});
-
+		
 		// Game loop. Updates world and manages control.
 		for(;;) {
 			final KeyboardEvent event = context.pollKeyboard();
@@ -88,6 +94,7 @@ public class YouRobotCode implements ApplicationCode{
 				public void render(final Graphics2D graphics) {
 					try {
 						world.updateGame(graphics, event);
+					
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -96,7 +103,6 @@ public class YouRobotCode implements ApplicationCode{
 			});
 			try {
 				Thread.sleep(20);
-				world.updateRaycasts();
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}

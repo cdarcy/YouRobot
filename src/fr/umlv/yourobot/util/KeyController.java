@@ -35,7 +35,7 @@ public class KeyController {
 
 	public void control(KeyboardEvent event){
 		if(keyUp.equals(event.getKey().name()))
-			e.impulse(world);
+			e.impulse();
 		if(keyLeft.equals(event.getKey().name()))
 			e.rotate(-10);
 		if(keyRight.equals(event.getKey().name()))

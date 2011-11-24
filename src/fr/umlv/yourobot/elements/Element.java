@@ -43,6 +43,7 @@ abstract public class Element {
 	public Element(float x, float y){
 		bodyDef = new BodyDef();
 		bodyDef.position.set(x, y);
+		bodyDef.linearDamping = .5f;
 	}
 	
 	public Body getBody() {
@@ -54,7 +55,7 @@ abstract public class Element {
 
 	
 	public Vec2 getPosition() {
-		return getBody().getPosition();
+		return bodyElem.getPosition();
 	}
 
 

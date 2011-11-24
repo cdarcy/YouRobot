@@ -108,7 +108,6 @@ public class RobotWorld  {
 	}
 
 	public void addRobot(Robot element) {
-		callbacks.add(new AICallback(this, element));
 		robots.add((ComputerRobot) element);
 		addElement(element, BodyType.DYNAMIC, true);
 	}	
@@ -130,16 +129,16 @@ public class RobotWorld  {
 		addElement(b, BodyType.STATIC, true);
 		bonuses.add(b);
 	}
-	
+
 	public void addLureRobot(Robot lureRobot){
 		robots.add(lureRobot);
 		addElement(lureRobot, BodyType.STATIC, true);
 	}
-	
+
 	public void delLureRobot(int index){
 		robots.remove(index);
 	}
-	
+
 	public BorderWall addBorder(int x, int y, String fileName) throws IOException {
 		BorderWall element = new BorderWall(x, y, fileName);
 		addElement(element, BodyType.STATIC, true);
@@ -154,28 +153,28 @@ public class RobotWorld  {
 		list.add(ElementType.STONEBOMB);
 		list.add(ElementType.ICEBOMB);
 		list.add(ElementType.LURE);
-		
+
 		for (int i=0;i<5;i++){
 			float x = MathUtils.randomFloat(100, WIDTH-100);
 			float y = MathUtils.randomFloat(100, HEIGHT-100);			
 			int value = Math.round(MathUtils.randomFloat(0,list.size()-1));
 			switch (list.get(value)){
-				case WOODBOMB:
-					addBonus(new WoodBomb(x, y));
-					break;
-				case STONEBOMB:
-					addBonus(new StoneBomb(x, y));
-					break;
-				case ICEBOMB:
-					addBonus(new IceBomb(x, y));
-					break;
-				case SNAP:
-					addBonus(new Snap(x, y));
-					break;
-				case LURE:
-					addBonus(new Lure(x, y));
+			case WOODBOMB:
+				addBonus(new WoodBomb(x, y));
+				break;
+			case STONEBOMB:
+				addBonus(new StoneBomb(x, y));
+				break;
+			case ICEBOMB:
+				addBonus(new IceBomb(x, y));
+				break;
+			case SNAP:
+				addBonus(new Snap(x, y));
+				break;
+			case LURE:
+				addBonus(new Lure(x, y));
 			}
-			
+
 			System.out.println(list.get(value));
 		}
 	}	
@@ -238,11 +237,11 @@ public class RobotWorld  {
 		callbacks.add(callback);
 	}	
 
-	public void updateRaycasts() throws InterruptedException{
+	public void updateRobots() throws InterruptedException{
 		final RobotWorld rw = (RobotWorld) this;
-		for(final Robot e : robots){
-				((ComputerRobot) e).run(rw);
-		}
+		for(final Robot e : getRobots()){
+			((ComputerRobot) e).run(rw);
+		}	
 	}
 
 
@@ -290,11 +289,6 @@ public class RobotWorld  {
 				e.draw(g,api);
 			}
 		}
-		for(Element e : effects){
-			if(e!=null){
-				e.draw(g,api);
-			}
-		}
 		for (Element e : IOMap){
 			if(e!=null){
 				e.draw(g,api);
@@ -305,9 +299,21 @@ public class RobotWorld  {
 				e.draw(g,api);
 			}
 		}
+		for(Element e : effects){
+			if(e!=null){
+				e.draw(g,api);
+			}
+		}
 		effects.clear();
 		tmpelements.clear();
 	}
+
+	public void removeEffects() {
+		for(Element e : effects){
+			jboxWorld.destroyBody(e.getBody());
+		}
+	}
+
 
 	public void drawInterface(Graphics2D g) throws IOException {
 		g.setColor(Color.BLACK);
@@ -361,6 +367,7 @@ public class RobotWorld  {
 	}
 
 	public void drawEffect(Element element){
+		elements.add(element);
 		effects.add(element);
 	}
 
@@ -452,13 +459,13 @@ public class RobotWorld  {
 
 
 	public ArrayList<HumanRobot> getPlayers() {
-		return players;
+		return new ArrayList<>(players);
 	}
 
 
 
 	public ArrayList<Robot> getRobots() {
-		return robots;
+		return new ArrayList<>(robots);
 	}
 
 

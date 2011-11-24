@@ -51,7 +51,7 @@ abstract public class Robot extends Element {
 		final float y = bodyElem.getWorldCenter().y;
 		final RadialGradientPaint paint = new RadialGradientPaint(x, y,
 				ROBOT_SIZE, new float[] { .5f, 1f }, new Color[] { Color.RED,
-						Color.WHITE });
+				Color.WHITE });
 		g.setPaint(paint);
 		new Runnable() {
 
@@ -70,26 +70,23 @@ abstract public class Robot extends Element {
 		return pName;
 	}
 
-	public void impulse(RobotWorld world) {
+	public void impulse() {
 		final Vec2 imp = new Vec2();
-		Vec2 pos = new Vec2();
-		
-		pos.x = (float) Math.cos(Math.toRadians(direction));
-		pos.x = (float) Math.sin(Math.toRadians(direction));
-		
-		imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
-		imp.y = (float) Math.sin(Math.toRadians(direction))* SPEED;
-		
-		bodyElem.applyLinearImpulse(imp, bodyElem.getLocalCenter());
-		
-		final RadialGradientPaint paint = new RadialGradientPaint(pos.x, pos.y,
-				10, new float[] { .9f, 1f }, new Color[] { Color.ORANGE,
-						Color.YELLOW });
-		final Circle c = new Circle(world, paint, 10, pos.x, pos.y);
 
-		world.drawEffect(c);
+		imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
+		imp.y = (float) Math.sin(Math.toRadians(direction)) * SPEED;
+
+		bodyElem.applyLinearImpulse(imp, bodyElem.getLocalCenter());
+
 	}
 
+	public void impulse(float speed){
+		final Vec2 imp = new Vec2();
+		imp.x = (float) Math.cos(Math.toRadians(direction)) * speed;
+		imp.y = (float) Math.sin(Math.toRadians(direction)) * speed;
+		bodyElem.applyLinearImpulse(imp, bodyElem.getLocalCenter());
+
+	}
 	public void rotate(float inc) {
 		direction = (direction + inc) % 360;
 		bodyElem.setType(BodyType.DYNAMIC);

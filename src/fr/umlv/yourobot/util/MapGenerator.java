@@ -106,15 +106,15 @@ public class MapGenerator {
 		ArrayList<Vec2> allPositions = new ArrayList<>();
 		RadialGradientPaint paint1 = new RadialGradientPaint(80, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
 		g.setPaint(paint1);
-		Circle circle1 = new Circle (world, paint1, 40, 80, HEIGHT-100);
+		Circle circle1 = new Circle (paint1, 40, 80, HEIGHT-100);
 		allPositions.add(new Vec2(80, 80));
 		RadialGradientPaint paint2 = new RadialGradientPaint(70, HEIGHT-150, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
 		g.setPaint(paint2);
-		Circle circle2 = new Circle (world, paint2, 40, 80, HEIGHT-150);
+		Circle circle2 = new Circle (paint2, 40, 80, HEIGHT-150);
 		allPositions.add(new Vec2(80, 520));
 		RadialGradientPaint paint3 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.GREEN});
 		g.setPaint(paint3);
-		Circle circle3 = new Circle (world, paint3, 40, 730, 70);
+		Circle circle3 = new Circle (paint3, 40, 730, 70);
 		allPositions.add(new Vec2(730, 300));
 		
 		world.drawIOMap(circle1);

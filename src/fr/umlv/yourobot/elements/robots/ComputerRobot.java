@@ -2,8 +2,10 @@ package fr.umlv.yourobot.elements.robots;
 
 import java.awt.Graphics2D;
 import java.io.IOException;
+import java.util.Random;
 
 import org.jbox2d.common.MathUtils;
+import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.DrawAPI;
@@ -25,26 +27,55 @@ public class ComputerRobot extends Robot {
 		return this;
 	}
 
-	public void run(final RobotWorld world){
-		c = new AICallback(world, this);
-		Thread t = new Thread(new Runnable() {
+	public void run(final RobotWorld world) {
+		new Thread(new Runnable() {
+
 			@Override
 			public void run() {
 				float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
+				while(true) {
 
-					for (HumanRobot p : world.getPlayers()){
-						if(MathUtils.distance(getPosition(), p.getPosition()) < quarter_diagonal){
-							c.raycast(p);
+					Random rand = new Random();
+					for (final HumanRobot p : world.getPlayers()){
+						float distance = MathUtils.distance(bodyElem.getPosition(), p.getPosition());
+						if(distance > quarter_diagonal){
+							int rotation = rand.nextInt(45);
+
+							if(rand.nextBoolean()) {
+								rotate(-rotation);
+							}
+							else {
+								rotate(rotation);
+							}
+							final Vec2 imp = new Vec2();
 							
+							imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
+							imp.y = (float) Math.sin(Math.toRadians(direction)) * SPEED;
+							
+							bodyElem.applyLinearImpulse(imp, getPosition());
+
+						}
+						else {
+							final Vec2 force = p.getPosition().sub(bodyElem.getPosition());		
+							move(new Vec2(force.x * 10000, force.y * 10000));
+
+							try {
+								Thread.sleep(rand.nextInt(2000));
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						try {
+							Thread.sleep(rand.nextInt(5000));
+						} catch (InterruptedException e) {
+							e.printStackTrace();
 						}
 					}
-				
+				}
 
 			}
-		});
-		t.start();
+		}).start();
 	}
-	
 
 	public void setDetect(boolean b) {
 		detect = b;

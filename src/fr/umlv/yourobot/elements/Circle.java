@@ -7,6 +7,7 @@ import java.awt.geom.Ellipse2D.Float;
 import java.io.IOException;
 
 import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
@@ -14,7 +15,6 @@ import fr.umlv.yourobot.RobotWorld;
 
 public class Circle extends Element {
 	private Float circle;
-	protected FixtureDef fixtureDef;
 	protected CircleShape shapeElem;
 	private RadialGradientPaint paint;
 	public Circle(RobotWorld world, float x, float y) {
@@ -22,17 +22,10 @@ public class Circle extends Element {
 		bodyElem.setType(BodyType.DYNAMIC);	
 	}
 
-	public Circle(RobotWorld world, RadialGradientPaint paint, float size,float x, float y) {
+	public Circle(RadialGradientPaint paint, float size, float x, float y) {
 		super(x, y);
 		fixtureDef = new FixtureDef();
-		fixtureDef.shape = shapeElem;
-		this.circle = new Ellipse2D.Float(x - size/2, y - size/2, size, size);
-		this.paint = paint;
-	}
-	
-	public Circle(Graphics2D g, RobotWorld world, RadialGradientPaint paint, float size,float x, float y) {
-		super(x, y);
-		fixtureDef = new FixtureDef();
+		shapeElem = new CircleShape();
 		fixtureDef.shape = shapeElem;
 		this.circle = new Ellipse2D.Float(x - size/2, y - size/2, size, size);
 		this.paint = paint;

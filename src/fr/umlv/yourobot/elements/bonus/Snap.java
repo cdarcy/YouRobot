@@ -45,36 +45,33 @@ public class Snap  extends Bonus  {
 		new Thread(new Runnable() {
 			private float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
 
-
 			@Override
 			public void run() {
 				long start = System.nanoTime();
-				while((System.nanoTime()-start)/1000000<(length*1000)){
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				while(((System.nanoTime()-start)/1000000)<(length*1000)){
 					final Vec2 pos = robot.getPosition();
 					for (Wall elem : world.getWalls()){
-						if (elem.classElem() != ElementClass.WALL ||
-								MathUtils.distance(elem.getBody().getPosition(), 
-										robot.getBody().getPosition()) > quarter_diagonal) {
+
+						if (MathUtils.distance(elem.getBody().getPosition(), robot.getBody().getPosition()) > quarter_diagonal) {
 							robot.getBody().setAwake(true);
-							return;
+							continue;
 						}  
-						if(MathUtils.distance(robot.getPosition(), elem.getPosition())>100 ){
+						if(elem.getBody().getType() == BodyType.STATIC)
 							elem.getBody().setType(BodyType.DYNAMIC);
+						
+						if(MathUtils.distance(robot.getPosition(), elem.getPosition())>100 && MathUtils.distance(robot.getPosition(), elem.getPosition())<quarter_diagonal){
 							final Vec2 force = pos.sub(elem.getPosition());
 							elem.getBody().setLinearVelocity(new Vec2(force.x * 6000, force.y * 6000));
 						}
-						else{
-							elem.getBody().setType(BodyType.DYNAMIC);
+						else if(MathUtils.distance(robot.getPosition(), elem.getPosition())<100){
 							final Vec2 force = elem.getPosition().sub(pos);
-							elem.getBody().setLinearVelocity(new Vec2(force.x * 6000, force.y * 6000));
+							elem.getBody().setLinearVelocity(new Vec2(force.x * 1000, force.y * 1000));
+						}
+						else{
+							elem.getBody().setType(BodyType.STATIC);
 						}
 					}
+					System.out.println((System.nanoTime()-start)/1000000 + "<"+length*1000);
 				}
 				for (Wall elem : world.getWalls()){
 					elem.getBody().setType(BodyType.STATIC);

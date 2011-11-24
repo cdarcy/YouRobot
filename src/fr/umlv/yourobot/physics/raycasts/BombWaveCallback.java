@@ -3,6 +3,7 @@ package fr.umlv.yourobot.physics.raycasts;
 import java.util.ArrayList;
 
 import org.jbox2d.callbacks.QueryCallback;
+import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
@@ -28,9 +29,10 @@ public class BombWaveCallback implements QueryCallback {
 	@Override
 	public boolean reportFixture(Fixture fixture) {
 		Element p = (Element) fixture.getBody().getUserData();
+
+		System.out.println(p);
 		if(p == null || raycasted.contains(p))
 			return false;
-
 		p.getBody().setType(BodyType.DYNAMIC);	
 		Vec2 pos = new Vec2(robot.getPosition());
 		Vec2 force = pos.sub(p.getPosition()).negate();
@@ -48,11 +50,13 @@ public class BombWaveCallback implements QueryCallback {
 			if(maxEffectType == ElementType.STONEWALL)
 				factor = 100000;		
 			break;
+		case BORDERWALL:
+			return false;
 		default:
 			break;
 		}
-		System.out.println(factor+" "+p+"="+maxEffectType);
-		p.getBody().applyForce(new Vec2(force.x*factor,force.y*factor), p.getBody().getWorldCenter());
+		float distance = MathUtils.distance(robot.getPosition(), p.getPosition());
+		p.getBody().applyForce(new Vec2((force.x*distance)*factor,(force.y*distance)*factor), p.getBody().getWorldCenter());
 		p.getBody().setAwake(true);
 		if(!raycasted.contains(p))
 			raycasted.add(p);

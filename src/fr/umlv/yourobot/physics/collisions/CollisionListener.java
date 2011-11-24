@@ -12,6 +12,7 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
+import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 
 public class CollisionListener implements ContactListener {
@@ -30,17 +31,15 @@ public class CollisionListener implements ContactListener {
 
 		switch (elemA.typeElem()) {
 		case COMPUTER_ROBOT:
-			
+
 			if(elemB.typeElem() == ElementType.PLAYER_ROBOT){
 				final Vec2 force = elemA.getPosition().sub(elemB.getPosition());	
-				ComputerRobot elem = (ComputerRobot)elemA;
-				elem.rotate(MathUtils.randomFloat(15, 180));
-				elem.move(new Vec2(force.x * 10000, force.y * 10000));
-				elem.setDetect(false);
+				ComputerRobot elem = (ComputerRobot)elemA; 
 			}
 			else{
 				Robot elem = (Robot)elemA;
-				elem.rotate(MathUtils.randomFloat(15, 180));
+				elem.rotate(MathUtils.randomFloat(-180, 180));
+				elem.impulse(100000);
 			}
 
 			break;
@@ -54,8 +53,8 @@ public class CollisionListener implements ContactListener {
 		case BORDERWALL:
 			world.drawElement(elemA);
 			break;
-		
-		
+
+
 		default:
 			break;
 		}
@@ -68,11 +67,17 @@ public class CollisionListener implements ContactListener {
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-		
+
 	}
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
+		Element elemA = (Element) contact.getFixtureA().getBody().getUserData();
+		Element elemB = (Element) contact.getFixtureB().getBody().getUserData();
 
+		if(elemA == null || elemB == null)
+			return;
+		if(elemA.typeElem() != ElementType.PLAYER_ROBOT && elemB.classElem() == ElementClass.BONUS)
+			contact.setEnabled(false);
 	}
 }

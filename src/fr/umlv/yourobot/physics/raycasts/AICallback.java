@@ -18,39 +18,28 @@ public class AICallback implements RayCastCallback, GameDetectionCallback {
 		this.world = world;
 		this.robot = robot;
 	}
-
-	public Vec2 getOrigin() {
-		return robot.getBody().getPosition();
+	@Override
+	public void raycast(final Element elem) {
+		world.getJBoxWorld().raycast(this, robot.getBody().getPosition(), elem.getBody().getPosition());
 	}
 
-	@Override
-	public void raycast(Element elem) {
-		synchronized (world.getMonitor()) {
-			world.getJBoxWorld().raycast(this, robot.getBody().getPosition(), elem.getBody().getPosition());
-		}
-	}
-
-	/*
-	 * return -1: ignore this fixture and continue return 0: terminate the ray
-	 * cast return fraction: clip the ray to this point return 1: don't clip the
-	 * ray and continue
-	 */
 
 	@Override
-	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
+	public float reportFixture(final Fixture fixture,final  Vec2 point, Vec2 normal, float fraction) {
+
 		final Vec2 pos = fixture.getBody().getPosition();
 		final Element elem = (Element) fixture.getBody().getUserData();
-
+		if(elem == null)
+			return -1;
 		if (elem.typeElem() != ElementType.PLAYER_ROBOT && elem.typeElem() != ElementType.LURE_ROBOT) {
-			return 0;
+			return -1;
 		}
-		
-		
+
 		final Vec2 force = pos.sub(point);		
-		float inc = MathUtils.randomFloat(6000, 7000);
-		robot.move(new Vec2(force.x * inc, force.y * inc));
-		
+		robot.move(new Vec2(force.x * 10000, force.y * 10000));
+	
 		return 0;
 	}
-
 }
+
+

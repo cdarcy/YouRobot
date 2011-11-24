@@ -40,23 +40,28 @@ public abstract class Bomb extends Bonus {
 
 			@Override
 			public void run() {
+				Circle c1 = null;
+				float x = 0;
+				float y = 0;
 				for(int i=0;i<120;i++)
 				{
 
-					float x = robot.getBody().getWorldCenter().x+(BONUS_SIZE/2);
-					float y = robot.getBody().getWorldCenter().y+(BONUS_SIZE/2);
+					x = robot.getBody().getWorldCenter().x;
+					y = robot.getBody().getWorldCenter().y;
 					RadialGradientPaint paint1 = new RadialGradientPaint(x, y, BONUS_SIZE+i, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.ORANGE});
-					RadialGradientPaint paint2 = new RadialGradientPaint(x, y, BONUS_SIZE+(i*2), new float[]{0f, 1f}, new Color[]{Color.YELLOW, Color.YELLOW});
-					final Circle c1 = new Circle(world, paint1, BONUS_SIZE+i, x, y);
-					new Circle(world, paint2, BONUS_SIZE+(i*2),x, y);
-					Vec2 pos = new Vec2(x, y);
-					Vec2 d = new Vec2(BONUS_SIZE+(i*2), BONUS_SIZE+(i*2));
-					AABB aabb = new AABB(pos.sub(d), pos.add(d));
-					world.getJBoxWorld().queryAABB(b, aabb);
-					world.drawEffect(c1);
 					
+					c1 = new Circle(paint1, BONUS_SIZE+i, x, y);
+					world.drawEffect(c1);
 				}
+				float size = 200;
 				
+				Vec2 lower = new Vec2(x,y).sub(new Vec2(size, 0));
+				Vec2 upper = new Vec2(x,y).add(new Vec2(size, 0));
+				AABB aabb =  new AABB(lower, upper);
+				
+				System.out.println(aabb.getExtents());
+				world.getJBoxWorld().queryAABB(b, new AABB(lower, upper));
+				//world.removeEffects();
 			}
 		}).run();
 		return b.getRaycastedBorder();
