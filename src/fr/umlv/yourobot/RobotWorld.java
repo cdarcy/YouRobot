@@ -217,6 +217,16 @@ public class RobotWorld  {
 
 	private void drawBackground(Graphics2D g) {
 		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
+		
+		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
+		g.setPaint(paint1);
+		g.fill(new Ellipse2D.Float(43, HEIGHT-100, 40, 40));
+		RadialGradientPaint paint2 = new RadialGradientPaint(70, HEIGHT-150, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
+		g.setPaint(paint2);
+		g.fill(new Ellipse2D.Float(43, HEIGHT-150, 40, 40));
+		RadialGradientPaint paint3 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.GREEN});
+		g.setPaint(paint3);
+		g.fill(new Ellipse2D.Float(705, 43, 40, 40));
 	}
 
 
@@ -314,7 +324,6 @@ public class RobotWorld  {
 		HumanRobot p1 = players.get(0);
 		int p1Col = 10;
 		g.drawString("Player 1 : " + p1.getpName() + " - " + p1.getLife()+"%", p1Col, 15);
-
 	}
 
 	public void setMode(RobotGameMod mode) {
@@ -381,7 +390,7 @@ public class RobotWorld  {
 		return null;
 	}
 	public void setBackground(String nameBackgroundPicture) throws IOException {
-		img = ImageIO.read(new File("images/" + nameBackgroundPicture));	
+		img = ImageIO.read(new File("images/" + nameBackgroundPicture));
 	}
 
 
@@ -400,8 +409,8 @@ public class RobotWorld  {
 		r3 = new ComputerRobot(500,500);
 
 		// Defining HumanRobots
-		e1 = new HumanRobot(this,"Camcam",keysP1,70, HEIGHT-100);
-		e2 = new HumanRobot(this,"Camcam",keysP2,70, HEIGHT-150);
+		e1 = new HumanRobot(this,"Camcam",keysP1,46, HEIGHT-97);
+		e2 = new HumanRobot(this,"Camcam",keysP2,46, HEIGHT-147);
 		addRobot(r1);
 		addRobot(r2);
 		addRobot(r3);
