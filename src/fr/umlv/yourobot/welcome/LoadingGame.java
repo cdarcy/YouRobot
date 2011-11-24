@@ -57,7 +57,17 @@ public class LoadingGame {
 		g.setColor(Color.WHITE);
 		g.drawString("Multi players", 330, 550);
 	}
-	
+
+	public static void drawSelectMenuGT(Graphics2D g) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void drawSelectMenuGC(Graphics2D g) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 
 }

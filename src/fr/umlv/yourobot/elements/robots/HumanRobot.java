@@ -13,7 +13,7 @@ import fr.umlv.yourobot.util.KeyController;
 import fr.umlv.zen.KeyboardEvent;
 
 public class HumanRobot extends Robot {
-	private float life;
+	private volatile double life;
 	private Bonus currentBonus = null;
 	protected KeyController controller;
 	
@@ -21,6 +21,7 @@ public class HumanRobot extends Robot {
 		super(x, y);
 		controller = new KeyController(world, this, k);
 		type = ElementType.PLAYER_ROBOT;
+		this.life = 100;
 	}
 	
 
@@ -43,12 +44,17 @@ public class HumanRobot extends Robot {
 
 	
 	public void controlMenu(Graphics2D g, KeyboardEvent event, RobotWorld world) throws IOException{
-		controller.controlMenu(event, g, world);			
+		controller.controlMenuPlayer(event, g, world);			
 	}
 	
 	
-	public float getLife() {
+	public double getLife() {
 		return life;
+	}
+	
+	public void setLife(double d){
+		if (d<=0.5)
+			this.life = this.life * d;
 	}
 
 	public Bonus getBonus() {

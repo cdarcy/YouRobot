@@ -67,12 +67,21 @@ public class KeyController {
 		
 	}
 	
-	public void controlMenu(KeyboardEvent event, Graphics2D g, RobotWorld world) throws IOException{
+	public void controlMenuPlayer(KeyboardEvent event, Graphics2D g, RobotWorld world) throws IOException{
 		if(keyUp.equals(event.getKey().name())){
 			LoadingGame.drawSelectMenuSP(g);
 		}
 		if(keyDown.equals(event.getKey().name())){
 			LoadingGame.drawSelectMenuMP(g);
+		}
+	}
+	
+	public void controlMenuGraphic(KeyboardEvent event, Graphics2D g, RobotWorld world) throws IOException{
+		if(keyUp.equals(event.getKey().name())){
+			LoadingGame.drawSelectMenuGT(g);
+		}
+		if(keyDown.equals(event.getKey().name())){
+			LoadingGame.drawSelectMenuGC(g);
 		}
 	}
 }

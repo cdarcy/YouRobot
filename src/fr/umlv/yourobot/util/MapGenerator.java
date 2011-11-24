@@ -50,11 +50,10 @@ public class MapGenerator {
 				g.setColor(color);
 				Element element = world.addBorder(0, i*Wall.WALL_SIZE, nameWallPicture);
 				arena.add((BorderWall) element.draw(g, world.getApi()));
-				
+
 				// DROITE
-				//g.rotate(Math.PI, WIDTH-(Wall.WALL_SIZE/2), i*(Wall.WALL_SIZE/2));
 				g.setColor(color);
-			    element =  world.addBorder(WIDTH-(Wall.WALL_SIZE-10), i*Wall.WALL_SIZE, nameWallPicture);
+				element =  world.addBorder(WIDTH-(Wall.WALL_SIZE-10), i*Wall.WALL_SIZE, nameWallPicture);
 				arena.add((BorderWall) element.draw(g, world.getApi()));
 			}
 			// HAUT
@@ -65,9 +64,9 @@ public class MapGenerator {
 			g.setColor(color);
 			element = world.addBorder((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, HEIGHT-(Wall.WALL_SIZE-10), nameWallPicture);
 			arena.add((BorderWall) element.draw(g, world.getApi()));
-			
+
 		}
-		
+
 	}
 
 	public static void mapRandom (RobotWorld w, Graphics2D g) throws IOException{
@@ -86,12 +85,11 @@ public class MapGenerator {
 			try {
 				arena.get(i).draw(g, world.getApi());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}
-	
-	
+
+
 	public static void drawBackground (Graphics2D g, String nameBackground) throws IOException{
 		if(img == null)
 			img = ImageIO.read(new File("images/" + nameBackground));	
@@ -104,23 +102,8 @@ public class MapGenerator {
 		int wallNumber = level + 10;
 		allWall = new ArrayList<>();
 		ArrayList<Vec2> allPositions = new ArrayList<>();
-		RadialGradientPaint paint1 = new RadialGradientPaint(80, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
-		g.setPaint(paint1);
-		Circle circle1 = new Circle (paint1, 40, 80, HEIGHT-100);
-		allPositions.add(new Vec2(80, 80));
-		RadialGradientPaint paint2 = new RadialGradientPaint(70, HEIGHT-150, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
-		g.setPaint(paint2);
-		Circle circle2 = new Circle (paint2, 40, 80, HEIGHT-150);
-		allPositions.add(new Vec2(80, 520));
-		RadialGradientPaint paint3 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.GREEN});
-		g.setPaint(paint3);
-		Circle circle3 = new Circle (paint3, 40, 730, 70);
-		allPositions.add(new Vec2(730, 300));
 		
-		world.drawIOMap(circle1);
-		world.drawIOMap(circle2);
-		world.drawIOMap(circle3);
-		
+		allPositions.add(new Vec2(730, 70));
 		for (int i=0 ; i<wallNumber ; i++){
 			//give a position in the map between the border
 			//the map is represented like a matrix
@@ -132,20 +115,22 @@ public class MapGenerator {
 				allPositions.add(vec2);
 				int randomNumber = (int) MathUtils.randomFloat(0, 4);
 				switch (randomNumber){
-					case (0) : 	world.addWall(new WoodWall(posX, posY));
-								break;
-					case (1) : 	world.addWall(new StoneWall(posX, posY));
-								break;
-					case (2) : 	world.addWall(new IceWall(posX, posY));		
-								break;
-					case (3) : 	world.addWall(new BarWall(posX, posY));		
-								break;
+				case (0) : 	world.addWall(new WoodWall(posX, posY));
+				break;
+				case (1) : 	world.addWall(new StoneWall(posX, posY));
+				break;
+				case (2) : 	world.addWall(new IceWall(posX, posY));		
+				break;
+				case (3) : 	world.addWall(new BarWall(posX, posY));		
+				break;
 				}
 			}
 			else
 				i--;
 		}
 	}
+	
+	
 
 	public static BufferedImage getBackground() {
 		return img;

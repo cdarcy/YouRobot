@@ -1,5 +1,7 @@
 package fr.umlv.yourobot.physics.collisions;
 
+import javax.lang.model.element.TypeElement;
+
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
@@ -34,7 +36,16 @@ public class CollisionListener implements ContactListener {
 
 			if(elemB.typeElem() == ElementType.PLAYER_ROBOT){
 				final Vec2 force = elemA.getPosition().sub(elemB.getPosition());	
-				ComputerRobot elem = (ComputerRobot)elemA; 
+				ComputerRobot elem = (ComputerRobot)elemA;
+				elem.rotate(MathUtils.randomFloat(15, 180));
+				elem.move(new Vec2(force.x * 10000, force.y * 10000));
+				elem.setDetect(false);
+				HumanRobot h = (HumanRobot) elemB;
+				System.out.println(contact.getFixtureA().getBody().m_linearVelocity.normalize());
+				double ecart = contact.getFixtureA().getBody().m_linearVelocity.normalize() * 0.003;
+				System.out.println();
+				h.setLife((ecart+0.3));
+				//System.out.println(h.getLife());
 			}
 			else{
 				Robot elem = (Robot)elemA;
@@ -69,7 +80,6 @@ public class CollisionListener implements ContactListener {
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 
 	}
-
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
 		Element elemA = (Element) contact.getFixtureA().getBody().getUserData();
@@ -79,5 +89,6 @@ public class CollisionListener implements ContactListener {
 			return;
 		if(elemA.typeElem() != ElementType.PLAYER_ROBOT && elemB.classElem() == ElementClass.BONUS)
 			contact.setEnabled(false);
+		
 	}
 }

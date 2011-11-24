@@ -24,69 +24,29 @@ public class YouRobotCode implements ApplicationCode{
 
 	@Override
 	public void run(final ApplicationContext context) {
-		// Defining World
+		// Defining basic World Game
+		// Création de l'objet world basique
 		world = new RobotWorld();
 
-		// Welcoming interface with mode choice 
-
-		/*context.render(new ApplicationRenderCode() {
-			@Override
-			public void render(final Graphics2D graphics) {
-				try {
-					LoadingGame.menu(welcome, graphics);
-					world.init(graphics);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		});*/
-		// Loop for choosing mode
-		/*for(;;) {
-			final KeyboardEvent event = context.pollKeyboard();
-			context.render(new ApplicationRenderCode() {
-				@Override
-				public void render(final Graphics2D graphics) {
-					//graphics.setColor(Color.GRAY);
-					//graphics.setColor(Color.WHITE);
-					//world.doControl(graphics, event);
-					try {
-						world.doControlMenu(graphics, event, world);
-						//System.out.println("mode de jeu: "+world.getMode());
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				} 
-			});
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-			if (world.getMode() != null)
-				break;
-		}*/
+		// Welcoming interface with game and graphic modes choice
+		// C'est ici que je pense que tu dois lancer les deux interfaces de choix utilisateur
 		
-
+		
+		// World game initialisation
+		// C'est ici qu'on passera les paramètres à init() après la fin du choix de mode graphics
+		
 		context.render(new ApplicationRenderCode(){
 
 			@Override
 			public void render(Graphics2D graphics) {
 				world.init(graphics);
 
-				try {
-					world.updateRobots();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 
 		});
 		
 		// Game loop. Updates world and manages control.
+		// Et enfin, c'est ici qu'on lance world.updateGame() pour actualiser la partie et capter les events
 		for(;;) {
 			final KeyboardEvent event = context.pollKeyboard();
 			context.render(new ApplicationRenderCode() {
