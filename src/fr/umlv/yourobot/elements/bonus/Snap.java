@@ -16,10 +16,10 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.DistanceJointDef;
 import org.jbox2d.dynamics.joints.Joint;
 import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
+import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 
@@ -50,7 +50,7 @@ public class Snap  extends Bonus  {
 				long start = System.nanoTime();
 				while(((System.nanoTime()-start)/1000000)<(length*1000)){
 					final Vec2 pos = robot.getPosition();
-					for (Wall elem : world.getWalls()){
+					for (Element elem : world.getListByClass(ElementClass.WALL)){
 
 						if (MathUtils.distance(elem.getBody().getPosition(), robot.getBody().getPosition()) > quarter_diagonal) {
 							robot.getBody().setAwake(true);
@@ -73,7 +73,7 @@ public class Snap  extends Bonus  {
 					}
 					System.out.println((System.nanoTime()-start)/1000000 + "<"+length*1000);
 				}
-				for (Wall elem : world.getWalls()){
+				for (Element elem : world.getListByClass(ElementClass.WALL)){
 					elem.getBody().setType(BodyType.STATIC);
 				}
 			}

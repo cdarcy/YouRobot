@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
 

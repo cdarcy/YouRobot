@@ -11,12 +11,13 @@ import javax.imageio.ImageIO;
 
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Circle;
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
+import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.physics.raycasts.BombWaveCallback;
 import fr.umlv.yourobot.util.ElementType;
 
@@ -51,7 +52,7 @@ public abstract class Bomb extends Bonus {
 					RadialGradientPaint paint1 = new RadialGradientPaint(x, y, BONUS_SIZE+i, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.ORANGE});
 					
 					c1 = new Circle(paint1, BONUS_SIZE+i, x, y);
-					world.drawEffect(c1);
+					world.addElement(c1, BodyType.DYNAMIC, true);
 				}
 				float size = 200;
 				

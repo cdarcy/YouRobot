@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
+import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.KeyController;
 import fr.umlv.zen.KeyboardEvent;

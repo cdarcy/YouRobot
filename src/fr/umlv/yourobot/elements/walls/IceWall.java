@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 
 import org.jbox2d.common.Vec2;
 
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
 public class IceWall extends Wall {

@@ -61,8 +61,6 @@ public class CollisionListener implements ContactListener {
 				elem.rotate(MathUtils.randomFloat(15, 180));
 				elem.move(new Vec2(force.x * 10000, force.y * 10000));
 			}
-		case BORDERWALL:
-			world.drawElement(elemA);
 			break;
 
 

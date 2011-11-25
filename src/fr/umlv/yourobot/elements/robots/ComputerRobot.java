@@ -8,8 +8,8 @@ import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
 import fr.umlv.yourobot.util.ElementType;
 
@@ -36,7 +36,7 @@ public class ComputerRobot extends Robot {
 				while(true) {
 
 					Random rand = new Random();
-					for (final HumanRobot p : world.getPlayers()){
+					for (final Element p : world.getListByType(ElementType.PLAYER_ROBOT)){
 						float distance = MathUtils.distance(bodyElem.getPosition(), p.getPosition());
 						if(distance > quarter_diagonal){
 							int rotation = rand.nextInt(45);

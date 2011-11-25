@@ -18,10 +18,6 @@ public class LureCallback implements RayCastCallback, GameDetectionCallback{
 		this.robot = robot;
 	}
 
-	public Vec2 getOrigin() {
-		return robot.getBody().getPosition();
-	}
-
 	/*
 	 * return -1: ignore this fixture and continue return 0: terminate the ray
 	 * cast return fraction: clip the ray to this point return 1: don't clip the
@@ -29,14 +25,13 @@ public class LureCallback implements RayCastCallback, GameDetectionCallback{
 	 */
 
 	@Override
-	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal,
-			float fraction) {
+	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
 		final Vec2 pos = fixture.getBody().getPosition();
 		final Element elem = (Element) fixture.getBody().getUserData();
 		System.out.println("raycats");
 		if (elem.typeElem() != ElementType.COMPUTER_ROBOT) {
 			robot.getBody().setAwake(true);
-			return -1;
+			return 0;
 		}
 		final Vec2 force = pos.sub(point);
 		elem.move(new Vec2(-force.x * 100000, -force.y * 100000));

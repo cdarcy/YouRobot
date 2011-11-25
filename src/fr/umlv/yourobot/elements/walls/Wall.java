@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.dynamics.FixtureDef;
 
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.graphics.DrawAPI;
 
 abstract public class Wall extends Element{
 	public static  int WALL_SIZE = 50;

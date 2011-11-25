@@ -6,10 +6,11 @@ import java.io.IOException;
 import org.jbox2d.common.MathUtils;
 
 import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
 import fr.umlv.yourobot.physics.raycasts.LureCallback;
+import fr.umlv.yourobot.util.ElementType;
 
 public class LureRobot extends Robot {
 
@@ -24,7 +25,7 @@ public class LureRobot extends Robot {
 	
 	public void run(RobotWorld world){
 		LureCallback c = new LureCallback(world, this);
-		for (Robot p : world.getRobots()){
+		for (Element p : world.getListByType(ElementType.COMPUTER_ROBOT)){
 				c.raycast(p);
 		}
 	}

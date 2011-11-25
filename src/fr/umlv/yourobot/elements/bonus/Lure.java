@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.LureRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
+import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.physics.raycasts.LureCallback;
 import fr.umlv.yourobot.util.ElementType;
 
@@ -41,10 +41,10 @@ public class Lure extends Bonus {
 		LureRobot lureRobot = new LureRobot(robot.getPosition().x+10, robot.getPosition().y);
 		world.addLureRobot(lureRobot);
 		final LureCallback c = new LureCallback(world, robot);
-		//new Thread(new Runnable() {
+		new Thread(new Runnable() {
 
-			//@Override
-			//public void run() {
+			@Override
+			public void run() {
 				long start = System.nanoTime();
 				/*try {
 					Thread.sleep(10000);
@@ -52,8 +52,9 @@ public class Lure extends Bonus {
 					e.printStackTrace();
 				}*/
 				System.out.println("test");
-				while (((System.nanoTime()-start)/1000000)<(length*1000)){
-					for (Robot enemy : world.getRobots()){
+
+				while(((System.nanoTime()-start)/1000000)<(length*1000)){
+					for (Element enemy : world.getListByType(ElementType.COMPUTER_ROBOT)){
 						c.raycast(enemy);
 					}
 				}
@@ -62,9 +63,8 @@ public class Lure extends Bonus {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}*/
-				world.delLureRobot(world.getRobots().size()-1);
-			//}
-		//}).start();
+			}
+		}).start();
 		return null;
 	}
 

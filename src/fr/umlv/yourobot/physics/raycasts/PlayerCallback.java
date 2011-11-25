@@ -24,7 +24,7 @@ public class PlayerCallback implements GameDetectionCallback, RayCastCallback {
 	@Override
 	public void raycast(Element elem) {
 		if (MathUtils.distance(robot.getPosition(), elem.getPosition()) < 40) {
-			world.removeBonus(elem.getPosition());
+			world.removeElement(elem);
 			robot.setBonus((Bonus) elem);
 		}
 
@@ -36,8 +36,10 @@ public class PlayerCallback implements GameDetectionCallback, RayCastCallback {
 		if(elem != null)
 			if (elem.classElem() == ElementClass.BONUS && MathUtils.distance(robot.getPosition(), elem.getPosition()) < 40) {
 				if(robot.getBonus() == null){
-					world.removeBonus(elem.getPosition());
-					robot.setBonus((Bonus) elem);
+					synchronized (world.getMonitor()) {
+						world.removeElement(elem);
+						robot.setBonus((Bonus) elem);	
+					}
 				}
 			}
 		return 0;

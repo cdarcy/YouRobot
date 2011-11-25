@@ -18,8 +18,8 @@ import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Circle;
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
 
 abstract public class Robot extends Element {

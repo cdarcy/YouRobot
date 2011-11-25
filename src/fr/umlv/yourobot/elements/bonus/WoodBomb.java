@@ -3,8 +3,8 @@ package fr.umlv.yourobot.elements.bonus;
 import java.awt.Graphics2D;
 import java.io.IOException;
 
-import fr.umlv.yourobot.elements.DrawAPI;
 import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
 public class WoodBomb extends Bomb{

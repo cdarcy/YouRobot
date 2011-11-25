@@ -45,7 +45,7 @@ public class KeyController {
 				
 				PlayerCallback c = new PlayerCallback(world, e);
 				@SuppressWarnings("unchecked")
-				ArrayList<Bonus> bonus = (ArrayList<Bonus>) world.getBonusList().clone();
+				ArrayList<Bonus> bonus = (ArrayList<Bonus>) world.getListByClass(ElementClass.BONUS).clone();
 				for(Bonus b : bonus)
 					world.getJBoxWorld().raycast(c, e.getBody().getPosition(), b.getBody().getPosition());
 			}
