@@ -43,10 +43,13 @@ public class HumanRobot extends Robot {
 	}
 
 	
-	public void controlMenu(Graphics2D g, KeyboardEvent event, RobotWorld world) throws IOException{
+	public void controlMenu(Graphics2D g, KeyboardEvent event, RobotWorld world) throws IOException, InterruptedException{
 		controller.controlMenuPlayer(event, g, world);			
 	}
 	
+	public void controlGraphic(Graphics2D g, KeyboardEvent event, RobotWorld world) throws IOException{
+		controller.controlMenuGraphic(event, g, world);			
+	}
 	
 	public double getLife() {
 		return life;

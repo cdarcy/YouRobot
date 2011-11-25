@@ -26,13 +26,17 @@ public class LoadingGame {
 	}
 	
 	
-	public static void menu(LoadingGame welcome, Graphics2D g) throws IOException, InterruptedException {
-		//MapGenerator background
-		drawLoafingPage(g);
+	public static void menu1(Graphics2D g) throws IOException {
+		drawLoadingPage(g);
 		drawSelectMenuSP(g);
 	}
+	
+	public static void menu2(Graphics2D g) throws IOException, InterruptedException {
+		drawLoadingPage(g);
+		drawSelectMenuGT(g);
+	}
 
-	private static void drawLoafingPage(Graphics2D g) throws IOException {
+	private static void drawLoadingPage(Graphics2D g) throws IOException {
 		if(img == null)
 			img = ImageIO.read(new File("images/accueil.png"));	
 
@@ -40,7 +44,7 @@ public class LoadingGame {
 	}
 
 
-	public static void drawSelectMenuSP(Graphics2D g) throws IOException {
+	public static void drawSelectMenuSP(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		Font fonte = new Font(Font.SERIF,Font.BOLD, 26);
 		g.setFont(fonte);
@@ -49,7 +53,7 @@ public class LoadingGame {
 		g.drawString("Multi players", 330, 550);
 	}
 	
-	public static void drawSelectMenuMP(Graphics2D g) throws IOException {
+	public static void drawSelectMenuMP(Graphics2D g) {
 		g.setColor(Color.BLACK);
 		Font fonte = new Font(Font.SERIF,Font.BOLD, 26);
 		g.setFont(fonte);
@@ -58,14 +62,24 @@ public class LoadingGame {
 		g.drawString("Multi players", 330, 550);
 	}
 
-	public static void drawSelectMenuGT(Graphics2D g) {
-		// TODO Auto-generated method stub
-		
+	public static void drawSelectMenuGT(Graphics2D g) throws IOException {
+		drawLoadingPage(g);
+		g.setColor(Color.WHITE);
+		Font fonte = new Font(Font.SERIF,Font.BOLD, 26);
+		g.setFont(fonte);
+		g.drawString("Texture mode", 330, 450);
+		g.setColor(Color.BLACK);
+		g.drawString("Graphic mode", 330, 550);		
 	}
 
-	public static void drawSelectMenuGC(Graphics2D g) {
-		// TODO Auto-generated method stub
-		
+	public static void drawSelectMenuGC(Graphics2D g) throws IOException {
+		drawLoadingPage(g);
+		g.setColor(Color.BLACK);
+		Font fonte = new Font(Font.SERIF,Font.BOLD, 26);
+		g.setFont(fonte);
+		g.drawString("Texture mode", 330, 450);
+		g.setColor(Color.WHITE);
+		g.drawString("Graphic mode", 330, 550);		
 	}
 
 	

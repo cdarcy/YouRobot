@@ -59,8 +59,8 @@ public class RobotWorld  {
 	private TexturedDrawAPI api;
 	public static int WIDTH = 800;
 	public static int HEIGHT = 600;
-	final String[] keysP1 = {"UP","LEFT","RIGHT","SPACE"};
-	final String[] keysP2 = {"Z","Q","D","X"};
+	final String[] keysP1 = {"UP", "LEFT","RIGHT","SPACE", "DOWN"};
+	final String[] keysP2 = {"Z","Q","D","X", "S"};
 	final Vec2 startCoordsP1 = new Vec2(Wall.WALL_SIZE+30, HEIGHT-100);
 	final Vec2 startCoordsP2 = new Vec2(Wall.WALL_SIZE+30, HEIGHT-200);
 	
@@ -71,6 +71,7 @@ public class RobotWorld  {
 
 	Body body;
 	RobotGameMod mode;
+	
 	/**
 	 * Create a new world simulation
 	 * @param gravity gravity applied to the world
@@ -265,11 +266,14 @@ public class RobotWorld  {
 		}
 	}
 
-	public void doControlMenu(Graphics2D g, KeyboardEvent event, RobotWorld world) throws IOException{
+	public void doControlMenu(Graphics2D g, KeyboardEvent event, RobotWorld world) throws IOException, InterruptedException{
 		if (event == null)
 			return;
-		players.get(0).controlMenu(g, event, world);
-	}
+		if (world.getMode() == null)
+			players.get(0).controlMenu(g, event, world);
+		if (world.getMode() != null) 
+			players.get(0).controlGraphic(g, event, world);
+	}	
 
 	public void drawBonuses(Graphics2D g) throws IOException {
 		for(Bonus b : bonuses){
@@ -401,7 +405,7 @@ public class RobotWorld  {
 
 
 	public void init(Graphics2D g) {
-		setMode(RobotGameMod.TWOPLAYER);
+		//setMode(RobotGameMod.TWOPLAYER);
 
 		ComputerRobot r1;
 		ComputerRobot r2;

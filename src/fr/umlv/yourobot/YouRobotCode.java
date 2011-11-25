@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Random;
 
+import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.welcome.LoadingGame;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
@@ -20,6 +21,7 @@ public class YouRobotCode implements ApplicationCode{
 	final String[] keysP2 = {"Z","S","Q","D","X"};
 	RobotWorld world;
 	LoadingGame welcome;
+	//HumanRobot player1;
 
 
 	@Override
@@ -27,7 +29,7 @@ public class YouRobotCode implements ApplicationCode{
 		// Defining basic World Game
 		// Création de l'objet world basique
 		world = new RobotWorld();
-
+		//player1 = new HumanRobot(world,"loulou",keysP1,46, HEIGHT-97);
 		// Welcoming interface with game and graphic modes choice
 		// C'est ici que je pense que tu dois lancer les deux interfaces de choix utilisateur
 		
@@ -40,6 +42,12 @@ public class YouRobotCode implements ApplicationCode{
 			@Override
 			public void render(Graphics2D graphics) {
 				world.init(graphics);
+				try {
+					LoadingGame.menu1(graphics);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 
@@ -53,9 +61,11 @@ public class YouRobotCode implements ApplicationCode{
 				@Override
 				public void render(final Graphics2D graphics) {
 					try {
-						world.updateGame(graphics, event);
-					
+						world.doControlMenu(graphics, event, world);
 					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 

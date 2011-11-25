@@ -24,12 +24,20 @@ public class KeyController {
 	private String keyLeft;
 	private String keyRight;
 	private String keyFire;
+	
+	public enum RobotTextureMod{
+		TEXTURE,
+		GRAPHIC
+	}
+	RobotTextureMod texture;
+	
 	public KeyController(RobotWorld world, Robot e, String[] keys){
 		this.e = (HumanRobot) e;
 		this.keyUp = keys[0];
 		this.keyLeft = keys[1];
 		this.keyRight = keys[2];
 		this.keyFire = keys[3];
+		this.keyDown = keys[4];
 		this.world = world;
 	}
 
@@ -67,21 +75,37 @@ public class KeyController {
 		
 	}
 	
-	public void controlMenuPlayer(KeyboardEvent event, Graphics2D g, RobotWorld world) throws IOException{
+	public void controlMenuPlayer(KeyboardEvent event, Graphics2D g, RobotWorld world) throws IOException, InterruptedException{
+		RobotGameMod mode = RobotGameMod.ONEPLAYER;
 		if(keyUp.equals(event.getKey().name())){
 			LoadingGame.drawSelectMenuSP(g);
+			mode = RobotGameMod.ONEPLAYER;
 		}
 		if(keyDown.equals(event.getKey().name())){
+			mode = RobotGameMod.TWOPLAYER;
 			LoadingGame.drawSelectMenuMP(g);
+			
+		}
+		if(keyFire.equals(event.getKey().name())){
+			world.setMode(mode);
+			LoadingGame.menu2(g);
 		}
 	}
 	
 	public void controlMenuGraphic(KeyboardEvent event, Graphics2D g, RobotWorld world) throws IOException{
+		RobotTextureMod mode = RobotTextureMod.TEXTURE;
+		
 		if(keyUp.equals(event.getKey().name())){
 			LoadingGame.drawSelectMenuGT(g);
+			mode = RobotTextureMod.TEXTURE;
 		}
 		if(keyDown.equals(event.getKey().name())){
 			LoadingGame.drawSelectMenuGC(g);
+			mode = RobotTextureMod.GRAPHIC;
+			System.out.println("control down");
+		}
+		if (keyFire.equals(event.getKey().name())){
+			
 		}
 	}
 }
