@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Random;
 
+import fr.umlv.yourobot.RobotWorld.RobotGameMod;
 import fr.umlv.yourobot.graphics.MenusAPI;
 import fr.umlv.yourobot.util.KeyController;
 import fr.umlv.yourobot.util.KeyControllers;
@@ -29,6 +30,7 @@ public class YouRobotCode implements ApplicationCode{
 	RobotWorld world;
 	LoadingGame welcome;
 	//HumanRobot player1;
+	private int level = 0;
 
 
 	@Override
@@ -94,58 +96,64 @@ public class YouRobotCode implements ApplicationCode{
 								loop=false;
 								graphics.clearRect(0, 0, 800,600);
 							}
-								
+
 						} catch (IOException | InterruptedException e) {
 							e.printStackTrace();
 						}
 				}
 			});
 		}
-		
+
 		System.out.println("game");
-		// Defining basic Game Object
-		world = new RobotWorld(MenusAPI.choice1, MenusAPI.choice2);
-		
-		context.render(new ApplicationRenderCode() {
-			@Override
-			public void render(Graphics2D graphics) {
-				world.init(graphics);
-			}
-		});
+
 
 		// World game initialisation
-		
+
 		// Game loop. Updates world and manages control.
 		loop=true;
-		while(loop) {
+		for(int i=0;i<20;i++){
+			// Defining basic Game Object
+			world = new RobotWorld(level , MenusAPI.choice1, MenusAPI.choice2);
+
 			context.render(new ApplicationRenderCode() {
 				@Override
-				public void render(final Graphics2D graphics) {
+				public void render(Graphics2D graphics) {
+					world.init(graphics);
+				}
+			});
+			
+			while(loop) {
+				context.render(new ApplicationRenderCode() {
+					@Override
+					public void render(final Graphics2D graphics) {
 						try {
 							final KeyboardEvent event = context.pollKeyboard();
-							world.updateGame(graphics, event);
+							if(world.updateGame(graphics, event)){
+								loop=false;
+								level++;
+							}
 						} catch (IOException e) {
 							e.printStackTrace();
 						} 
-					
+
+					}
+				});
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();	
 				}
-			});
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();	
 			}
 		}
-
 	}
 
 
 	public ApplicationRenderCode runGame(){
 		return new ApplicationRenderCode() {
-			
+
 			@Override
 			public void render(Graphics2D graphics) {
-				
+
 			}
 		};
 	}

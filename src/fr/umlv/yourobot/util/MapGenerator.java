@@ -65,7 +65,7 @@ public class MapGenerator {
 
 	}
 
-	public static void mapRandom (RobotWorld w, Graphics2D g) throws IOException{
+	public static void mapRandom (int level, RobotWorld w, Graphics2D g) throws IOException{
 		new MapStyle();
 		value =  (int) MathUtils.randomFloat(0, 4);
 		world = w;
@@ -74,7 +74,7 @@ public class MapGenerator {
 		world.setBackground(nameBackgroundPicture);
 		createArena(g, world, nameWallPicture);
 		drawArena(g);
-		setWalls(g, 4);
+		setWalls(g, 20);
 	}
 
 	public static void drawArena(Graphics2D g){

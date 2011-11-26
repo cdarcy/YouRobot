@@ -38,6 +38,7 @@ public class HumanRobot extends Robot {
 	public ArrayList<Element> runBonus(RobotWorld world) {
 		if(currentBonus == null)
 			return null;
+		System.out.println(world);
 		return currentBonus.run(world, this);
 	}
 

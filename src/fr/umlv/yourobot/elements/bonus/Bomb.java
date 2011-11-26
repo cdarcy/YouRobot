@@ -49,9 +49,9 @@ public abstract class Bomb extends Bonus {
 
 					x = robot.getBody().getWorldCenter().x;
 					y = robot.getBody().getWorldCenter().y;
-					RadialGradientPaint paint1 = new RadialGradientPaint(x, y, BONUS_SIZE+i, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.ORANGE});
+					RadialGradientPaint paint1 = new RadialGradientPaint(x, y, BONUS_SIZE+i, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.YELLOW});
 					
-					c1 = new Circle(paint1, BONUS_SIZE+i, x, y);
+					c1 = new Circle(paint1, BONUS_SIZE+i, x, y, ElementType.EFFECT);
 					world.addElement(c1, BodyType.DYNAMIC, true);
 				}
 				float size = 200;
@@ -62,7 +62,7 @@ public abstract class Bomb extends Bonus {
 				
 				System.out.println(aabb.getExtents());
 				world.getJBoxWorld().queryAABB(b, new AABB(lower, upper));
-				//world.removeEffects();
+				world.removeEffects();
 			}
 		}).run();
 		return b.getRaycastedBorder();

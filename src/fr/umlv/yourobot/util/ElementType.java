@@ -13,7 +13,8 @@ public enum ElementType{
 	EFFECT(ElementClass.EFFECT), 
 	ICEBOMB(ElementClass.BONUS),
 	STONEBOMB(ElementClass.BONUS), 
-	WOODBOMB(ElementClass.BONUS);
+	WOODBOMB(ElementClass.BONUS), 
+	END_CIRCLE(ElementClass.CIRCLE);
 
 	private ElementClass eclass;
 	private ElementType(ElementClass c){

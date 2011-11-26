@@ -13,6 +13,7 @@ import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.util.ElementType;
 
 public class Circle extends Element {
 	private Float circle;
@@ -23,19 +24,20 @@ public class Circle extends Element {
 		bodyElem.setType(BodyType.DYNAMIC);	
 	}
 
-	public Circle(RadialGradientPaint paint, float size, float x, float y) {
+	public Circle(RadialGradientPaint paint, float size, float x, float y, ElementType type) {
 		super(x, y);
 		fixtureDef = new FixtureDef();
 		shapeElem = new CircleShape();
 		fixtureDef.shape = shapeElem;
 		this.circle = new Ellipse2D.Float(x - size/2, y - size/2, size, size);
 		this.paint = paint;
+		this.type = type;
 	}
 
 	@Override
 	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
 		g.setPaint(paint);
-		g.draw(circle);
+		g.fill(circle);
 		return this;
 	}
 

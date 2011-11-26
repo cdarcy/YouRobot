@@ -5,7 +5,8 @@ public enum ElementClass{
 	WALL, // Wall group
 	BONUS, // Bonus group
 	BLOCK, // For Borderwalls 
-	EFFECT; // Circles
+	EFFECT,
+	CIRCLE; // Circles
 	
 }
 

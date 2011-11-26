@@ -41,16 +41,11 @@ public class CollisionListener implements ContactListener {
 				elem.move(new Vec2(force.x * 10000, force.y * 10000));
 				elem.setDetect(false);
 				HumanRobot h = (HumanRobot) elemB;
-				System.out.println(contact.getFixtureA().getBody().m_linearVelocity.normalize());
 				double ecart = contact.getFixtureA().getBody().m_linearVelocity.normalize() * 0.003;
-				System.out.println();
 				h.setLife((ecart+0.3));
-				//System.out.println(h.getLife());
 			}
-			else{
-				Robot elem = (Robot)elemA;
-				elem.rotate(MathUtils.randomFloat(-180, 180));
-				elem.impulse(100000);
+			else if(elemB.typeElem() == ElementType.END_CIRCLE){
+				world.setGameFinished();
 			}
 
 			break;
@@ -80,12 +75,11 @@ public class CollisionListener implements ContactListener {
 	}
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		Element elemA = (Element) contact.getFixtureA().getBody().getUserData();
 		Element elemB = (Element) contact.getFixtureB().getBody().getUserData();
 
-		if(elemA == null || elemB == null)
+		if(elemB == null)
 			return;
-		if(elemA.typeElem() != ElementType.PLAYER_ROBOT && elemB.classElem() == ElementClass.BONUS)
+		if(elemB.classElem() == ElementClass.BONUS)
 			contact.setEnabled(false);
 		
 	}

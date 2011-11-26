@@ -2,6 +2,10 @@ package fr.umlv.yourobot.elements.robots;
 
 import java.awt.Graphics2D;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 
 import org.jbox2d.common.MathUtils;
@@ -33,13 +37,29 @@ public class ComputerRobot extends Robot {
 			@Override
 			public void run() {
 				float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
+				ArrayList<Element> list = new ArrayList<>();
+				list.addAll(world.getListByType(ElementType.PLAYER_ROBOT));
+				list.addAll(world.getListByType(ElementType.LURE_ROBOT));
+				
 				while(true) {
-
-					for (final Element p : world.getListByType(ElementType.PLAYER_ROBOT)){
+					for (final Element p : list){
 						float distance = MathUtils.distance(bodyElem.getPosition(), p.getPosition());
 						Random rand = new Random();
-						if(distance > quarter_diagonal){
-							
+						
+						if(distance < quarter_diagonal && p.typeElem() == ElementType.PLAYER_ROBOT && world.getListByType(ElementType.LURE_ROBOT).size() == 0)
+						{
+							distance = MathUtils.distance(bodyElem.getPosition(), p.getPosition());
+							final Vec2 force = p.getPosition().sub(bodyElem.getPosition());		
+							move(new Vec2(force.x * 10000, force.y * 10000));
+
+							try {
+								Thread.sleep(rand.nextInt(2000));
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+
+						}
+						else  {
 							int rotation = rand.nextInt(45);
 
 							if(rand.nextBoolean()) {
@@ -49,22 +69,11 @@ public class ComputerRobot extends Robot {
 								rotate(rotation);
 							}
 							final Vec2 imp = new Vec2();
-							
+
 							imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
 							imp.y = (float) Math.sin(Math.toRadians(direction)) * SPEED;
-							
+
 							bodyElem.applyLinearImpulse(imp, getPosition());
-
-						}
-						else {
-							final Vec2 force = p.getPosition().sub(bodyElem.getPosition());		
-							move(new Vec2(force.x * 10000, force.y * 10000));
-
-							try {
-								Thread.sleep(rand.nextInt(2000));
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
 						}
 						try {
 							Thread.sleep(rand.nextInt(5000));

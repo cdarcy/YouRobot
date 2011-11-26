@@ -28,7 +28,6 @@ public class LureCallback implements RayCastCallback, GameDetectionCallback{
 	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
 		final Vec2 pos = fixture.getBody().getPosition();
 		final Element elem = (Element) fixture.getBody().getUserData();
-		System.out.println("raycats");
 		if (elem.typeElem() != ElementType.COMPUTER_ROBOT) {
 			robot.getBody().setAwake(true);
 			return 0;
@@ -40,8 +39,8 @@ public class LureCallback implements RayCastCallback, GameDetectionCallback{
 
 	@Override
 	public void raycast(Element elem) {
-		world.getJBoxWorld().raycast(this, robot.getBody().getPosition(),
-		elem.getBody().getPosition());
+		if(elem.getBody().getPosition() != null)
+			world.getJBoxWorld().raycast(this, robot.getBody().getPosition(), elem.getBody().getPosition());
 	}
 
 }
