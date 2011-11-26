@@ -16,7 +16,7 @@ import org.jbox2d.dynamics.FixtureDef;
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 
 abstract public class Bonus extends Element{
 	protected static  int BONUS_SIZE = 30;
@@ -40,7 +40,7 @@ abstract public class Bonus extends Element{
 		color = Color.BLACK;
 	}
 	
-	public Element draw(String name, Graphics2D g, DrawAPI api) throws IOException{
+	public Element draw(String name, Graphics2D g, GameDrawAPI api) throws IOException{
 		Vec2 pos = this.bodyElem.getPosition();	
 		if(img==null)
 			img=ImageIO.read(new File("images/"+name));

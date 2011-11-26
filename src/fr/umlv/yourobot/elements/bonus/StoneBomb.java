@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
 public class StoneBomb extends Bomb {
@@ -18,7 +18,7 @@ public class StoneBomb extends Bomb {
 	}
 	
 	@Override
-	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		return super.draw("stonebomb.png", g, api);
 	}
 

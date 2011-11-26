@@ -17,7 +17,7 @@ import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.physics.raycasts.BombWaveCallback;
 import fr.umlv.yourobot.util.ElementType;
 
@@ -69,11 +69,11 @@ public abstract class Bomb extends Bonus {
 	}
 
 	@Override
-	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		return super.draw("bombicon.png", g, api);
 	}
 	
-	public Element draw(String image, Graphics2D g, DrawAPI api) throws IOException {
+	public Element draw(String image, Graphics2D g, GameDrawAPI api) throws IOException {
 		return super.draw(image, g, api);
 	}
 }

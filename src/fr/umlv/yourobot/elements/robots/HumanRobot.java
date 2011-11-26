@@ -9,7 +9,7 @@ import fr.umlv.yourobot.RobotWorld.RobotGameMod;
 import fr.umlv.yourobot.YouRobotCode;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
 import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
@@ -67,7 +67,7 @@ public class HumanRobot extends Robot {
 	}
 
 	@Override
-	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		super.draw(this, "robot_game.png", g, api);
 		return this;
 	}

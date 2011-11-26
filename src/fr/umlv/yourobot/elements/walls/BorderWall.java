@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
 public class BorderWall extends Wall{
@@ -25,7 +25,7 @@ public class BorderWall extends Wall{
 
 
 	@Override
-	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		super.draw(this, fileName, g, api);
 		return this;
 	}

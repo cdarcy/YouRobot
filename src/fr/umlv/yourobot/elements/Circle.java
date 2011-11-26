@@ -12,8 +12,12 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
+<<<<<<< HEAD
 import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.util.ElementType;
+=======
+import fr.umlv.yourobot.graphics.GameDrawAPI;
+>>>>>>> 802290debd1d84e6cb628fed522789f61efc2a0b
 
 public class Circle extends Element {
 	private Float circle;
@@ -35,7 +39,7 @@ public class Circle extends Element {
 	}
 
 	@Override
-	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		g.setPaint(paint);
 		g.fill(circle);
 		return this;
