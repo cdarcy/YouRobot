@@ -19,7 +19,7 @@ import org.jbox2d.dynamics.FixtureDef;
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
 
 abstract public class Robot extends Element {
@@ -69,14 +69,23 @@ abstract public class Robot extends Element {
 		return pName;
 	}
 
-	public void impulse() {
+	public void impulse(RobotWorld world) {
+		
 		final Vec2 imp = new Vec2();
+		final Vec2 dir = new Vec2();
+		
 
 		imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
 		imp.y = (float) Math.sin(Math.toRadians(direction)) * SPEED;
-
+		
 		bodyElem.applyLinearImpulse(imp, bodyElem.getLocalCenter());
-
+		
+		dir.x = (float) Math.cos(Math.toRadians(direction*135));
+		dir.y = (float) Math.sin(Math.toRadians(direction*135));
+		
+		RadialGradientPaint paint = new RadialGradientPaint(dir.x, dir.y, 20, new float[]{.3f, 1f}, new Color[]{Color.YELLOW, Color.YELLOW});
+		Circle circle = new Circle (paint, 20, dir.x, dir.y);
+		world.addDynamicElement(circle);
 	}
 
 	public void impulse(float speed){
@@ -86,6 +95,7 @@ abstract public class Robot extends Element {
 		bodyElem.applyLinearImpulse(imp, bodyElem.getLocalCenter());
 
 	}
+	
 	public void rotate(float inc) {
 		direction = (direction + inc) % 360;
 		bodyElem.setType(BodyType.DYNAMIC);
@@ -97,7 +107,7 @@ abstract public class Robot extends Element {
 		super.setBody(bodyElem);
 	}
 
-	public Robot draw(Element robot, String fileName, Graphics2D g, DrawAPI api) throws IOException {
+	public Robot draw(Element robot, String fileName, Graphics2D g, GameDrawAPI api) throws IOException {
 		if(img == null)
 			img = ImageIO.read(new File("images/" + fileName));
 		api.drawCircle(robot.getBody().getPosition(), direction, Color.lightGray, img, g);

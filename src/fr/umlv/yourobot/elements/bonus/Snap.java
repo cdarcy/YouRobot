@@ -19,7 +19,7 @@ import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 
@@ -119,7 +119,7 @@ public class Snap  extends Bonus  {
 	}
 
 	@Override
-	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		super.draw("snap.png", g, api);
 		Graphics gr = g.create();
 		gr.setColor(Color.WHITE);

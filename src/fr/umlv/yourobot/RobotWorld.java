@@ -1,6 +1,7 @@
 package fr.umlv.yourobot;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.geom.Ellipse2D;
@@ -32,9 +33,7 @@ import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.elements.walls.BorderWall;
 import fr.umlv.yourobot.elements.walls.Wall;
-import fr.umlv.yourobot.graphics.ColoredDrawAPI;
-import fr.umlv.yourobot.graphics.DrawAPI;
-import fr.umlv.yourobot.graphics.TexturedDrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
@@ -48,7 +47,7 @@ public class RobotWorld  {
 	private BufferedImage img;
 	private World jboxWorld;
 	private Object monitor = new Object();
-	private DrawAPI api;
+	private GameDrawAPI api;
 	private ArrayList<Element> players;
 	private ArrayList<Element> all;
 	public static final int WIDTH = 800;
@@ -71,10 +70,7 @@ public class RobotWorld  {
 	public RobotWorld(RobotGameMod gameMod, RobotTextureMod graphicMod) {
 		jboxWorld = new World(new Vec2(0, 0), true);
 		mode = gameMod;
-		if(graphicMod == RobotTextureMod.GRAPHIC)
-			api = new ColoredDrawAPI();
-		else
-			api = new TexturedDrawAPI();
+		api = new GameDrawAPI();
 
 		body = jboxWorld.createBody(new BodyDef());
 		body.setUserData(this);
@@ -117,7 +113,7 @@ public class RobotWorld  {
 	}
 
 	public Element addDynamicElement(Element element){
-		addElement(element, BodyType.STATIC, true);
+		addElement(element, BodyType.DYNAMIC, true);
 		return element;
 	}
 
@@ -203,21 +199,6 @@ public class RobotWorld  {
 		drawInterface(g);
 	}
 
-	private void drawBackground(Graphics2D g) {
-		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
-
-		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
-		g.setPaint(paint1);
-		g.fill(new Ellipse2D.Float(43, HEIGHT-100, 40, 40));
-		RadialGradientPaint paint2 = new RadialGradientPaint(70, HEIGHT-150, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
-		g.setPaint(paint2);
-		g.fill(new Ellipse2D.Float(43, HEIGHT-150, 40, 40));
-		RadialGradientPaint paint3 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.GREEN});
-		g.setPaint(paint3);
-		g.fill(new Ellipse2D.Float(705, 43, 40, 40));
-	}
-
-
 	/**
 	 * @param args
 	 */
@@ -263,14 +244,6 @@ public class RobotWorld  {
 		}
 
 	}
-	public void draw(Graphics2D g) throws IOException {
-			for(Element e : all){
-				if(e!=null)	
-					e.draw(g, api);
-			}
-			
-		map.remove(ElementType.EFFECT);
-	}
 
 	public void removeEffects() {
 		for(Element e : getListByClass(ElementClass.EFFECT)){
@@ -283,12 +256,46 @@ public class RobotWorld  {
 		return map.get(elclass);
 	}
 
+	private void drawBackground(Graphics2D g) {
+		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
+
+		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
+		g.setPaint(paint1);
+		g.fill(new Ellipse2D.Float(43, HEIGHT-100, 40, 40));
+		if (mode == RobotGameMod.TWOPLAYER){
+			RadialGradientPaint paint2 = new RadialGradientPaint(70, HEIGHT-150, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
+			g.setPaint(paint2);
+			 g.fill(new Ellipse2D.Float(43, HEIGHT-150, 40, 40));
+		}
+		RadialGradientPaint paint3 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
+		g.setPaint(paint3);
+		g.fill(new Ellipse2D.Float(705, 43, 40, 40));
+	}
+	
+	public void draw(Graphics2D g) throws IOException {
+		for(Element e : all){
+			if(e!=null)	
+				e.draw(g, api);
+		}
+		
+	map.remove(ElementType.EFFECT);
+}
 
 	public void drawInterface(Graphics2D g) throws IOException {
-		g.setColor(Color.BLACK);
 		HumanRobot p1 = (HumanRobot) players.get(0);
 		int p1Col = 10;
-		g.drawString("Player 1 : " + p1.getpName() + " - " + p1.getLife()+"%", p1Col, 15);
+		g.setColor(Color.CYAN);
+		Font fonte = new Font(Font.SERIF,Font.BOLD, 20);
+		g.setFont(fonte);
+		g.drawString("player 1 - " + Math.round(p1.getLife())+"%", p1Col, 20);
+		if (mode == RobotGameMod.TWOPLAYER){
+			HumanRobot p2 = (HumanRobot) players.get(0);
+			int p2Col = 640;
+			g.setColor(Color.CYAN);
+			Font fonte2 = new Font(Font.SERIF,Font.BOLD, 20);
+			g.setFont(fonte2);
+			g.drawString("player 2 - " + Math.round(p2.getLife()) +"%", p2Col, 20);
+		}
 	}
 
 	public void setMode(RobotGameMod mode) {
@@ -355,7 +362,7 @@ public class RobotWorld  {
 		e1.setController(KeyControllers.getGameController(this, e1, keysP1));
 		addPlayer(e1);
 		if(mode == RobotGameMod.TWOPLAYER){
-			e2 = new HumanRobot(this,"Camcam",46, HEIGHT-147);
+			e2 = new HumanRobot(this,"Loulou",46, HEIGHT-147);
 			e2.setController(KeyControllers.getGameController(this, e2, keysP2));
 			addPlayer(e2);
 		}
@@ -372,14 +379,12 @@ public class RobotWorld  {
 		try {
 			updateRobots();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		for(Element e : map.get(ElementClass.BLOCK)){
 			try {
 				e.draw(g, api);
 			} catch (IOException e3) {
-				// TODO Auto-generated catch block
 				e3.printStackTrace();
 			}
 		}
@@ -397,7 +402,7 @@ public class RobotWorld  {
 
 
 
-	public DrawAPI getApi() {
+	public GameDrawAPI getApi() {
 		return api;
 	}
 
@@ -407,7 +412,7 @@ public class RobotWorld  {
 	}
 
 
-	public void setApi(TexturedDrawAPI api) {
+	public void setApi(GameDrawAPI api) {
 		this.api = api;
 	}
 

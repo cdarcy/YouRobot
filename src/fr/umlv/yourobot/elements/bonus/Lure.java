@@ -15,7 +15,7 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.LureRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.physics.raycasts.LureCallback;
 import fr.umlv.yourobot.util.ElementType;
 
@@ -69,7 +69,7 @@ public class Lure extends Bonus {
 	}
 
 	@Override
-	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		super.draw("lure.png", g, api);
 		Graphics gr = g.create();
 		gr.setColor(Color.WHITE);

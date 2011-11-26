@@ -10,7 +10,7 @@ import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 
 abstract public class Wall extends Element{
 	public static  int WALL_SIZE = 50;
@@ -29,7 +29,7 @@ abstract public class Wall extends Element{
 		shapeElem.setAsBox(RADIUS, RADIUS);
 	}
 	
-	public Wall draw(Element wall, String fileName, Graphics2D g, DrawAPI api) throws IOException {
+	public Wall draw(Element wall, String fileName, Graphics2D g, GameDrawAPI api) throws IOException {
 		if(img == null)
 			img = ImageIO.read(new File("images/" + fileName));
 		api.drawWall(wall.getBody().getWorldCenter(), img, Color.lightGray, g);

@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
 public class IceWall extends Wall {
@@ -21,7 +21,7 @@ public class IceWall extends Wall {
 	}
 
 	@Override
-	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
+	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		final Vec2 pos = bodyElem.getPosition();
 		if (img == null) {
 			img = ImageIO.read(new File("images/iceWall.png"));

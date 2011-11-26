@@ -6,7 +6,8 @@ import java.io.IOException;
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.RobotWorld.RobotGameMod;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.graphics.MenusAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
+import fr.umlv.yourobot.graphics.MenusDrawAPI;
 
 public class KeyControllers {
 	private static RobotGameMod player;
@@ -33,7 +34,7 @@ public class KeyControllers {
 		return new KeyController(keys) {	
 			@Override
 			public void pressKeyUp() {
-				e.impulse();
+				e.impulse(world);
 			}
 
 			@Override
@@ -71,7 +72,7 @@ public class KeyControllers {
 
 			@Override
 			public void pressKeyUp() {
-				MenusAPI.choice1 = RobotGameMod.ONEPLAYER;
+				MenusDrawAPI.choice1 = RobotGameMod.ONEPLAYER;
 			}
 			@Override
 			public void pressKeyFire() {
@@ -79,7 +80,7 @@ public class KeyControllers {
 			}
 			@Override
 			public void pressKeyDown() {
-				MenusAPI.choice1 = RobotGameMod.TWOPLAYER;
+				MenusDrawAPI.choice1 = RobotGameMod.TWOPLAYER;
 			}
 			@Override
 			public void pressKeyRight() { 	 }
@@ -88,7 +89,7 @@ public class KeyControllers {
 			@Override
 			public void drawMenu(Graphics2D g) {
 				try {
-					MenusAPI.menu1(g);
+					MenusDrawAPI.menu1(g);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -101,18 +102,16 @@ public class KeyControllers {
 		return new KeyController(keys){
 			@Override
 			public void pressKeyUp() {
-				MenusAPI.choice2 = RobotTextureMod.TEXTURE;
+				MenusDrawAPI.choice2 = RobotTextureMod.TEXTURE;
 			}
 
 			@Override
 			public void pressKeyDown() {
-				MenusAPI.choice2 = RobotTextureMod.GRAPHIC;
+				MenusDrawAPI.choice2 = RobotTextureMod.GRAPHIC;
 			}
 
 			@Override
 			public void pressKeyLeft() {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
@@ -126,9 +125,8 @@ public class KeyControllers {
 			@Override
 			public void drawMenu(Graphics2D g) {
 				try {
-					MenusAPI.menu2(g);
+					MenusDrawAPI.menu2(g);
 				} catch (IOException | InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

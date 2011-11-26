@@ -9,7 +9,7 @@ import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
 import fr.umlv.yourobot.util.ElementType;
 
@@ -22,7 +22,7 @@ public class ComputerRobot extends Robot {
 		detect = false;
 	}
 
-	public Element draw(Graphics2D g, DrawAPI api) throws IOException{
+	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException{
 		super.draw(this, "robot_IA.png", g, api);
 		return this;
 	}

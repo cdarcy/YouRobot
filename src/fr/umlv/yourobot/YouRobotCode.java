@@ -4,10 +4,9 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Random;
 
-import fr.umlv.yourobot.graphics.MenusAPI;
+import fr.umlv.yourobot.graphics.MenusDrawAPI;
 import fr.umlv.yourobot.util.KeyController;
 import fr.umlv.yourobot.util.KeyControllers;
-import fr.umlv.yourobot.welcome.LoadingGame;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
 import fr.umlv.zen.ApplicationRenderCode;
@@ -27,7 +26,6 @@ public class YouRobotCode implements ApplicationCode{
 
 
 	RobotWorld world;
-	LoadingGame welcome;
 	//HumanRobot player1;
 
 
@@ -42,7 +40,7 @@ public class YouRobotCode implements ApplicationCode{
 			public void render(Graphics2D graphics) {
 
 				try {
-					MenusAPI.menu1(graphics);
+					MenusDrawAPI.menu1(graphics);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -72,7 +70,7 @@ public class YouRobotCode implements ApplicationCode{
 			public void render(Graphics2D graphics) {
 
 				try {
-					MenusAPI.menu2(graphics);
+					MenusDrawAPI.menu2(graphics);
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (InterruptedException e) {
@@ -104,7 +102,7 @@ public class YouRobotCode implements ApplicationCode{
 		
 		System.out.println("game");
 		// Defining basic Game Object
-		world = new RobotWorld(MenusAPI.choice1, MenusAPI.choice2);
+		world = new RobotWorld(MenusDrawAPI.choice1, MenusDrawAPI.choice2);
 		
 		context.render(new ApplicationRenderCode() {
 			@Override
