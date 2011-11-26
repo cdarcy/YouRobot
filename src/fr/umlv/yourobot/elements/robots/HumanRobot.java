@@ -5,11 +5,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotWorld.RobotGameMod;
+import fr.umlv.yourobot.YouRobotCode;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.graphics.DrawAPI;
+import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
+import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.KeyController;
+import fr.umlv.yourobot.util.KeyControllers;
 import fr.umlv.zen.KeyboardEvent;
 
 public class HumanRobot extends Robot {
@@ -17,9 +22,8 @@ public class HumanRobot extends Robot {
 	private Bonus currentBonus = null;
 	protected KeyController controller;
 	
-	public HumanRobot(RobotWorld world, String name, String[] k, float x, float y) {
+	public HumanRobot(RobotWorld world, String name, float x, float y) {
 		super(x, y);
-		controller = new KeyController(world, this, k);
 		type = ElementType.PLAYER_ROBOT;
 		this.life = 100;
 	}
@@ -42,11 +46,6 @@ public class HumanRobot extends Robot {
 		controller.control(event);
 	}
 
-	
-	public void controlMenu(Graphics2D g, KeyboardEvent event, RobotWorld world) throws IOException{
-		controller.controlMenuPlayer(event, g, world);			
-	}
-	
 	
 	public double getLife() {
 		return life;
@@ -75,5 +74,27 @@ public class HumanRobot extends Robot {
 
 	public float getDirection() {
 		return direction;
+	}
+
+
+	public void detectBonus(RobotWorld world) {
+		if(getBonus() == null){
+			PlayerCallback c = new PlayerCallback(world, this);
+			@SuppressWarnings("unchecked")
+			ArrayList<Bonus> bonus = (ArrayList<Bonus>) world.getListByClass(ElementClass.BONUS).clone();
+			for(Bonus b : bonus)
+				world.getJBoxWorld().raycast(c, bodyElem.getPosition(), b.getBody().getPosition());
+		}
+		else{
+			ArrayList<Element> list = runBonus(world);
+			if(list != null && list.size()>0)
+				world.drawElements(list);
+			setBonus(null);
+		}
+	}
+
+
+	public void setController(KeyController gameController) {
+		this.controller = gameController;
 	}
 }

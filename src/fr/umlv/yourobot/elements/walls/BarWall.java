@@ -22,10 +22,7 @@ public class BarWall extends Wall {
 
 	@Override
 	public Element draw(Graphics2D g, DrawAPI api) throws IOException {
-		if(img == null)
-			img = ImageIO.read(new File("images/barrierWall.png"));	
-		g.drawImage(img, null, getX(), getY());	
-		shapeElem.setAsBox(WALL_SIZE, WALL_SIZE);
+		this.draw(this, "barrierWall.png", g, api);
 		return this;
 	}
 

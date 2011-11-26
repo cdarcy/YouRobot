@@ -38,7 +38,7 @@ public class MapGenerator {
 	public static ArrayList<Element> allWall;
 
 
-	public static void drawArena(Graphics2D g, RobotWorld world, String nameWallPicture) throws IOException{
+	public static void createArena(Graphics2D g, RobotWorld world, String nameWallPicture) throws IOException{
 		arena = new ArrayList<>();
 		if (value == 0)	color = new Color(0, 0, 100); //BLUE
 		else if (value == 1)	color = new Color(100, 0, 0); //RED
@@ -47,23 +47,19 @@ public class MapGenerator {
 		for (int i = 0; i < WIDTH/Wall.WALL_SIZE; i++){
 			if(i<HEIGHT){
 				// GAUCHE
-				g.setColor(color);
-				Element element = world.addBorder(0, i*Wall.WALL_SIZE, nameWallPicture);
-				arena.add((BorderWall) element.draw(g, world.getApi()));
+				Element element = (Element) world.addStaticElement(new BorderWall(0, i*Wall.WALL_SIZE, nameWallPicture));
+				arena.add((BorderWall) element);
 
 				// DROITE
-				g.setColor(color);
-				element =  world.addBorder(WIDTH-(Wall.WALL_SIZE-10), i*Wall.WALL_SIZE, nameWallPicture);
-				arena.add((BorderWall) element.draw(g, world.getApi()));
+				element = (Element) world.addStaticElement(new BorderWall(WIDTH-(Wall.WALL_SIZE-10), i*Wall.WALL_SIZE, nameWallPicture));
+				arena.add((BorderWall) element);
 			}
 			// HAUT
-			g.setColor(color);
-			Element element = world.addBorder((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, 0, nameWallPicture);
-			arena.add((BorderWall) element.draw(g, world.getApi()));
+			Element element = (Element) world.addStaticElement(new BorderWall((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, 0, nameWallPicture));
+			arena.add((BorderWall) element);
 			// BAS
-			g.setColor(color);
-			element = world.addBorder((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, HEIGHT-(Wall.WALL_SIZE-10), nameWallPicture);
-			arena.add((BorderWall) element.draw(g, world.getApi()));
+			element = (Element) world.addStaticElement(new BorderWall((i*Wall.WALL_SIZE)+Wall.WALL_SIZE, HEIGHT-(Wall.WALL_SIZE-10), nameWallPicture));
+			arena.add((BorderWall) element);
 
 		}
 
@@ -76,13 +72,15 @@ public class MapGenerator {
 		String nameBackgroundPicture = MapStyle.background.get(value);
 		String nameWallPicture = MapStyle.wall.get(value);
 		world.setBackground(nameBackgroundPicture);
-		drawArena(g, world, nameWallPicture);
+		createArena(g, world, nameWallPicture);
+		drawArena(g);
 		setWalls(g, 4);
 	}
 
 	public static void drawArena(Graphics2D g){
 		for(int i=0;i<arena.size();i++)
 			try {
+				g.setColor(color);
 				arena.get(i).draw(g, world.getApi());
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -115,13 +113,13 @@ public class MapGenerator {
 				allPositions.add(vec2);
 				int randomNumber = (int) MathUtils.randomFloat(0, 4);
 				switch (randomNumber){
-				case (0) : 	world.addWall(new WoodWall(posX, posY));
+				case (0) : 	world.addStaticElement(new WoodWall(posX, posY));
 				break;
-				case (1) : 	world.addWall(new StoneWall(posX, posY));
+				case (1) : 	world.addStaticElement(new StoneWall(posX, posY));
 				break;
-				case (2) : 	world.addWall(new IceWall(posX, posY));		
+				case (2) : 	world.addStaticElement(new IceWall(posX, posY));		
 				break;
-				case (3) : 	world.addWall(new BarWall(posX, posY));		
+				case (3) : 	world.addStaticElement(new BarWall(posX, posY));		
 				break;
 				}
 			}

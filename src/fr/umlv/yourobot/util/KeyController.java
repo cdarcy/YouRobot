@@ -7,6 +7,7 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
+import fr.umlv.yourobot.graphics.TexturedDrawAPI;
 import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
 
 import java.awt.Graphics2D;
@@ -16,73 +17,45 @@ import fr.umlv.yourobot.welcome.LoadingGame;
 
 import fr.umlv.zen.KeyboardEvent;
 
-public class KeyController {
-	private HumanRobot e;
-	private RobotWorld world;
-	private final String keyUp;
+public abstract class KeyController {
+	private String keyUp;
 	private String keyDown;
 	private String keyLeft;
 	private String keyRight;
 	private String keyFire;
-	public KeyController(RobotWorld world, Robot e, String[] keys){
-		this.e = (HumanRobot) e;
-		this.keyUp = keys[0];
-		this.keyLeft = keys[1];
-		this.keyRight = keys[2];
-		this.keyFire = keys[3];
-		this.world = world;
+	protected boolean finished;
+	
+	public KeyController(String keys[]){
+		keyUp = keys[0];
+		keyDown = keys[1];
+		keyLeft = keys[2];
+		keyRight = keys[3];
+		keyFire = keys[4];
+		finished = false;
 	}
-
-	public void control(KeyboardEvent event){
+	
+	public void control(KeyboardEvent event) {
 		if(keyUp.equals(event.getKey().name()))
-			e.impulse();
-		if(keyLeft.equals(event.getKey().name()))
-			e.rotate(-10);
-		if(keyRight.equals(event.getKey().name()))
-			e.rotate(10);
-		if(keyFire.equals(event.getKey().name())){
-			if(e.getBonus() == null){
-				
-				PlayerCallback c = new PlayerCallback(world, e);
-				@SuppressWarnings("unchecked")
-				ArrayList<Bonus> bonus = (ArrayList<Bonus>) world.getListByClass(ElementClass.BONUS).clone();
-				for(Bonus b : bonus)
-					world.getJBoxWorld().raycast(c, e.getBody().getPosition(), b.getBody().getPosition());
-			}
-			else{
-				ArrayList<Element> list = e.runBonus(world);
-				if(list != null && list.size()>0)
-					world.drawElements(list);
-				e.setBonus(null);
-			}
+			pressKeyUp();
+		else if(keyDown.equals(event.getKey().name()))
+			pressKeyDown();
+		else if(keyLeft.equals(event.getKey().name()))
+			pressKeyLeft();
+		else if(keyRight.equals(event.getKey().name()))
+			pressKeyRight();
+		else if(keyFire.equals(event.getKey().name())){
+			pressKeyFire();
 		}
+	}
+	abstract public void pressKeyUp();
+	abstract public void pressKeyDown();
+	abstract public void pressKeyLeft();
+	abstract public void pressKeyRight();
+	abstract public void pressKeyFire();
+	abstract public void drawMenu(Graphics2D g);
+	public boolean isFinished() {
+		return finished;
 	}
 
-	
-	public void control2(KeyboardEvent event){
-		if(keyLeft.equals(event.getKey().name()))
-			e.rotate(-10);
-		if(keyRight.equals(event.getKey().name()))
-			e.rotate(10);
-		
-	}
-	
-	public void controlMenuPlayer(KeyboardEvent event, Graphics2D g, RobotWorld world) throws IOException{
-		if(keyUp.equals(event.getKey().name())){
-			LoadingGame.drawSelectMenuSP(g);
-		}
-		if(keyDown.equals(event.getKey().name())){
-			LoadingGame.drawSelectMenuMP(g);
-		}
-	}
-	
-	public void controlMenuGraphic(KeyboardEvent event, Graphics2D g, RobotWorld world) throws IOException{
-		if(keyUp.equals(event.getKey().name())){
-			LoadingGame.drawSelectMenuGT(g);
-		}
-		if(keyDown.equals(event.getKey().name())){
-			LoadingGame.drawSelectMenuGC(g);
-		}
-	}
 }
 

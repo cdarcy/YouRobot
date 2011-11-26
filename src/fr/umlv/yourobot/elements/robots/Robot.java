@@ -50,8 +50,7 @@ abstract public class Robot extends Element {
 		final float x = bodyElem.getWorldCenter().x;
 		final float y = bodyElem.getWorldCenter().y;
 		final RadialGradientPaint paint = new RadialGradientPaint(x, y,
-				ROBOT_SIZE, new float[] { .5f, 1f }, new Color[] { Color.RED,
-				Color.WHITE });
+				ROBOT_SIZE, new float[] { .0f, 1f }, new Color[] { Color.RED, Color.WHITE });
 		g.setPaint(paint);
 		new Runnable() {
 

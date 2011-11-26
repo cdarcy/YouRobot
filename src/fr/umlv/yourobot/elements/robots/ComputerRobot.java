@@ -35,10 +35,11 @@ public class ComputerRobot extends Robot {
 				float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
 				while(true) {
 
-					Random rand = new Random();
 					for (final Element p : world.getListByType(ElementType.PLAYER_ROBOT)){
 						float distance = MathUtils.distance(bodyElem.getPosition(), p.getPosition());
+						Random rand = new Random();
 						if(distance > quarter_diagonal){
+							
 							int rotation = rand.nextInt(45);
 
 							if(rand.nextBoolean()) {
