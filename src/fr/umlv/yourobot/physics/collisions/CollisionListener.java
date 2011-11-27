@@ -13,7 +13,7 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
-import fr.umlv.yourobot.util.ElementClass;
+import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 
 public class CollisionListener implements ContactListener {
@@ -38,13 +38,10 @@ public class CollisionListener implements ContactListener {
 				ComputerRobot elem = (ComputerRobot)elemA;
 				elem.rotate(MathUtils.randomFloat(15, 180));
 				elem.move(new Vec2(force.x * 10000, force.y * 10000));
-				elem.setDetect(false);
 				HumanRobot h = (HumanRobot) elemB;
 				double ecart = contact.getFixtureA().getBody().m_linearVelocity.normalize() * 0.003;
 				h.setLife((ecart+0.3));
-				System.out.println();
 				h.setLife((ecart+0.49));
-				//System.out.println(h.getLife());
 			}
 			else{
 				Robot elem = (Robot)elemA;

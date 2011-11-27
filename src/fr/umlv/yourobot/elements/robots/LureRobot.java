@@ -12,7 +12,6 @@ import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Lure;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
-import fr.umlv.yourobot.physics.raycasts.AICallback;
 import fr.umlv.yourobot.physics.raycasts.LureCallback;
 import fr.umlv.yourobot.util.ElementType;
 

@@ -20,7 +20,7 @@ import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
-import fr.umlv.yourobot.util.ElementClass;
+import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 
 public class Snap  extends Bonus  {
@@ -70,7 +70,7 @@ public class Snap  extends Bonus  {
 					}
 					System.out.println((System.nanoTime()-start)/1000000 + "<"+length*1000);
 				}
-				for (Element elem : world.getListByClass(ElementClass.WALL)){
+				for (Element elem : world.getWalls()){
 					elem.getBody().setType(BodyType.STATIC);
 				}
 			}

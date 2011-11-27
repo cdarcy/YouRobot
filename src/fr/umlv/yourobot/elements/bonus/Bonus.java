@@ -23,12 +23,6 @@ abstract public class Bonus extends Element{
 	protected BufferedImage img;
 	protected CircleShape shapeElem;
 
-	public enum BonusType{
-		SNAP,
-		BOMB,
-		LURE
-	}
-
 	public Bonus(float x, float y) {
 		super(x, y);
 		fixtureDef = new FixtureDef();
@@ -41,10 +35,9 @@ abstract public class Bonus extends Element{
 	}
 	
 	public Element draw(String name, Graphics2D g, GameDrawAPI api) throws IOException{
-		Vec2 pos = this.bodyElem.getPosition();	
 		if(img==null)
 			img=ImageIO.read(new File("images/"+name));
-		api.drawCircle(pos, 0, Color.GREEN, img, g);
+		api.drawCircle(bodyElem.getPosition(), 0, Color.GREEN, img, g);
 		return this;
 	}
 	abstract public void drawIcon(int x, int y, Graphics2D g) throws IOException;

@@ -37,7 +37,7 @@ import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
-import fr.umlv.yourobot.util.ElementClass;
+import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.KeyControllers;
 import fr.umlv.yourobot.util.KeyControllers.RobotTextureMod;
@@ -47,7 +47,6 @@ import fr.umlv.zen.KeyboardEvent;
 public class RobotWorld  {
 
 	private World jboxWorld;
-	private Object monitor = new Object();
 	private GameDrawAPI api;
 	private ArrayList<Element> players;
 	private ArrayList<Element> all;
@@ -70,12 +69,12 @@ public class RobotWorld  {
 	RobotGameMod mode;
 	private int currentLevel;
 	private boolean finished = false;
+	private ArrayList<Element> walls;
 
 	public RobotWorld(int level, RobotGameMod gameMod, RobotTextureMod graphicMod) {
 		jboxWorld = new World(new Vec2(0, 0), true);
 		mode = gameMod;
 		api = new GameDrawAPI(this);
-
 		body = jboxWorld.createBody(new BodyDef());
 		body.setUserData(this);
 		jboxWorld.setContactListener(new CollisionListener(this));
@@ -85,10 +84,10 @@ public class RobotWorld  {
 		players = new ArrayList<>();
 		toDestroy = new ArrayList<>();
 	}
-	
-		public void setGameFinished(){
-			finished = true;
-		}
+
+	public void setGameFinished(){
+		finished = true;
+	}
 
 	public void addElement(Element element, BodyType type, boolean createFixture){
 		Body body = jboxWorld.createBody(element.getBodyDef());
@@ -98,6 +97,8 @@ public class RobotWorld  {
 			map.put(element.classElem(), l);
 		}
 		else map.get(element.classElem()).add(element);
+		if(element.typeElem()==ElementType.PLAYER_ROBOT)
+			players.add(element);
 		all.add(element);
 		element.setBody(body);
 		body.setUserData(element);
@@ -105,7 +106,7 @@ public class RobotWorld  {
 		if(createFixture)
 			element.setFixture(body.createFixture(element.getFixtureDef()));
 	}
-	
+
 
 	public Element addStaticElement(Element element){
 		addElement(element, BodyType.STATIC, true);
@@ -161,20 +162,19 @@ public class RobotWorld  {
 			doControl(g, event);
 		// Steps jbox2d physics world
 		jboxWorld.step(1/30f, 15, 8);
-		jboxWorld.clearForces();
-		
-		if (Math.round(((HumanRobot) getListByType(ElementType.PLAYER_ROBOT).get(0)).getLife()) == 0){
+
+		if (Math.round(((HumanRobot) players.get(0)).getLife()) == 0){
 			GameDrawAPI.drawGameOver(g);
 			MenusDrawAPI.restartGame(g);
 		}
-		
+
 		//MapGenerator background
 		GameDrawAPI.drawBackground(g);
 		// Draw bonuses before drawing other elements (robots, walls)
 		// Draw elements of the ga		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
 
 		GameDrawAPI.draw(g);
-		
+
 		// Destroy effects
 		for (Element e : toDestroy){
 			jboxWorld.destroyBody(e.getBody());
@@ -183,7 +183,7 @@ public class RobotWorld  {
 		}
 		// Draw Interface
 		GameDrawAPI.drawInterface(g);
-		
+
 		return isGameFinished();
 	}
 
@@ -214,17 +214,17 @@ public class RobotWorld  {
 	public void doControl(Graphics2D g, KeyboardEvent event){
 		if (event == null)
 			return;
-		for(Element r : getListByType(ElementType.PLAYER_ROBOT)){
+		for(Element r : players){
 			if(r != null){
 				((HumanRobot) r).control(g, event);
 			}
 		}
 	}
 
-	public ArrayList<Element> getListByType(ElementType playerRobot) {
+	public ArrayList<Element> getListByType(ElementType type) {
 		ArrayList<Element> l = new ArrayList<>();
-		for(Element e : map.get(playerRobot.getEClass()))
-			if(e.typeElem()==playerRobot)
+		for(Element e : map.get(type.getEClass()))
+			if(e.typeElem()==type)
 				l.add(e);
 		return l;
 	}
@@ -256,6 +256,8 @@ public class RobotWorld  {
 			all.remove(e);
 			toDestroy.add(e);
 		}
+		if(players.contains(e))
+			players.remove(e);
 	}
 
 	public synchronized Element getElement(ElementClass classelem, Vec2 pos){
@@ -277,7 +279,7 @@ public class RobotWorld  {
 		return map.get(group);
 	}
 
-	
+
 
 	public void init(Graphics2D g) {
 		//setMode(RobotGameMod.TWOPLAYER);
@@ -307,6 +309,7 @@ public class RobotWorld  {
 		addDynamicElement(e1);
 		addStaticElement(c1);
 		addStaticElement(c3);
+
 		if(mode == RobotGameMod.TWOPLAYER){
 			e2 = new HumanRobot(this,"Loulou",46, HEIGHT-147);
 			e2.setController(KeyControllers.getGameController(this, e2, keysP2));
@@ -314,7 +317,7 @@ public class RobotWorld  {
 			addStaticElement(c2);
 			addDynamicElement(e2);
 		}
-		
+
 		// create map
 		try {
 			MapGenerator.mapRandom(currentLevel, this, g);
@@ -354,18 +357,22 @@ public class RobotWorld  {
 		return api;
 	}
 
-
-	public Object getMonitor() {
-		return this.monitor;
-	}
-
-
 	public void setApi(GameDrawAPI api) {
 		this.api = api;
 	}
 
 	public ArrayList<Element> getAll() {
 		return all;
+	}
+
+	public ArrayList<Element> getPlayers() {
+		return players;
+	}
+
+	public ArrayList<Element> getWalls() {
+		if(walls == null)
+			walls = map.get(ElementClass.WALL);
+		return walls;
 	}
 
 

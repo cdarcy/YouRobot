@@ -3,9 +3,6 @@ package fr.umlv.yourobot.elements.robots;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Random;
 
 import org.jbox2d.common.MathUtils;
@@ -14,16 +11,12 @@ import org.jbox2d.common.Vec2;
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
-import fr.umlv.yourobot.physics.raycasts.AICallback;
 import fr.umlv.yourobot.util.ElementType;
 
 public class ComputerRobot extends Robot {
-	private AICallback c;
-	private boolean detect;
 	public ComputerRobot(float x, float y) {
 		super(x, y);
 		type = ElementType.COMPUTER_ROBOT;
-		detect = false;
 	}
 
 	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException{
@@ -87,7 +80,4 @@ public class ComputerRobot extends Robot {
 		}).start();
 	}
 
-	public void setDetect(boolean b) {
-		detect = b;
-	}
 }

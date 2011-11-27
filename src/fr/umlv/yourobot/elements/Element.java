@@ -16,8 +16,8 @@ import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.graphics.GameDrawAPI;
-import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
+import fr.umlv.yourobot.util.ElementType.ElementClass;
 
 abstract public class Element {
 

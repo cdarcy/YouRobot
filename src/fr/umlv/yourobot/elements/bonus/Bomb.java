@@ -23,7 +23,7 @@ import fr.umlv.yourobot.util.ElementType;
 
 public abstract class Bomb extends Bonus {
 	protected ElementType typeEffectMax;
-	
+
 	public Bomb(float x, float y) {
 		super(x, y);
 	}
@@ -44,25 +44,25 @@ public abstract class Bomb extends Bonus {
 				Circle c1 = null;
 				float x = 0;
 				float y = 0;
-				for(int i=0;i<120;i++)
-				{
-
-					x = robot.getBody().getWorldCenter().x;
-					y = robot.getBody().getWorldCenter().y;
-					RadialGradientPaint paint1 = new RadialGradientPaint(x, y, BONUS_SIZE+i, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.YELLOW});
-					
-					c1 = new Circle(paint1, BONUS_SIZE+i, x, y, ElementType.EFFECT);
-					world.addElement(c1, BodyType.DYNAMIC, true);
-				}
 				float size = 200;
+
+				x = robot.getBody().getWorldCenter().x;
+				y = robot.getBody().getWorldCenter().y;
 				
-				Vec2 lower = new Vec2(x,y).sub(new Vec2(size, 0));
-				Vec2 upper = new Vec2(x,y).add(new Vec2(size, 0));
+				Vec2 lower = new Vec2(x - size/2, y - size/2);
+				Vec2 upper = new Vec2(x + size/2, y + size/2);
 				AABB aabb =  new AABB(lower, upper);
-				
+
 				System.out.println(aabb.getExtents());
 				world.getJBoxWorld().queryAABB(b, new AABB(lower, upper));
+			
+				RadialGradientPaint paint1 = new RadialGradientPaint(x, y, BONUS_SIZE*7, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.YELLOW});
+
+				c1 = new Circle(paint1, BONUS_SIZE*7, x, y, ElementType.EFFECT);
+				world.addElement(c1, BodyType.DYNAMIC, true);
 				world.removeEffects();
+
+
 			}
 		}).run();
 		return b.getRaycastedBorder();
@@ -72,7 +72,7 @@ public abstract class Bomb extends Bonus {
 	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		return super.draw("bombicon.png", g, api);
 	}
-	
+
 	public Element draw(String image, Graphics2D g, GameDrawAPI api) throws IOException {
 		return super.draw(image, g, api);
 	}

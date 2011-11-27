@@ -9,7 +9,7 @@ import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.util.ElementClass;
+import fr.umlv.yourobot.util.ElementType.ElementClass;
 
 public class PlayerCallback implements GameDetectionCallback, RayCastCallback {
 
@@ -36,10 +36,8 @@ public class PlayerCallback implements GameDetectionCallback, RayCastCallback {
 		if(elem != null)
 			if (elem.classElem() == ElementClass.BONUS && MathUtils.distance(robot.getPosition(), elem.getPosition()) < 40) {
 				if(robot.getBonus() == null){
-					synchronized (world.getMonitor()) {
-						world.removeElement(elem);
-						robot.setBonus((Bonus) elem);	
-					}
+					world.removeElement(elem);
+					robot.setBonus((Bonus) elem);	
 				}
 			}
 		return 0;

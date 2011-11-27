@@ -11,7 +11,7 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
-import fr.umlv.yourobot.util.ElementClass;
+import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.KeyController;
 import fr.umlv.yourobot.util.KeyControllers;

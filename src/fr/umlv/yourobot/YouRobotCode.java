@@ -26,7 +26,7 @@ public class YouRobotCode implements ApplicationCode{
 	KeyController modeController  = KeyControllers.getMenuController(DEFAULT_KEYBOARDSET);
 
 
-	RobotWorld world;
+	volatile RobotWorld world;
 	//HumanRobot player1;
 	private int level = 0;
 
@@ -122,23 +122,7 @@ public class YouRobotCode implements ApplicationCode{
 			System.out.println(level);
 			while(loop) {
 				
-				context.render(new ApplicationRenderCode() {
-					@Override
-					public void render(final Graphics2D graphics) {
-						try {
-							final KeyboardEvent event = context.pollKeyboard();
-							if(world.updateGame(graphics, event)){
-								loop=false;
-								level++;
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						} 
-
-					}
-				});
+				context.render(runGame(context));
 				try {
 					Thread.sleep(20);
 				} catch (InterruptedException e1) {
@@ -149,12 +133,22 @@ public class YouRobotCode implements ApplicationCode{
 	}
 
 
-	public ApplicationRenderCode runGame(){
+	public ApplicationRenderCode runGame(final ApplicationContext context){
 		return new ApplicationRenderCode() {
 
 			@Override
 			public void render(Graphics2D graphics) {
-
+				try {
+					final KeyboardEvent event = context.pollKeyboard();
+					if(world.updateGame(graphics, event)){
+						loop=false;
+						level++;
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} 
 			}
 		};
 	}

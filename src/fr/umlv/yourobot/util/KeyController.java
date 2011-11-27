@@ -1,17 +1,6 @@
 package fr.umlv.yourobot.util;
 
-import java.util.ArrayList;
-
-import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.bonus.Bonus;
-import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.elements.robots.Robot;
-import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
-
 import java.awt.Graphics2D;
-import java.io.IOException;
-import fr.umlv.yourobot.RobotWorld.RobotGameMod;
 
 import fr.umlv.zen.KeyboardEvent;
 

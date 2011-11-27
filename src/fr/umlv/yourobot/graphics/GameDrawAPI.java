@@ -10,23 +10,19 @@ import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.BodyType;
 
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.RobotWorld.RobotGameMod;
-import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
-import fr.umlv.yourobot.util.ElementClass;
+import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
-import fr.umlv.yourobot.elements.Element;
 
 public class GameDrawAPI{
 	
@@ -79,12 +75,15 @@ public class GameDrawAPI{
 		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
 	}
 	
+	/* 
+	 *TODO : switch case in RobotWorld to manage lists to store bonuses, circles, robots, players and walls
+	 */
 	public static void draw(Graphics2D g) throws IOException {
 		for(Element e : world.getListByClass(ElementClass.BONUS)){
 			if(e != null)	
 				e.draw(g, world.getApi());
 		}
-		for(Element e : world.getListByType(ElementType.START_CIRCLE)){
+		for(Element e : world.getListByClass(ElementClass.CIRCLE)){
 			if(e != null)	
 				e.draw(g, world.getApi());
 		}
@@ -98,15 +97,15 @@ public class GameDrawAPI{
 
 
 	public static void drawInterface(Graphics2D g) throws IOException {
-		HumanRobot p1 = (HumanRobot) world.getListByType(ElementType.PLAYER_ROBOT).get(0);
+		HumanRobot p1 = (HumanRobot) world.getPlayers().get(0);
 		
 		int p1Col = 10;
-		g.setColor(Color.CYAN);
+		g.setColor(Color.ORANGE);
 		Font fonte = new Font(Font.SERIF,Font.BOLD, 20);
 		g.setFont(fonte);
 		g.drawString("player 1 - " + Math.round(p1.getLife())+"%", p1Col, 20);
 		if (world.getMode() == RobotGameMod.TWOPLAYER){
-			HumanRobot p2 = (HumanRobot) world.getListByType(ElementType.PLAYER_ROBOT).get(1);
+			HumanRobot p2 = (HumanRobot) world.getPlayers().get(1);
 			int p2Col = 640;
 			g.setColor(Color.CYAN);
 			Font fonte2 = new Font(Font.SERIF,Font.BOLD, 20);
@@ -114,7 +113,9 @@ public class GameDrawAPI{
 			g.drawString("player 2 - " + Math.round(p2.getLife()) +"%", p2Col, 20);
 		}
 	}
-	
+
+
+
 	public static void setBackground(String nameBackgroundPicture) throws IOException {
 		img = ImageIO.read(new File("images/" + nameBackgroundPicture));
 	}

@@ -17,7 +17,6 @@ public class BombWaveCallback implements QueryCallback {
 	private HumanRobot robot;
 	private ArrayList<Element> raycasted;
 	private ElementType maxEffectType;
-	private float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
 
 
 	public BombWaveCallback(RobotWorld world, HumanRobot robot, ElementType typeEffectMax){
