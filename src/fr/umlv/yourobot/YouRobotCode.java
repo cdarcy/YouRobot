@@ -2,7 +2,6 @@ package fr.umlv.yourobot;
 
 import java.awt.Graphics2D;
 import java.io.IOException;
-import java.util.Random;
 
 import fr.umlv.yourobot.RobotGame.StateGame;
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
@@ -25,15 +24,15 @@ public class YouRobotCode implements ApplicationCode{
 
 	final int WIDTH = 800;
 	final int HEIGHT = 600;
-	
+
 	public static boolean loop = true;
 	public static StateGame causeInterruption;
 	public final static String[] DEFAULT_KEYBOARDSET = {"UP","DOWN","LEFT","RIGHT", "SPACE"};
 	public final static String[] ALT_KEYBOARDSET  = {"Z","S","Q","D","X"};
 
-	private static KeyController graphicController  = KeyControllers.getGraphicsMenuController(DEFAULT_KEYBOARDSET);
-	private static KeyController modeController  = KeyControllers.getMenuController(DEFAULT_KEYBOARDSET);
-	private static KeyController gameOverMenuController  = KeyControllers.getMenuGameOverController(DEFAULT_KEYBOARDSET);
+	private static KeyController graphicController;
+	private static KeyController modeController;
+	private static KeyController gameOverMenuController;
 
 	private static volatile RobotGame game;
 	private static int level = 0;
@@ -47,53 +46,54 @@ public class YouRobotCode implements ApplicationCode{
 	@Override
 	public void run(final ApplicationContext context) {
 
+		while(true){
+			// Displays menu 1 (game mod choice)
+			context.render(CodeFactory.runMenu1());
 
-		// Welcoming interface with game and graphic modes choice
-		context.render(CodeFactory.runMenu1());
-
-		while(loop) {
-			context.render(CodeFactory.controlMenu1(context));
-		}
-
-		context.render(CodeFactory.runMenu2());
-
-		loop = true;
-		while(loop) {
-			context.render(CodeFactory.controlMenu2(context));
-		}
-
-		/*
-		 * Loop for a set of 10 games
-		 */
-		for(int i=0;i<=9;i++){
-
-			// Initializing new game
-			context.render(CodeFactory.initNewGame());
-			loop=true;
-			
-			// Game updating loop
+			// Loop to control menu 1
 			while(loop) {
-				context.render(CodeFactory.runGame(game, context));
-				try {
-					Thread.sleep(20);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();	
-				}
+				context.render(CodeFactory.controlMenu1(context));
 			}
-			
-			// If players died, we show the game over menu
-			if(causeInterruption == StateGame.PLAYERDIED){
-				context.render(CodeFactory.runMenuGameOver());	
+			// Displays menu 2 (graphic mod choice)
+			context.render(CodeFactory.runMenu2());
+
+			// Loop to control menu 2
+			loop = true;
+			while(loop) {
+				context.render(CodeFactory.controlMenu2(context));
+			}
+
+			// Loop running a set of 10 games
+
+			for(int i=0;i<=9;i++){
+
+				// Initializing new game
+				context.render(CodeFactory.initNewGame());
 				loop=true;
-				while(loop){
-					context.render(CodeFactory.controlMenuGameOver(context));
+
+				// Game updating loop
+				while(loop) {
+					context.render(CodeFactory.runGame(game, context));
+					try {
+						Thread.sleep(20);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();	
+					}
 				}
-				if(MenusDrawAPI.choiceEndGame == GameMenu.EXIT)
-					break;
+
+				// If players died, we show the game over menu
+				if(causeInterruption == StateGame.PLAYERDIED){
+					context.render(CodeFactory.runMenuGameOver());	
+					loop=true;
+					while(loop){
+						context.render(CodeFactory.controlMenuGameOver(context));
+					}
+					if(MenusDrawAPI.choiceEndGame == GameMenu.EXIT)
+						break;
+				}
 			}
 		}
 	}
-
 	/**
 	 * Private inner-class CodeFactory 
 	 * Returns render codes to manage displaying and controlling of menus and game
@@ -102,6 +102,8 @@ public class YouRobotCode implements ApplicationCode{
 	private static class CodeFactory {
 
 		private static ApplicationRenderCode runMenuGameOver() {
+			gameOverMenuController  = KeyControllers.getMenuGameOverController(DEFAULT_KEYBOARDSET);
+
 			return new ApplicationRenderCode() {
 
 				@Override
@@ -109,7 +111,6 @@ public class YouRobotCode implements ApplicationCode{
 					try {
 						MenusDrawAPI.menu3(graphics);
 					} catch (IOException | InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -167,6 +168,7 @@ public class YouRobotCode implements ApplicationCode{
 
 
 		private static ApplicationRenderCode runMenu2() {
+			graphicController  = KeyControllers.getGraphicsMenuController(DEFAULT_KEYBOARDSET);
 			return new ApplicationRenderCode() {
 
 				@Override
@@ -213,6 +215,8 @@ public class YouRobotCode implements ApplicationCode{
 		}
 
 		private static ApplicationRenderCode runMenu1(){
+			modeController  = KeyControllers.getGraphicsMenuController(DEFAULT_KEYBOARDSET);
+
 			return new ApplicationRenderCode() {
 
 				@Override

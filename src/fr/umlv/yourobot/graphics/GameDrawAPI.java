@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RadialGradientPaint;
-import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -24,7 +23,7 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.util.ElementType.ElementClass;
-import fr.umlv.yourobot.util.ElementType;
+import fr.umlv.yourobot.util.MapGenerator;
 
 public class GameDrawAPI{
 
@@ -82,9 +81,6 @@ public class GameDrawAPI{
 		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
 	}
 
-	/* 
-	 *TODO : switch case in RobotGame to manage lists to store bonuses, circles, robots, players and walls
-	 */
 	public static void draw(Graphics2D g) throws IOException {
 		for(Element e : world.getListByClass(ElementClass.BONUS)){
 			if(e != null)	
@@ -111,18 +107,27 @@ public class GameDrawAPI{
 					e.draw(g, world.getApi());
 			}
 			world.removeEffects();
+			world.destroyEffects();
 		}
+		
+		
 	}
 
 
 	public static void drawInterface(Graphics2D g) throws IOException {
 		HumanRobot p1 = (HumanRobot) world.getPlayers().get(0);
-
+		BufferedImage img = ImageIO.read(new File("images/" + MapGenerator.getNameWallPicture()));
+		
+		for (int i = 0; i < 800/Wall.WALL_SIZE; i++){
+			g.drawImage(img , null, 0, i*Wall.WALL_SIZE-8);
+		}
+		
 		int p1Col = 10;
-		g.setColor(Color.ORANGE);
+		g.setColor(Color.CYAN);
 		Font fonte = new Font(Font.SERIF,Font.BOLD, 20);
 		g.setFont(fonte);
 		g.drawString("player 1 - " + Math.round(p1.getLife())+"%", p1Col, 20);
+		g.drawString("Level - " + RobotGame.getCurrentLevel()+1, 350, 20);
 		if (world.getMode() == RobotGameMod.TWOPLAYER){
 			HumanRobot p2 = (HumanRobot) world.getPlayers().get(1);
 			int p2Col = 640;

@@ -14,7 +14,6 @@ import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
 import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.KeyController;
-import fr.umlv.yourobot.util.KeyControllers;
 import fr.umlv.zen.KeyboardEvent;
 
 public class HumanRobot extends Robot {

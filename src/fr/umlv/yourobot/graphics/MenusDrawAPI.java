@@ -10,20 +10,19 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import fr.umlv.yourobot.RobotGame.RobotGameMod;
-import fr.umlv.yourobot.util.KeyController;
 import fr.umlv.yourobot.util.KeyController.GameMenu;
 import fr.umlv.yourobot.util.KeyControllers.RobotTextureMod;
 
 public class MenusDrawAPI {
-	protected static BufferedImage img;
-	protected static KeyController controller;
+	private static BufferedImage imgLoad;
+	private static BufferedImage imgEnd;
 	
 	public static RobotGameMod choice1 = RobotGameMod.ONEPLAYER;
 	public static RobotTextureMod choice2 = RobotTextureMod.TEXTURE;
 	public static GameMenu choiceEndGame = GameMenu.REPLAY;
 
 	public static void menu1(Graphics2D g) throws IOException {
-		if(choice1.name().equals(RobotGameMod.ONEPLAYER.name())){
+		if(choice1 == RobotGameMod.ONEPLAYER){
 			drawSelectMenuSP(g);
 		}
 		else if(choice1 == RobotGameMod.TWOPLAYER){
@@ -46,12 +45,16 @@ public class MenusDrawAPI {
 	}
 
 	private static void drawLoadingPage(Graphics2D g) throws IOException {
-		if(img == null)
-			img = ImageIO.read(new File("images/accueil.png"));	
-
-		g.drawImage(img, null, 0, 0);		
+		if(imgLoad == null)
+			imgLoad = ImageIO.read(new File("images/accueil.png"));	
+		g.drawImage(imgLoad, null, 0, 0);		
 	}
 
+	private static void drawEndPage(Graphics2D g) throws IOException {
+		if(imgEnd == null)
+			imgEnd = ImageIO.read(new File("images/end.png"));	
+		g.drawImage(imgEnd, null, 0, 0);		
+	}
 
 	public static void drawSelectMenuSP(Graphics2D g) {
 		try {
@@ -104,11 +107,7 @@ public class MenusDrawAPI {
 		g.drawString("Color mode", 330, 550);		
 	}
 
-	private static void drawEndPage(Graphics2D g) throws IOException {
-		img = ImageIO.read(new File("images/end.png"));	
-
-		g.drawImage(img, null, 0, 0);		
-	}
+	
 	
 	private static void drawSelectRestartGame(Graphics2D g) throws IOException {
 		drawEndPage(g);

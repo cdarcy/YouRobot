@@ -1,7 +1,6 @@
 package fr.umlv.yourobot.elements.walls;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import fr.umlv.yourobot.elements.Element;
