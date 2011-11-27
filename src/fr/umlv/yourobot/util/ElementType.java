@@ -14,7 +14,8 @@ public enum ElementType{
 	ICEBOMB(ElementClass.BONUS),
 	STONEBOMB(ElementClass.BONUS), 
 	WOODBOMB(ElementClass.BONUS), 
-	END_CIRCLE(ElementClass.CIRCLE);
+	END_CIRCLE(ElementClass.CIRCLE), 
+	START_CIRCLE(ElementClass.CIRCLE);
 
 	private ElementClass eclass;
 	private ElementType(ElementClass c){

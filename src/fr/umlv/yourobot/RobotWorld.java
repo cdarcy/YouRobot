@@ -21,6 +21,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
+import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.bonus.IceBomb;
@@ -44,7 +45,6 @@ import fr.umlv.zen.KeyboardEvent;
 
 public class RobotWorld  {
 
-	private BufferedImage img;
 	private World jboxWorld;
 	private Object monitor = new Object();
 	private GameDrawAPI api;
@@ -73,7 +73,7 @@ public class RobotWorld  {
 	public RobotWorld(int level, RobotGameMod gameMod, RobotTextureMod graphicMod) {
 		jboxWorld = new World(new Vec2(0, 0), true);
 		mode = gameMod;
-		api = new GameDrawAPI();
+		api = new GameDrawAPI(this);
 
 		body = jboxWorld.createBody(new BodyDef());
 		body.setUserData(this);
@@ -91,7 +91,6 @@ public class RobotWorld  {
 
 	public void addElement(Element element, BodyType type, boolean createFixture){
 		Body body = jboxWorld.createBody(element.getBodyDef());
-		System.out.println(element);
 		if(map.get(element.classElem()) == null){
 			ArrayList<Element> l = new ArrayList<>();
 			l.add(element);
@@ -116,13 +115,6 @@ public class RobotWorld  {
 		addElement(element, BodyType.DYNAMIC, true);
 		return element;
 	}
-
-	public Element addBorder(int x, int y, String fileName) throws IOException {
-		BorderWall element = new BorderWall(x, y, fileName);
-		addElement(element, BodyType.STATIC, true);
-		element.getBody().setAngularDamping(.0f);
-		return element;
-	}	
 
 	public void putBonus() {
 		ArrayList<ElementType> list = new ArrayList<>();
@@ -165,15 +157,23 @@ public class RobotWorld  {
 		if(event != null)
 			doControl(g, event);
 		// Steps jbox2d physics world
-		jboxWorld.step(1/10f, 15, 8);
+		jboxWorld.step(1/30f, 15, 8);
 		jboxWorld.clearForces();
 		//MapGenerator background
-		drawBackground(g);
+		GameDrawAPI.drawBackground(g);
 		// Draw bonuses before drawing other elements (robots, walls)
-		drawBonuses(g);
-		//Draw wall
-		// Draw elements of the game
-		draw(g);
+		// Draw elements of the ga		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
+		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
+		Circle c1 = new Circle(paint1, 40, 43, HEIGHT-100, ElementType.START_CIRCLE);
+
+		if (mode == RobotGameMod.TWOPLAYER){
+			RadialGradientPaint paint2 = new RadialGradientPaint(70, HEIGHT-150, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
+			g.setPaint(paint2);
+			 g.fill(new Ellipse2D.Float(43, HEIGHT-150, 40, 40));
+		}
+		RadialGradientPaint paint3 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
+		g.setPaint(paint3);
+		GameDrawAPI.draw(g);
 		
 		// Destroy effects
 		for (Element e : toDestroy){
@@ -182,12 +182,12 @@ public class RobotWorld  {
 			map.get(e.classElem()).remove(e);
 		}
 		// Draw Interface
-		drawInterface(g);
+		GameDrawAPI.drawInterface(g);
 		
 		return isGameFinished();
 	}
 
-<<<<<<< HEAD
+
 
 
 	private boolean isGameFinished() {
@@ -195,8 +195,6 @@ public class RobotWorld  {
 	}
 
 
-=======
->>>>>>> 802290debd1d84e6cb628fed522789f61efc2a0b
 	/**
 	 * @param args
 	 */
@@ -212,7 +210,6 @@ public class RobotWorld  {
 			((ComputerRobot) e).run(rw);
 		}	
 	}
-
 
 	public void doControl(Graphics2D g, KeyboardEvent event){
 		if (event == null)
@@ -233,99 +230,16 @@ public class RobotWorld  {
 	}
 
 
-
-	public void drawBonuses(Graphics2D g) throws IOException {
-		for(Element b : getListByClass(ElementClass.BONUS)){
-			if(b != null){
-				b.draw(g,api);
-			}
-		}
-	}
-<<<<<<< HEAD
-	
-	private void drawBackground(Graphics2D g) {
-		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
-		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
-		g.setPaint(paint1);
-		g.fill(new Ellipse2D.Float(43, HEIGHT-100, 40, 40));
-		RadialGradientPaint paint2 = new RadialGradientPaint(70, HEIGHT-150, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.BLUE});
-		g.setPaint(paint2);
-		g.fill(new Ellipse2D.Float(43, HEIGHT-150, 40, 40));
-		RadialGradientPaint paint3 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.GREEN});
-		g.setPaint(paint3);
-		g.fill(new Ellipse2D.Float(705, 43, 40, 40));
+	public ArrayList<Element> getListByClass(ElementClass elclass) {
+		return map.get(elclass);
 	}
 
-	public void draw(Graphics2D g) throws IOException {
-		for(Element e : map.get(ElementClass.BONUS)){
-			if(e != null)	
-				e.draw(g, api);
-		}
-		for(Element e : all){
-			if(e != null && e.classElem() != ElementClass.BONUS)	
-				e.draw(g, api);
-		}
-
-		map.remove(ElementType.EFFECT);
-	}
-=======
->>>>>>> 802290debd1d84e6cb628fed522789f61efc2a0b
 
 	public void removeEffects() {
 		toDestroy.addAll(getListByClass(ElementClass.EFFECT));
 	}
 
 
-	public ArrayList<Element> getListByClass(ElementClass elclass) {
-		return map.get(elclass);
-	}
-
-	private void drawBackground(Graphics2D g) {
-		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
-
-		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
-		g.setPaint(paint1);
-		g.fill(new Ellipse2D.Float(43, HEIGHT-100, 40, 40));
-		if (mode == RobotGameMod.TWOPLAYER){
-			RadialGradientPaint paint2 = new RadialGradientPaint(70, HEIGHT-150, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
-			g.setPaint(paint2);
-			 g.fill(new Ellipse2D.Float(43, HEIGHT-150, 40, 40));
-		}
-		RadialGradientPaint paint3 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
-		g.setPaint(paint3);
-		g.fill(new Ellipse2D.Float(705, 43, 40, 40));
-	}
-	
-	public void draw(Graphics2D g) throws IOException {
-		for(Element e : all){
-			if(e!=null)	
-				e.draw(g, api);
-		}
-		
-	map.remove(ElementType.EFFECT);
-}
-
-	public void drawInterface(Graphics2D g) throws IOException {
-<<<<<<< HEAD
-		g.setColor(Color.BLACK);
-		HumanRobot p1 = (HumanRobot) getListByType(ElementType.PLAYER_ROBOT).get(0);
-=======
-		HumanRobot p1 = (HumanRobot) players.get(0);
->>>>>>> 802290debd1d84e6cb628fed522789f61efc2a0b
-		int p1Col = 10;
-		g.setColor(Color.CYAN);
-		Font fonte = new Font(Font.SERIF,Font.BOLD, 20);
-		g.setFont(fonte);
-		g.drawString("player 1 - " + Math.round(p1.getLife())+"%", p1Col, 20);
-		if (mode == RobotGameMod.TWOPLAYER){
-			HumanRobot p2 = (HumanRobot) players.get(0);
-			int p2Col = 640;
-			g.setColor(Color.CYAN);
-			Font fonte2 = new Font(Font.SERIF,Font.BOLD, 20);
-			g.setFont(fonte2);
-			g.drawString("player 2 - " + Math.round(p2.getLife()) +"%", p2Col, 20);
-		}
-	}
 
 	public void setMode(RobotGameMod mode) {
 		this.mode = mode;
@@ -363,9 +277,7 @@ public class RobotWorld  {
 		return map.get(group);
 	}
 
-	public void setBackground(String nameBackgroundPicture) throws IOException {
-		img = ImageIO.read(new File("images/" + nameBackgroundPicture));
-	}
+	
 
 	public void init(Graphics2D g) {
 		//setMode(RobotGameMod.TWOPLAYER);
@@ -396,7 +308,14 @@ public class RobotWorld  {
 			e2.setController(KeyControllers.getGameController(this, e2, keysP2));
 			addDynamicElement(e2);
 		}
+		RadialGradientPaint paint2 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
+		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
+		
+		Circle c1 = new Circle(paint1, 40, 43, HEIGHT-100, ElementType.START_CIRCLE);
+		Circle c2 = new Circle(paint1, 40, 43, HEIGHT-150, ElementType.START_CIRCLE);
+		Circle c3 = new Circle(paint2, 40, 710, 70, ElementType.END_CIRCLE);
 
+		
 		// create map
 		try {
 			MapGenerator.mapRandom(currentLevel, this, g);
@@ -446,9 +365,8 @@ public class RobotWorld  {
 		this.api = api;
 	}
 
-
-	public void nextGame() {
-		
+	public ArrayList<Element> getAll() {
+		return all;
 	}
 
 

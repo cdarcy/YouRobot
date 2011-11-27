@@ -44,9 +44,6 @@ public class CollisionListener implements ContactListener {
 				double ecart = contact.getFixtureA().getBody().m_linearVelocity.normalize() * 0.003;
 				h.setLife((ecart+0.3));
 			}
-			else if(elemB.typeElem() == ElementType.END_CIRCLE){
-				world.setGameFinished();
-			}
 
 			break;
 		case PLAYER_ROBOT:
@@ -55,6 +52,10 @@ public class CollisionListener implements ContactListener {
 				Robot elem = (Robot)elemB;
 				elem.rotate(MathUtils.randomFloat(15, 180));
 				elem.move(new Vec2(force.x * 10000, force.y * 10000));
+			}
+			else if(elemB.typeElem() == ElementType.END_CIRCLE){
+				world.setGameFinished();
+				System.out.println("finished");
 			}
 			break;
 

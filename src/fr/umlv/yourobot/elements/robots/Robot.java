@@ -21,6 +21,7 @@ import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.physics.raycasts.AICallback;
+import fr.umlv.yourobot.util.ElementType;
 
 abstract public class Robot extends Element {
 	private String pName;
@@ -84,7 +85,7 @@ abstract public class Robot extends Element {
 		dir.y = (float) Math.sin(Math.toRadians(direction*135));
 		
 		RadialGradientPaint paint = new RadialGradientPaint(dir.x, dir.y, 20, new float[]{.3f, 1f}, new Color[]{Color.YELLOW, Color.YELLOW});
-		Circle circle = new Circle (paint, 20, dir.x, dir.y);
+		Circle circle = new Circle (paint, 20, dir.x, dir.y, ElementType.EFFECT);
 		world.addDynamicElement(circle);
 	}
 

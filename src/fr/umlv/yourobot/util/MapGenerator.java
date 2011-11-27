@@ -25,6 +25,7 @@ import fr.umlv.yourobot.elements.walls.IceWall;
 import fr.umlv.yourobot.elements.walls.StoneWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.elements.walls.WoodWall;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 
 public class MapGenerator {
 
@@ -71,7 +72,7 @@ public class MapGenerator {
 		world = w;
 		String nameBackgroundPicture = MapStyle.background.get(value);
 		String nameWallPicture = MapStyle.wall.get(value);
-		world.setBackground(nameBackgroundPicture);
+		GameDrawAPI.setBackground(nameBackgroundPicture);
 		createArena(g, world, nameWallPicture);
 		drawArena(g);
 		setWalls(g, 20);

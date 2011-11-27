@@ -7,18 +7,18 @@ import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
-import org.jbox2d.dynamics.joints.DistanceJointDef;
 import org.jbox2d.dynamics.joints.Joint;
+
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
@@ -53,23 +53,20 @@ public class Snap  extends Bonus  {
 					for (Element elem : world.getListByClass(ElementClass.WALL)){
 
 						if (MathUtils.distance(elem.getBody().getPosition(), robot.getBody().getPosition()) > quarter_diagonal) {
-							robot.getBody().setAwake(true);
+							elem.getBody().setType(BodyType.STATIC);
 							continue;
 						}  
-						if(elem.getBody().getType() == BodyType.STATIC)
-							elem.getBody().setType(BodyType.DYNAMIC);
-						
 						if(MathUtils.distance(robot.getPosition(), elem.getPosition())>100 && MathUtils.distance(robot.getPosition(), elem.getPosition())<quarter_diagonal){
+							elem.getBody().setType(BodyType.DYNAMIC);
 							final Vec2 force = pos.sub(elem.getPosition());
 							elem.getBody().setLinearVelocity(new Vec2(force.x * 6000, force.y * 6000));
 						}
 						else if(MathUtils.distance(robot.getPosition(), elem.getPosition())<100){
+							elem.getBody().setType(BodyType.DYNAMIC);
 							final Vec2 force = elem.getPosition().sub(pos);
 							elem.getBody().setLinearVelocity(new Vec2(force.x * 1000, force.y * 1000));
 						}
-						else{
-							elem.getBody().setType(BodyType.STATIC);
-						}
+						
 					}
 					System.out.println((System.nanoTime()-start)/1000000 + "<"+length*1000);
 				}

@@ -4,12 +4,8 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Random;
 
-<<<<<<< HEAD
 import fr.umlv.yourobot.RobotWorld.RobotGameMod;
-import fr.umlv.yourobot.graphics.MenusAPI;
-=======
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
->>>>>>> 802290debd1d84e6cb628fed522789f61efc2a0b
 import fr.umlv.yourobot.util.KeyController;
 import fr.umlv.yourobot.util.KeyControllers;
 import fr.umlv.zen.ApplicationCode;
@@ -106,20 +102,7 @@ public class YouRobotCode implements ApplicationCode{
 			});
 		}
 
-		System.out.println("game");
-<<<<<<< HEAD
-
-=======
 		// Defining basic Game Object
-		world = new RobotWorld(MenusDrawAPI.choice1, MenusDrawAPI.choice2);
-		
-		context.render(new ApplicationRenderCode() {
-			@Override
-			public void render(Graphics2D graphics) {
-				world.init(graphics);
-			}
-		});
->>>>>>> 802290debd1d84e6cb628fed522789f61efc2a0b
 
 		// World game initialisation
 
@@ -127,8 +110,8 @@ public class YouRobotCode implements ApplicationCode{
 		loop=true;
 		for(int i=0;i<20;i++){
 			// Defining basic Game Object
-			world = new RobotWorld(level , MenusAPI.choice1, MenusAPI.choice2);
-
+			world = new RobotWorld(level , MenusDrawAPI.choice1, MenusDrawAPI.choice2);
+			
 			context.render(new ApplicationRenderCode() {
 				@Override
 				public void render(Graphics2D graphics) {
@@ -136,7 +119,9 @@ public class YouRobotCode implements ApplicationCode{
 				}
 			});
 			
+			System.out.println(level);
 			while(loop) {
+				
 				context.render(new ApplicationRenderCode() {
 					@Override
 					public void render(final Graphics2D graphics) {

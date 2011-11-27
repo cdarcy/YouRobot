@@ -12,12 +12,8 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotWorld;
-<<<<<<< HEAD
-import fr.umlv.yourobot.graphics.DrawAPI;
 import fr.umlv.yourobot.util.ElementType;
-=======
 import fr.umlv.yourobot.graphics.GameDrawAPI;
->>>>>>> 802290debd1d84e6cb628fed522789f61efc2a0b
 
 public class Circle extends Element {
 	private Float circle;
