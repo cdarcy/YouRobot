@@ -100,9 +100,8 @@ public class GameDrawAPI{
 	public static void drawInterface(Graphics2D g) throws IOException {
 		HumanRobot p1 = (HumanRobot) world.getPlayers().get(0);
 		BufferedImage img = ImageIO.read(new File("images/" + MapGenerator.getNameWallPicture()));
-		
 		for (int i = 0; i < 800/Wall.WALL_SIZE; i++){
-			g.drawImage(img , null, 0, i*Wall.WALL_SIZE-8);
+			g.drawImage(img , null, (i*Wall.WALL_SIZE)+Wall.WALL_SIZE, 0);
 		}
 		
 		int p1Col = 10;
