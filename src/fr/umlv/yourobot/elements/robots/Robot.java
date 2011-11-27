@@ -10,7 +10,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyType;
@@ -20,7 +19,6 @@ import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
-import fr.umlv.yourobot.physics.raycasts.AICallback;
 
 abstract public class Robot extends Element {
 	private String pName;
@@ -85,7 +83,7 @@ abstract public class Robot extends Element {
 		
 		RadialGradientPaint paint = new RadialGradientPaint(dir.x, dir.y, 20, new float[]{.3f, 1f}, new Color[]{Color.YELLOW, Color.YELLOW});
 		Circle circle = new Circle (paint, 20, dir.x, dir.y);
-		world.addDynamicElement(circle);
+		
 	}
 
 	public void impulse(float speed){

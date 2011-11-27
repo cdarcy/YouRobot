@@ -97,6 +97,31 @@ public class MenusDrawAPI {
 		g.drawString("Color mode", 330, 550);		
 	}
 
+	private static void drawEndPage(Graphics2D g) throws IOException {
+		img = ImageIO.read(new File("images/end.png"));	
 
+		g.drawImage(img, null, 0, 0);		
+	}
+	
+	public static void restartGame(Graphics2D g) throws IOException {
+		drawEndPage(g);
+		g.setColor(Color.WHITE);
+		Font fonte = new Font(Font.SERIF,Font.BOLD, 26);
+		g.setFont(fonte);
+		g.drawString("Play Again", 330, 450);
+		g.setColor(Color.BLACK);
+		g.drawString("EXIT", 360, 550);
+	}
+
+	public static void exitGame(Graphics2D g) throws IOException {
+		drawEndPage(g);
+		g.setColor(Color.WHITE);
+		Font fonte = new Font(Font.SERIF,Font.BOLD, 26);
+		g.setFont(fonte);
+		g.drawString("Play Again", 330, 450);
+		g.setColor(Color.WHITE);
+		g.drawString("EXIT", 360, 550);
+	}
+	
 
 }

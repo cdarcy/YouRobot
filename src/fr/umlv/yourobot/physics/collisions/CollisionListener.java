@@ -1,6 +1,5 @@
 package fr.umlv.yourobot.physics.collisions;
 
-import javax.lang.model.element.TypeElement;
 
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
@@ -44,7 +43,7 @@ public class CollisionListener implements ContactListener {
 				System.out.println(contact.getFixtureA().getBody().m_linearVelocity.normalize());
 				double ecart = contact.getFixtureA().getBody().m_linearVelocity.normalize() * 0.003;
 				System.out.println();
-				h.setLife((ecart+0.3));
+				h.setLife((ecart+0.49));
 				//System.out.println(h.getLife());
 			}
 			else{

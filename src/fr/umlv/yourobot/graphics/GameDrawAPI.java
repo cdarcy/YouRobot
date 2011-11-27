@@ -3,23 +3,21 @@ package fr.umlv.yourobot.graphics;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.RadialGradientPaint;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.RobotWorld.RobotGameMod;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.walls.Wall;
-import fr.umlv.yourobot.util.ElementType;
 
 
 public class GameDrawAPI{
@@ -69,6 +67,11 @@ public class GameDrawAPI{
 
 	public void drawEffect(CircleShape circle, Paint p, Color c,
 			BufferedImage img, Graphics2D g) throws IOException {
+	}
+	
+	public static void drawGameOver(Graphics2D g) throws IOException{
+		BufferedImage img = ImageIO.read(new File("images/gameOver.png"));
+		g.drawImage(img, null, 300, 200);
 	}
 
 	/*@Override

@@ -47,8 +47,8 @@ public class HumanRobot extends Robot {
 	}
 
 	
-	public double getLife() {
-		return life;
+	public int getLife() {
+		return (int) Math.round(life);
 	}
 	
 	public void setLife(double d){

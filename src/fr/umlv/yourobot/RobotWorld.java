@@ -34,6 +34,7 @@ import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.elements.walls.BorderWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
+import fr.umlv.yourobot.graphics.MenusDrawAPI;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
@@ -70,7 +71,7 @@ public class RobotWorld  {
 	public RobotWorld(RobotGameMod gameMod, RobotTextureMod graphicMod) {
 		jboxWorld = new World(new Vec2(0, 0), true);
 		mode = gameMod;
-		api = new GameDrawAPI();
+		api = new GameDrawAPI(this);
 
 		body = jboxWorld.createBody(new BodyDef());
 		body.setUserData(this);
@@ -180,13 +181,22 @@ public class RobotWorld  {
 	 * 
 	 * @param timeStep The amount of time to simulate
 	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
-	public void updateGame(Graphics2D g, KeyboardEvent event) throws IOException {
+	public void updateGame(Graphics2D g, KeyboardEvent event) throws IOException, InterruptedException {
 		if(event != null)
 			doControl(g, event);
 		// Steps jbox2d physics world
 		jboxWorld.step(1/10f, 15, 8);
 		jboxWorld.clearForces();
+		
+		if (Math.round(players.get(0).getLife()) == 0){
+			GameDrawAPI.drawGameOver(g);
+			Thread.sleep(2000);
+			MenusDrawAPI.restartGame(g);
+			return;
+		}
+		
 		//MapGenerator background
 		drawBackground(g);
 		//g.fillRect(Wall.WALL_SIZE, Wall.WALL_SIZE, WIDTH-(Wall.WALL_SIZE*2), HEIGHT-(Wall.WALL_SIZE*2));

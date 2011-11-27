@@ -124,6 +124,8 @@ public class YouRobotCode implements ApplicationCode{
 							world.updateGame(graphics, event);
 						} catch (IOException e) {
 							e.printStackTrace();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
 						} 
 					
 				}
