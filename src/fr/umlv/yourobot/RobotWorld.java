@@ -1,18 +1,12 @@
 package fr.umlv.yourobot;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
@@ -23,7 +17,6 @@ import org.jbox2d.dynamics.World;
 
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.bonus.IceBomb;
 import fr.umlv.yourobot.elements.bonus.Lure;
 import fr.umlv.yourobot.elements.bonus.Snap;
@@ -31,8 +24,6 @@ import fr.umlv.yourobot.elements.bonus.StoneBomb;
 import fr.umlv.yourobot.elements.bonus.WoodBomb;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.elements.robots.Robot;
-import fr.umlv.yourobot.elements.walls.BorderWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
@@ -67,7 +58,7 @@ public class RobotWorld  {
 
 	Body body;
 	RobotGameMod mode;
-	private int currentLevel;
+	private static int currentLevel;
 	private boolean finished = false;
 	private ArrayList<Element> walls;
 
@@ -87,6 +78,10 @@ public class RobotWorld  {
 
 	public void setGameFinished(){
 		finished = true;
+	}
+	
+	public static int getCurrentLevel(){
+		return currentLevel;
 	}
 
 	public void addElement(Element element, BodyType type, boolean createFixture){
@@ -128,24 +123,29 @@ public class RobotWorld  {
 
 		for (int i=0;i<5;i++){
 			float x = MathUtils.randomFloat(100, WIDTH-100);
-			float y = MathUtils.randomFloat(100, HEIGHT-100);			
-			int value = Math.round(MathUtils.randomFloat(0,list.size()-1));
-			switch (list.get(value)){
-			case WOODBOMB:
-				addStaticElement(new WoodBomb(x, y));
-				break;
-			case STONEBOMB:
-				addStaticElement(new StoneBomb(x, y));
-				break;
-			case ICEBOMB:
-				addStaticElement(new IceBomb(x, y));
-				break;
-			case SNAP:
-				addStaticElement(new Snap(x, y));
-				break;
-			case LURE:
-				addStaticElement(new Lure(x, y));
+			float y = MathUtils.randomFloat(100, HEIGHT-100);
+			if (!MapGenerator.getAllStaticElement().contains(new Vec2(x, y))){
+				MapGenerator.addVecPos(new Vec2(x, y));
+				int value = Math.round(MathUtils.randomFloat(0,list.size()-1));
+				switch (list.get(value)){
+				case WOODBOMB:
+					addStaticElement(new WoodBomb(x, y));
+					break;
+				case STONEBOMB:
+					addStaticElement(new StoneBomb(x, y));
+					break;
+				case ICEBOMB:
+					addStaticElement(new IceBomb(x, y));
+					break;
+				case SNAP:
+					addStaticElement(new Snap(x, y));
+					break;
+				case LURE:
+					addStaticElement(new Lure(x, y));
+				}
 			}
+			else
+				i--;
 		}
 	}	
 
@@ -292,28 +292,35 @@ public class RobotWorld  {
 
 		// Defining ComputerRobots
 		r1 = new ComputerRobot(500,300);
+		MapGenerator.addVecPos(new Vec2(500, 300));
 		r2 = new ComputerRobot(500,400);
+		MapGenerator.addVecPos(new Vec2(500, 400));
 		r3 = new ComputerRobot(500,500);
+		MapGenerator.addVecPos(new Vec2(500, 400));
 
 		addDynamicElement(r1);
 		addDynamicElement(r2);
 		addDynamicElement(r3);
 
-		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
+		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-83, 40, new float[]{.1f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
 		RadialGradientPaint paint2 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
-		Circle c1 = new Circle(paint1, 40, 70, HEIGHT-100, ElementType.START_CIRCLE);
-		Circle c3 = new Circle(paint2, 40, 710, 70, ElementType.END_CIRCLE);
+		Circle c1 = new Circle(paint1, 40, 70, HEIGHT-83, ElementType.START_CIRCLE);
+		MapGenerator.addVecPos(new Vec2(50, HEIGHT-83));
+		Circle c3 = new Circle(paint2, 40, 730, 70, ElementType.END_CIRCLE);
+		MapGenerator.addVecPos(new Vec2(730, 70));
 		// Defining HumanRobots
-		e1 = new HumanRobot(this,"Camcam",46, HEIGHT-97);
+		e1 = new HumanRobot(this,"Camcam",50, HEIGHT-100);
 		e1.setController(KeyControllers.getGameController(this, e1, keysP1));
 		addDynamicElement(e1);
 		addStaticElement(c1);
 		addStaticElement(c3);
 
 		if(mode == RobotGameMod.TWOPLAYER){
-			e2 = new HumanRobot(this,"Loulou",46, HEIGHT-147);
+			RadialGradientPaint paint3 = new RadialGradientPaint(70, HEIGHT-133, 40, new float[]{.1f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
+			e2 = new HumanRobot(this,"Loulou",50, HEIGHT-150);
 			e2.setController(KeyControllers.getGameController(this, e2, keysP2));
-			Circle c2 = new Circle(paint1, 40, 70, HEIGHT-150, ElementType.START_CIRCLE);
+			Circle c2 = new Circle(paint3, 40, 70, HEIGHT-133, ElementType.START_CIRCLE);
+			MapGenerator.addVecPos(new Vec2(70, HEIGHT-133));
 			addStaticElement(c2);
 			addDynamicElement(e2);
 		}
@@ -374,9 +381,6 @@ public class RobotWorld  {
 			walls = map.get(ElementClass.WALL);
 		return walls;
 	}
-
-
-
 }
 
 

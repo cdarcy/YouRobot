@@ -40,7 +40,6 @@ public class CollisionListener implements ContactListener {
 				elem.move(new Vec2(force.x * 10000, force.y * 10000));
 				HumanRobot h = (HumanRobot) elemB;
 				double ecart = contact.getFixtureA().getBody().m_linearVelocity.normalize() * 0.003;
-				h.setLife((ecart+0.3));
 				h.setLife((ecart+0.49));
 			}
 			else{

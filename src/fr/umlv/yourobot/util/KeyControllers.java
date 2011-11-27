@@ -6,7 +6,6 @@ import java.io.IOException;
 import fr.umlv.yourobot.RobotWorld;
 import fr.umlv.yourobot.RobotWorld.RobotGameMod;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
 
 public class KeyControllers {

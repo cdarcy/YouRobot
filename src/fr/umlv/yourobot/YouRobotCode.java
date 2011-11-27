@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Random;
 
-import fr.umlv.yourobot.RobotWorld.RobotGameMod;
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
 import fr.umlv.yourobot.util.KeyController;
 import fr.umlv.yourobot.util.KeyControllers;

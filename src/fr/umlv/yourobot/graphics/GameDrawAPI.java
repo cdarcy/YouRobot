@@ -23,6 +23,7 @@ import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
+import fr.umlv.yourobot.util.MapGenerator;
 
 public class GameDrawAPI{
 	
@@ -98,12 +99,18 @@ public class GameDrawAPI{
 
 	public static void drawInterface(Graphics2D g) throws IOException {
 		HumanRobot p1 = (HumanRobot) world.getPlayers().get(0);
+		BufferedImage img = ImageIO.read(new File("images/" + MapGenerator.getNameWallPicture()));
+		
+		for (int i = 0; i < 800/Wall.WALL_SIZE; i++){
+			g.drawImage(img , null, 0, i*Wall.WALL_SIZE-8);
+		}
 		
 		int p1Col = 10;
-		g.setColor(Color.ORANGE);
+		g.setColor(Color.CYAN);
 		Font fonte = new Font(Font.SERIF,Font.BOLD, 20);
 		g.setFont(fonte);
 		g.drawString("player 1 - " + Math.round(p1.getLife())+"%", p1Col, 20);
+		g.drawString("Level - " + RobotWorld.getCurrentLevel()+1, 350, 20);
 		if (world.getMode() == RobotGameMod.TWOPLAYER){
 			HumanRobot p2 = (HumanRobot) world.getPlayers().get(1);
 			int p2Col = 640;
