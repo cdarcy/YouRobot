@@ -16,8 +16,8 @@ import javax.imageio.ImageIO;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 
-import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.RobotWorld.RobotGameMod;
+import fr.umlv.yourobot.RobotGame;
+import fr.umlv.yourobot.RobotGame.RobotGameMod;
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.walls.BarWall;
@@ -32,7 +32,7 @@ public class MapGenerator {
 
 	private static int value;
 	private static Color color;
-	private static RobotWorld world;
+	private static RobotGame world;
 	private static BufferedImage img;
 	private static ArrayList<BorderWall> arena;
 	public final static int WIDTH = 800;
@@ -40,7 +40,7 @@ public class MapGenerator {
 	public static ArrayList<Element> allWall;
 
 
-	public static void createArena(Graphics2D g, RobotWorld world, String nameWallPicture) throws IOException{
+	public static void createArena(Graphics2D g, RobotGame world, String nameWallPicture) throws IOException{
 		arena = new ArrayList<>();
 		if (value == 0)	color = new Color(0, 0, 100); //BLUE
 		else if (value == 1)	color = new Color(100, 0, 0); //RED
@@ -67,7 +67,7 @@ public class MapGenerator {
 
 	}
 
-	public static void mapRandom (int level, RobotWorld w, Graphics2D g) throws IOException{
+	public static void mapRandom (int level, RobotGame w, Graphics2D g) throws IOException{
 		new MapStyle();
 		value =  (int) MathUtils.randomFloat(0, 4);
 		world = w;

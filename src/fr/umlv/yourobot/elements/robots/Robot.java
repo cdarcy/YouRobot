@@ -15,7 +15,7 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
@@ -68,7 +68,7 @@ abstract public class Robot extends Element {
 		return pName;
 	}
 
-	public void impulse(RobotWorld world) {
+	public void impulse(RobotGame world) {
 		
 		final Vec2 imp = new Vec2();
 		final Vec2 dir = new Vec2();

@@ -9,8 +9,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import fr.umlv.yourobot.RobotWorld.RobotGameMod;
+import fr.umlv.yourobot.RobotGame.RobotGameMod;
 import fr.umlv.yourobot.util.KeyController;
+import fr.umlv.yourobot.util.KeyController.GameMenu;
 import fr.umlv.yourobot.util.KeyControllers.RobotTextureMod;
 
 public class MenusDrawAPI {
@@ -19,9 +20,9 @@ public class MenusDrawAPI {
 	
 	public static RobotGameMod choice1 = RobotGameMod.ONEPLAYER;
 	public static RobotTextureMod choice2 = RobotTextureMod.TEXTURE;
+	public static GameMenu choiceEndGame = GameMenu.REPLAY;
 
 	public static void menu1(Graphics2D g) throws IOException {
-
 		if(choice1.name().equals(RobotGameMod.ONEPLAYER.name())){
 			drawSelectMenuSP(g);
 		}
@@ -31,11 +32,17 @@ public class MenusDrawAPI {
 	}
 
 	public static void menu2(Graphics2D g) throws IOException, InterruptedException {
-		drawLoadingPage(g);
 		if(choice2 == RobotTextureMod.TEXTURE)
 			drawSelectMenuGT(g);
 		else if(choice2 == RobotTextureMod.GRAPHIC)
 			drawSelectMenuGC(g);
+	}
+	
+	public static void menu3(Graphics2D g) throws IOException, InterruptedException {
+		if(choiceEndGame == GameMenu.REPLAY)
+			drawSelectRestartGame(g);
+		else if(choiceEndGame == GameMenu.EXIT)
+			drawSelectExitGame(g);
 	}
 
 	private static void drawLoadingPage(Graphics2D g) throws IOException {
@@ -103,7 +110,7 @@ public class MenusDrawAPI {
 		g.drawImage(img, null, 0, 0);		
 	}
 	
-	public static void restartGame(Graphics2D g) throws IOException {
+	private static void drawSelectRestartGame(Graphics2D g) throws IOException {
 		drawEndPage(g);
 		g.setColor(Color.WHITE);
 		Font fonte = new Font(Font.SERIF,Font.BOLD, 26);
@@ -113,9 +120,9 @@ public class MenusDrawAPI {
 		g.drawString("EXIT", 360, 550);
 	}
 
-	public static void exitGame(Graphics2D g) throws IOException {
+	private static void drawSelectExitGame(Graphics2D g) throws IOException {
 		drawEndPage(g);
-		g.setColor(Color.WHITE);
+		g.setColor(Color.BLACK);
 		Font fonte = new Font(Font.SERIF,Font.BOLD, 26);
 		g.setFont(fonte);
 		g.drawString("Play Again", 330, 450);

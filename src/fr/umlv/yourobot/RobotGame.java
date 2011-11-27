@@ -1,19 +1,16 @@
 package fr.umlv.yourobot;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
+import org.jbox2d.callbacks.QueryCallback;
+import org.jbox2d.callbacks.RayCastCallback;
+import org.jbox2d.collision.AABB;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -23,7 +20,6 @@ import org.jbox2d.dynamics.World;
 
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.bonus.IceBomb;
 import fr.umlv.yourobot.elements.bonus.Lure;
 import fr.umlv.yourobot.elements.bonus.Snap;
@@ -31,20 +27,17 @@ import fr.umlv.yourobot.elements.bonus.StoneBomb;
 import fr.umlv.yourobot.elements.bonus.WoodBomb;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.elements.robots.Robot;
-import fr.umlv.yourobot.elements.walls.BorderWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
-import fr.umlv.yourobot.graphics.MenusDrawAPI;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
-import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
+import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.KeyControllers;
 import fr.umlv.yourobot.util.KeyControllers.RobotTextureMod;
 import fr.umlv.yourobot.util.MapGenerator;
 import fr.umlv.zen.KeyboardEvent;
 
-public class RobotWorld  {
+public class RobotGame{
 
 	private World jboxWorld;
 	private GameDrawAPI api;
@@ -70,8 +63,10 @@ public class RobotWorld  {
 	private int currentLevel;
 	private boolean finished = false;
 	private ArrayList<Element> walls;
+	private ArrayList<Element> robots;
+	private ArrayList<Element> lures;
 
-	public RobotWorld(int level, RobotGameMod gameMod, RobotTextureMod graphicMod) {
+	public RobotGame(int level, RobotGameMod gameMod, RobotTextureMod graphicMod) {
 		jboxWorld = new World(new Vec2(0, 0), true);
 		mode = gameMod;
 		api = new GameDrawAPI(this);
@@ -82,6 +77,8 @@ public class RobotWorld  {
 		map = new HashMap<>();
 		all = new ArrayList<>();
 		players = new ArrayList<>();
+		robots = new ArrayList<>();
+		lures = new ArrayList<>();
 		toDestroy = new ArrayList<>();
 	}
 
@@ -99,6 +96,10 @@ public class RobotWorld  {
 		else map.get(element.classElem()).add(element);
 		if(element.typeElem()==ElementType.PLAYER_ROBOT)
 			players.add(element);
+		if(element.typeElem()==ElementType.COMPUTER_ROBOT)
+			robots.add(element);
+		if(element.typeElem()==ElementType.LURE_ROBOT)
+			lures.add(element);
 		all.add(element);
 		element.setBody(body);
 		body.setUserData(element);
@@ -157,17 +158,12 @@ public class RobotWorld  {
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	public boolean updateGame(Graphics2D g, KeyboardEvent event) throws IOException, InterruptedException {
+	public StateGame updateGame(Graphics2D g, KeyboardEvent event) throws IOException, InterruptedException {
 		if(event != null)
 			doControl(g, event);
 		// Steps jbox2d physics world
 		jboxWorld.step(1/30f, 15, 8);
-
-		if (Math.round(((HumanRobot) players.get(0)).getLife()) == 0){
-			GameDrawAPI.drawGameOver(g);
-			MenusDrawAPI.restartGame(g);
-		}
-
+		
 		//MapGenerator background
 		GameDrawAPI.drawBackground(g);
 		// Draw bonuses before drawing other elements (robots, walls)
@@ -175,38 +171,39 @@ public class RobotWorld  {
 
 		GameDrawAPI.draw(g);
 
+		// Draw Interface
+		GameDrawAPI.drawInterface(g);
+		
 		// Destroy effects
 		for (Element e : toDestroy){
 			jboxWorld.destroyBody(e.getBody());
 			all.remove(e);
 			map.get(e.classElem()).remove(e);
 		}
-		// Draw Interface
-		GameDrawAPI.drawInterface(g);
-
-		return isGameFinished();
+		
+		return getStateGame();
 	}
 
 
 
-
-	private boolean isGameFinished() {
-		return finished;
-	}
-
-
-	/**
-	 * @param args
-	 */
-
-
-	public World getJBoxWorld() {
-		return jboxWorld;
+	private StateGame getStateGame(){
+		if(mode == RobotGameMod.ONEPLAYER)
+			if (Math.round(((HumanRobot) players.get(0)).getLife()) == 0){
+				return StateGame.PLAYERDIED;
+			}
+		else
+			if (Math.round(((HumanRobot) players.get(0)).getLife()) == 0 &&
+					Math.round(((HumanRobot) players.get(1)).getLife()) == 0){
+				return StateGame.PLAYERDIED;
+			}
+		if(finished)
+			return StateGame.WINLEVEL;
+		return StateGame.PROCESSING;
 	}
 
 	public void updateRobots() throws InterruptedException{
-		final RobotWorld rw = (RobotWorld) this;
-		for(final Element e : getListByType(ElementType.COMPUTER_ROBOT)){
+		final RobotGame rw = (RobotGame) this;
+		for(final Element e : robots){
 			((ComputerRobot) e).run(rw);
 		}	
 	}
@@ -221,14 +218,6 @@ public class RobotWorld  {
 		}
 	}
 
-	public ArrayList<Element> getListByType(ElementType type) {
-		ArrayList<Element> l = new ArrayList<>();
-		for(Element e : map.get(type.getEClass()))
-			if(e.typeElem()==type)
-				l.add(e);
-		return l;
-	}
-
 
 	public ArrayList<Element> getListByClass(ElementClass elclass) {
 		return map.get(elclass);
@@ -236,10 +225,9 @@ public class RobotWorld  {
 
 
 	public void removeEffects() {
-		toDestroy.addAll(getListByClass(ElementClass.EFFECT));
+		if(getListByClass(ElementClass.EFFECT) != null)
+			toDestroy.addAll(getListByClass(ElementClass.EFFECT));
 	}
-
-
 
 	public void setMode(RobotGameMod mode) {
 		this.mode = mode;
@@ -258,20 +246,14 @@ public class RobotWorld  {
 		}
 		if(players.contains(e))
 			players.remove(e);
+		if(robots.contains(e))
+			robots.remove(e);
 	}
 
-	public synchronized Element getElement(ElementClass classelem, Vec2 pos){
+	public Element getElement(ElementClass classelem, Vec2 pos){
 		for(Element e : map.get(classelem))
 			if(e.getBody().getPosition().equals(pos))
 				return e;
-		return null;
-	}
-
-
-	public HumanRobot getPlayerFromCurrentPosition(Vec2 pos) {
-		for(Element e : players)
-			if(e.getBody().getPosition().equals(pos))
-				return (HumanRobot) e;
 		return null;
 	}
 
@@ -287,8 +269,6 @@ public class RobotWorld  {
 		ComputerRobot r1;
 		ComputerRobot r2;
 		ComputerRobot r3;
-		HumanRobot e1 = null;
-		HumanRobot e2 = null;
 
 		// Defining ComputerRobots
 		r1 = new ComputerRobot(500,300);
@@ -304,14 +284,14 @@ public class RobotWorld  {
 		Circle c1 = new Circle(paint1, 40, 70, HEIGHT-100, ElementType.START_CIRCLE);
 		Circle c3 = new Circle(paint2, 40, 710, 70, ElementType.END_CIRCLE);
 		// Defining HumanRobots
-		e1 = new HumanRobot(this,"Camcam",46, HEIGHT-97);
+		HumanRobot e1 = new HumanRobot(this,"Camcam",46, HEIGHT-97);
 		e1.setController(KeyControllers.getGameController(this, e1, keysP1));
 		addDynamicElement(e1);
 		addStaticElement(c1);
 		addStaticElement(c3);
 
 		if(mode == RobotGameMod.TWOPLAYER){
-			e2 = new HumanRobot(this,"Loulou",46, HEIGHT-147);
+			HumanRobot e2 = new HumanRobot(this,"Loulou",46, HEIGHT-147);
 			e2.setController(KeyControllers.getGameController(this, e2, keysP2));
 			Circle c2 = new Circle(paint1, 40, 70, HEIGHT-150, ElementType.START_CIRCLE);
 			addStaticElement(c2);
@@ -375,8 +355,27 @@ public class RobotWorld  {
 		return walls;
 	}
 
+	public ArrayList<Element> getRobots() {
+		return robots;
+	}
 
+	public ArrayList<Element> getLureRobots() {
+		return lures;
+	}
+	
+	public void raycast(RayCastCallback callback, Vec2 position1, Vec2 position2) {
+		jboxWorld.raycast(callback, position1, position2);
+	}
 
+	public void queryAABB(QueryCallback callback, AABB aabb) {
+		jboxWorld.queryAABB(callback, aabb);
+	}
+	
+	public enum StateGame{
+		INTERRUPTED,
+		PLAYERDIED, 
+		WINLEVEL, PROCESSING;
+	}
 }
 
 

@@ -8,7 +8,7 @@ import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.contacts.Contact;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
@@ -17,8 +17,8 @@ import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 
 public class CollisionListener implements ContactListener {
-	private final RobotWorld world;
-	public CollisionListener(RobotWorld world){
+	private final RobotGame world;
+	public CollisionListener(RobotGame world){
 		this.world = world;
 	}
 	@Override
@@ -84,7 +84,7 @@ public class CollisionListener implements ContactListener {
 
 		if(elemB == null)
 			return;
-		if(elemB.classElem() == ElementClass.BONUS)
+		if(elemB.classElem() == ElementClass.BONUS || elemB.typeElem() == ElementType.START_CIRCLE)
 			contact.setEnabled(false);
 		
 	}

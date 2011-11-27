@@ -44,5 +44,9 @@ public abstract class KeyController {
 		return finished;
 	}
 
+	public enum GameMenu{
+		REPLAY,
+		EXIT;
+	}
 }
 

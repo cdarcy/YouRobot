@@ -13,7 +13,7 @@ import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.FixtureDef;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
@@ -41,5 +41,5 @@ abstract public class Bonus extends Element{
 		return this;
 	}
 	abstract public void drawIcon(int x, int y, Graphics2D g) throws IOException;
-	abstract public ArrayList<Element> run(final RobotWorld world, final HumanRobot robot);
+	abstract public ArrayList<Element> run(final RobotGame world, final HumanRobot robot);
 }

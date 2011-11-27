@@ -16,7 +16,7 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.Joint;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
@@ -40,10 +40,10 @@ public class Snap  extends Bonus  {
 	}
 
 	@Override
-	public ArrayList<Element> run(final RobotWorld world, final HumanRobot robot){
+	public ArrayList<Element> run(final RobotGame world, final HumanRobot robot){
 		System.out.println("Raycasting area");
 		new Thread(new Runnable() {
-			private float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
+			private float quarter_diagonal = (float) (Math.sqrt((RobotGame.WIDTH*RobotGame.WIDTH)+(RobotGame.HEIGHT*RobotGame.HEIGHT))/4);
 
 			@Override
 			public void run() {
@@ -77,7 +77,7 @@ public class Snap  extends Bonus  {
 		}).start();
 		/*
 
-		final float quarter_diagonal = (float) (Math.sqrt(RobotWorld.WIDTH * RobotWorld.WIDTH + RobotWorld.HEIGHT * RobotWorld.HEIGHT) / 4);
+		final float quarter_diagonal = (float) (Math.sqrt(RobotGame.WIDTH * RobotGame.WIDTH + RobotGame.HEIGHT * RobotGame.HEIGHT) / 4);
 
 		new Thread(new Runnable() {
 

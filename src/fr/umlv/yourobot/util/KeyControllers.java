@@ -3,8 +3,8 @@ package fr.umlv.yourobot.util;
 import java.awt.Graphics2D;
 import java.io.IOException;
 
-import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.RobotWorld.RobotGameMod;
+import fr.umlv.yourobot.RobotGame;
+import fr.umlv.yourobot.RobotGame.RobotGameMod;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
@@ -30,7 +30,7 @@ public class KeyControllers {
 	 * @param keys the set of keys to use to manage events (up/down/left/right/fire)   
 	 * @return new KeyController defines commands for the keys passed in parameter
 	 */
-	public static KeyController getGameController(final RobotWorld world, final HumanRobot e, String keys[]){
+	public static KeyController getGameController(final RobotGame world, final HumanRobot e, String keys[]){
 		return new KeyController(keys) {	
 			@Override
 			public void pressKeyUp() {
@@ -132,6 +132,47 @@ public class KeyControllers {
 			}
 			
 
+		};
+	}
+
+	public static KeyController getMenuGameOverController(String[] k) {
+		return new KeyController(k) {
+			
+			@Override
+			public void pressKeyUp() {
+				MenusDrawAPI.choiceEndGame = GameMenu.REPLAY;
+			}
+			
+			@Override
+			public void pressKeyRight() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void pressKeyLeft() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void pressKeyFire() {
+				finished = true;				
+			}
+			
+			@Override
+			public void pressKeyDown() {
+				MenusDrawAPI.choiceEndGame = GameMenu.EXIT;
+			}
+			
+			@Override
+			public void drawMenu(Graphics2D g) {
+				try {
+					MenusDrawAPI.menu3(g);
+				} catch (IOException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		};
 	}
 

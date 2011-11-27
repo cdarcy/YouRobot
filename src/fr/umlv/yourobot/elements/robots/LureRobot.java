@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.jbox2d.common.MathUtils;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Lure;
 import fr.umlv.yourobot.graphics.GameDrawAPI;

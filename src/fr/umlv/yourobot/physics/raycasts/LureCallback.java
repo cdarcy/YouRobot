@@ -4,16 +4,16 @@ import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Fixture;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.util.ElementType;
 
 public class LureCallback implements RayCastCallback, GameDetectionCallback{
-	private final RobotWorld world;
+	private final RobotGame world;
 	private final Robot robot;
 
-	public LureCallback(RobotWorld world, Robot robot) {
+	public LureCallback(RobotGame world, Robot robot) {
 		this.world = world;
 		this.robot = robot;
 	}
@@ -40,7 +40,8 @@ public class LureCallback implements RayCastCallback, GameDetectionCallback{
 	@Override
 	public void raycast(Element elem) {
 		if(elem.getBody().getPosition() != null)
-			world.getJBoxWorld().raycast(this, robot.getBody().getPosition(), elem.getBody().getPosition());
+			world.raycast(this, robot.getBody().getPosition(), elem.getBody().getPosition());
+			
 	}
 
 }

@@ -4,8 +4,8 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.RobotWorld.RobotGameMod;
+import fr.umlv.yourobot.RobotGame;
+import fr.umlv.yourobot.RobotGame.RobotGameMod;
 import fr.umlv.yourobot.YouRobotCode;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
@@ -22,7 +22,7 @@ public class HumanRobot extends Robot {
 	private Bonus currentBonus = null;
 	protected KeyController controller;
 	
-	public HumanRobot(RobotWorld world, String name, float x, float y) {
+	public HumanRobot(RobotGame world, String name, float x, float y) {
 		super(x, y);
 		type = ElementType.PLAYER_ROBOT;
 		this.life = 100;
@@ -35,7 +35,7 @@ public class HumanRobot extends Robot {
 		currentBonus = b;
 	}
 	
-	public ArrayList<Element> runBonus(RobotWorld world) {
+	public ArrayList<Element> runBonus(RobotGame world) {
 		if(currentBonus == null)
 			return null;
 		System.out.println(world);
@@ -78,13 +78,13 @@ public class HumanRobot extends Robot {
 	}
 
 
-	public void detectBonus(RobotWorld world) {
+	public void detectBonus(RobotGame world) {
 		if(getBonus() == null){
 			PlayerCallback c = new PlayerCallback(world, this);
 			@SuppressWarnings("unchecked")
 			ArrayList<Bonus> bonus = (ArrayList<Bonus>) world.getListByClass(ElementClass.BONUS).clone();
 			for(Bonus b : bonus)
-				world.getJBoxWorld().raycast(c, bodyElem.getPosition(), b.getBody().getPosition());
+				world.raycast(c, bodyElem.getPosition(), b.getBody().getPosition());
 		}
 		else{
 			ArrayList<Element> list = runBonus(world);

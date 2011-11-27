@@ -8,7 +8,7 @@ import java.util.Random;
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
@@ -24,22 +24,22 @@ public class ComputerRobot extends Robot {
 		return this;
 	}
 
-	public void run(final RobotWorld world) {
+	public void run(final RobotGame world) {
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
+				float quarter_diagonal = (float) (Math.sqrt((RobotGame.WIDTH*RobotGame.WIDTH)+(RobotGame.HEIGHT*RobotGame.HEIGHT))/4);
 				ArrayList<Element> list = new ArrayList<>();
-				list.addAll(world.getListByType(ElementType.PLAYER_ROBOT));
-				list.addAll(world.getListByType(ElementType.LURE_ROBOT));
+				list.addAll(world.getPlayers());
+				list.addAll(world.getLureRobots());
 				
 				while(true) {
 					for (final Element p : list){
 						float distance = MathUtils.distance(bodyElem.getPosition(), p.getPosition());
 						Random rand = new Random();
 						
-						if(distance < quarter_diagonal && p.typeElem() == ElementType.PLAYER_ROBOT && world.getListByType(ElementType.LURE_ROBOT).size() == 0)
+						if(distance < quarter_diagonal && p.typeElem() == ElementType.PLAYER_ROBOT && world.getLureRobots().size() == 0)
 						{
 							distance = MathUtils.distance(bodyElem.getPosition(), p.getPosition());
 							final Vec2 force = p.getPosition().sub(bodyElem.getPosition());		

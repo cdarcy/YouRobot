@@ -4,88 +4,151 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.Random;
 
-import fr.umlv.yourobot.RobotWorld.RobotGameMod;
+import fr.umlv.yourobot.RobotGame.StateGame;
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
 import fr.umlv.yourobot.util.KeyController;
+import fr.umlv.yourobot.util.KeyController.GameMenu;
 import fr.umlv.yourobot.util.KeyControllers;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
 import fr.umlv.zen.ApplicationRenderCode;
 import fr.umlv.zen.KeyboardEvent;
 
+/**
+ * @code {@link YouRobotCode}
+ * Defines main procedure of launching YouRobot game.
+ * @see {@link ApplicationCode} 
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ */
 public class YouRobotCode implements ApplicationCode{
 
-	final Random random = new Random(0);
 	final int WIDTH = 800;
 	final int HEIGHT = 600;
-	private boolean loop = true;
+	
+	public static boolean loop = true;
+	public static StateGame causeInterruption;
 	public final static String[] DEFAULT_KEYBOARDSET = {"UP","DOWN","LEFT","RIGHT", "SPACE"};
 	public final static String[] ALT_KEYBOARDSET  = {"Z","S","Q","D","X"};
 
-	KeyController graphicController  = KeyControllers.getGraphicsMenuController(DEFAULT_KEYBOARDSET);
-	KeyController modeController  = KeyControllers.getMenuController(DEFAULT_KEYBOARDSET);
+	private static KeyController graphicController  = KeyControllers.getGraphicsMenuController(DEFAULT_KEYBOARDSET);
+	private static KeyController modeController  = KeyControllers.getMenuController(DEFAULT_KEYBOARDSET);
+	private static KeyController gameOverMenuController  = KeyControllers.getMenuGameOverController(DEFAULT_KEYBOARDSET);
 
+	private static volatile RobotGame game;
+	private static int level = 0;
 
-	volatile RobotWorld world;
-	//HumanRobot player1;
-	private int level = 0;
-
-
+	/**
+	 * Run method of YouRobot game
+	 * Displays menus and launches set of games
+	 * @see CodeFactory
+	 * @see fr.umlv.zen.ApplicationCode#run(fr.umlv.zen.ApplicationContext)
+	 */
 	@Override
 	public void run(final ApplicationContext context) {
 
 
 		// Welcoming interface with game and graphic modes choice
-		context.render(new ApplicationRenderCode() {
-
-			@Override
-			public void render(Graphics2D graphics) {
-
-				try {
-					MenusDrawAPI.menu1(graphics);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-		});
+		context.render(CodeFactory.runMenu1());
 
 		while(loop) {
-			final KeyboardEvent event = context.pollKeyboard();
-			context.render(new ApplicationRenderCode() {
+			context.render(CodeFactory.controlMenu1(context));
+		}
+
+		context.render(CodeFactory.runMenu2());
+
+		loop = true;
+		while(loop) {
+			context.render(CodeFactory.controlMenu2(context));
+		}
+
+		/*
+		 * Loop for a set of 10 games
+		 */
+		for(int i=0;i<=9;i++){
+
+			// Initializing new game
+			context.render(CodeFactory.initNewGame());
+			loop=true;
+			
+			// Game updating loop
+			while(loop) {
+				context.render(CodeFactory.runGame(game, context));
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();	
+				}
+			}
+			
+			// If players died, we show the game over menu
+			if(causeInterruption == StateGame.PLAYERDIED){
+				context.render(CodeFactory.runMenuGameOver());	
+				loop=true;
+				while(loop){
+					context.render(CodeFactory.controlMenuGameOver(context));
+				}
+				if(MenusDrawAPI.choiceEndGame == GameMenu.EXIT)
+					break;
+			}
+		}
+	}
+
+	/**
+	 * Private inner-class CodeFactory 
+	 * Returns render codes to manage displaying and controlling of menus and game
+	 * @see YouRobotCode
+	 */
+	private static class CodeFactory {
+
+		private static ApplicationRenderCode runMenuGameOver() {
+			return new ApplicationRenderCode() {
+
 				@Override
 				public void render(Graphics2D graphics) {
+					try {
+						MenusDrawAPI.menu3(graphics);
+					} catch (IOException | InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			};
+		}
 
+		private static ApplicationRenderCode controlMenuGameOver(final ApplicationContext context){
+			return new ApplicationRenderCode() {
+				final KeyboardEvent event = context.pollKeyboard();
+				@Override
+				public void render(Graphics2D graphics) {
 					if(event != null)
 						try {
-							if(doControlMenuFinished(modeController, graphics, event))
+							if(doControlMenuFinished(gameOverMenuController, graphics, event)){
 								loop=false;
+								graphics.clearRect(0, 0, 800,600);
+							}
+
 						} catch (IOException | InterruptedException e) {
 							e.printStackTrace();
 						}
 				}
-			});
+			};
 		}
-		context.render(new ApplicationRenderCode() {
+		private static ApplicationRenderCode initNewGame() {
+			return new ApplicationRenderCode() {
 
-			@Override
-			public void render(Graphics2D graphics) {
-
-				try {
-					MenusDrawAPI.menu2(graphics);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				@Override
+				public void render(Graphics2D graphics) {
+					game = new RobotGame(level , MenusDrawAPI.choice1, MenusDrawAPI.choice2);
+					game.init(graphics);
 				}
-			}
+			};
+		}
 
-		});
 
-		loop = true;
-		while(loop) {
-			final KeyboardEvent event = context.pollKeyboard();
-			context.render(new ApplicationRenderCode() {
+		private static ApplicationRenderCode controlMenu2(final ApplicationContext context) {
+			return new ApplicationRenderCode() {
+				final KeyboardEvent event = context.pollKeyboard();
 				@Override
 				public void render(Graphics2D graphics) {
 					if(event != null)
@@ -99,72 +162,102 @@ public class YouRobotCode implements ApplicationCode{
 							e.printStackTrace();
 						}
 				}
-			});
+			};
 		}
 
-		// Defining basic Game Object
 
-		// World game initialisation
+		private static ApplicationRenderCode runMenu2() {
+			return new ApplicationRenderCode() {
 
-		// Game loop. Updates world and manages control.players
-		
-		for(int i=0;i<20;i++){
-			// Defining basic Game Object
-			world = new RobotWorld(level , MenusDrawAPI.choice1, MenusDrawAPI.choice2);
-			
-			context.render(new ApplicationRenderCode() {
 				@Override
 				public void render(Graphics2D graphics) {
-					world.init(graphics);
-				}
-			});
-			loop=true;
-			System.out.println(level);
-			while(loop) {
-				
-				context.render(runGame(context));
-				try {
-					Thread.sleep(20);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();	
-				}
-			}
-		}
-	}
 
-
-	public ApplicationRenderCode runGame(final ApplicationContext context){
-		return new ApplicationRenderCode() {
-
-			@Override
-			public void render(Graphics2D graphics) {
-				try {
-					final KeyboardEvent event = context.pollKeyboard();
-					if(world.updateGame(graphics, event)){
-						loop=false;
-						level++;
+					try {
+						MenusDrawAPI.menu2(graphics);
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} 
+				}
+
+			};
+		}
+
+
+		private static ApplicationRenderCode runGame(final RobotGame game, final ApplicationContext context){
+			return new ApplicationRenderCode() {
+
+				@Override
+				public void render(Graphics2D graphics) {
+					try {
+						final KeyboardEvent event = context.pollKeyboard();
+						switch (game.updateGame(graphics, event)){
+						case WINLEVEL:
+							loop = false;
+							level++;
+							causeInterruption = StateGame.WINLEVEL;
+							break;
+						case PLAYERDIED:
+							causeInterruption = StateGame.PLAYERDIED;
+							loop = false;
+							break;
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} 
+				}
+			};
+		}
+
+		private static ApplicationRenderCode runMenu1(){
+			return new ApplicationRenderCode() {
+
+				@Override
+				public void render(Graphics2D graphics) {
+
+					try {
+						MenusDrawAPI.menu1(graphics);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			};
+		}
+
+		private static ApplicationRenderCode controlMenu1(final ApplicationContext context){
+			return new ApplicationRenderCode() {
+
+				final KeyboardEvent event = context.pollKeyboard();
+
+				@Override
+				public void render(Graphics2D graphics) {
+
+					if(event != null)
+						try {
+							if(doControlMenuFinished(modeController, graphics, event))
+								loop=false;
+						} catch (IOException | InterruptedException e) {
+							e.printStackTrace();
+						}
+				}
+			};
+		}
+
+		private static boolean doControlMenuFinished(KeyController k, Graphics2D g, KeyboardEvent event) throws IOException, InterruptedException{
+			if (k != null){
+				k.drawMenu(g);
+				k.control(event);
+				k.drawMenu(g);
+				if(k.isFinished()){
+					k = null;
+					return true;
+				}
 			}
-		};
+			return false;
+		}
 	}
 
-	public boolean doControlMenuFinished(KeyController k, Graphics2D g, KeyboardEvent event) throws IOException, InterruptedException{
-		if (k != null){
-			k.drawMenu(g);
-			k.control(event);
-			k.drawMenu(g);
-			if(k.isFinished()){
-				k = null;
-				return true;
-			}
-		}
-		return false;
-	}	
-}
-
-
+}	

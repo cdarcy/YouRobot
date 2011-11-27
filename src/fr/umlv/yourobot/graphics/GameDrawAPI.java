@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.RadialGradientPaint;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -16,8 +18,8 @@ import javax.imageio.ImageIO;
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
 
-import fr.umlv.yourobot.RobotWorld;
-import fr.umlv.yourobot.RobotWorld.RobotGameMod;
+import fr.umlv.yourobot.RobotGame;
+import fr.umlv.yourobot.RobotGame.RobotGameMod;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
@@ -25,17 +27,17 @@ import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 
 public class GameDrawAPI{
-	
+
 
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
-	static RobotWorld world;
+	static RobotGame world;
 	private static BufferedImage img;
 
-	public GameDrawAPI(RobotWorld world){
+	public GameDrawAPI(RobotGame world){
 		GameDrawAPI.world = world;
 	}
-	
+
 
 
 	public void drawCircle(Vec2 pos, float direction, Color c, BufferedImage img, Graphics2D g) throws IOException {
@@ -43,6 +45,11 @@ public class GameDrawAPI{
 		drawRotateImage(pos,direction,img,g);
 	}
 
+	public void drawCircle(Vec2 pos, int size, RadialGradientPaint paint,  Graphics2D g) throws IOException {
+		g.setPaint(paint);
+		g.fillOval((int)pos.x, (int)pos.y, size, size);
+	}
+	
 	public void drawWall(Vec2 pos, BufferedImage img, Color c, Graphics2D g) {
 		g.setColor(c);
 		g.drawImage(img, null, (int)pos.x-5, (int)pos.y-5);
@@ -65,7 +72,7 @@ public class GameDrawAPI{
 	public void drawEffect(CircleShape circle, Paint p, Color c,
 			BufferedImage img, Graphics2D g) throws IOException {
 	}
-	
+
 	public static void drawGameOver(Graphics2D g) throws IOException{
 		BufferedImage img = ImageIO.read(new File("images/gameOver.png"));
 		g.drawImage(img, null, 300, 200);
@@ -74,9 +81,9 @@ public class GameDrawAPI{
 	public static void drawBackground(Graphics2D g) {
 		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
 	}
-	
+
 	/* 
-	 *TODO : switch case in RobotWorld to manage lists to store bonuses, circles, robots, players and walls
+	 *TODO : switch case in RobotGame to manage lists to store bonuses, circles, robots, players and walls
 	 */
 	public static void draw(Graphics2D g) throws IOException {
 		for(Element e : world.getListByClass(ElementClass.BONUS)){
@@ -87,18 +94,30 @@ public class GameDrawAPI{
 			if(e != null)	
 				e.draw(g, world.getApi());
 		}
-		for(Element e : world.getAll()){
-			if(e != null && e.classElem() != ElementClass.BONUS && e.typeElem() != ElementType.START_CIRCLE)	
+
+		for(Element e : world.getListByClass(ElementClass.WALL)){
+			if(e != null)	
 				e.draw(g, world.getApi());
 		}
 
-		world.getAll().remove(ElementType.EFFECT);
+		for(Element e : world.getListByClass(ElementClass.ROBOT)){
+			if(e != null)	
+				e.draw(g, world.getApi());
+		}
+
+		if(world.getListByClass(ElementClass.EFFECT) != null){
+			for(Element e : world.getListByClass(ElementClass.EFFECT)){
+				if(e != null)	
+					e.draw(g, world.getApi());
+			}
+			world.removeEffects();
+		}
 	}
 
 
 	public static void drawInterface(Graphics2D g) throws IOException {
 		HumanRobot p1 = (HumanRobot) world.getPlayers().get(0);
-		
+
 		int p1Col = 10;
 		g.setColor(Color.ORANGE);
 		Font fonte = new Font(Font.SERIF,Font.BOLD, 20);
@@ -119,7 +138,7 @@ public class GameDrawAPI{
 	public static void setBackground(String nameBackgroundPicture) throws IOException {
 		img = ImageIO.read(new File("images/" + nameBackgroundPicture));
 	}
-	
+
 	/*@Override
 	public void drawEffect(Shape circle, Paint paint, Color c,
 			BufferedImage img, Graphics2D g) throws IOException {

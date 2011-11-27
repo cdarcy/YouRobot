@@ -5,7 +5,7 @@ import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Fixture;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
@@ -13,10 +13,10 @@ import fr.umlv.yourobot.util.ElementType.ElementClass;
 
 public class PlayerCallback implements GameDetectionCallback, RayCastCallback {
 
-	private final RobotWorld world;
+	private final RobotGame world;
 	private final HumanRobot robot;
 
-	public PlayerCallback(RobotWorld world, HumanRobot robot) {
+	public PlayerCallback(RobotGame world, HumanRobot robot) {
 		this.world = world;
 		this.robot = robot;
 	}

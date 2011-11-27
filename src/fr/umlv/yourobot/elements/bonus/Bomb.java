@@ -13,7 +13,7 @@ import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
@@ -35,7 +35,7 @@ public abstract class Bomb extends Bonus {
 		g.drawImage(img, null, (int)x, (int)y);
 	}
 
-	public ArrayList<Element> run(final RobotWorld world, final HumanRobot robot) {
+	public ArrayList<Element> run(final RobotGame world, final HumanRobot robot) {
 		final BombWaveCallback b = new BombWaveCallback(world, robot, getTypeBomb());
 		new Thread(new Runnable(){
 
@@ -51,10 +51,8 @@ public abstract class Bomb extends Bonus {
 				
 				Vec2 lower = new Vec2(x - size/2, y - size/2);
 				Vec2 upper = new Vec2(x + size/2, y + size/2);
-				AABB aabb =  new AABB(lower, upper);
 
-				System.out.println(aabb.getExtents());
-				world.getJBoxWorld().queryAABB(b, new AABB(lower, upper));
+				world.queryAABB(b, new AABB(lower, upper));
 			
 				RadialGradientPaint paint1 = new RadialGradientPaint(x, y, BONUS_SIZE*7, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.YELLOW});
 

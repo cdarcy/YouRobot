@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.LureRobot;
@@ -35,7 +35,7 @@ public class Lure extends Bonus {
 	}
 
 	@Override
-	public ArrayList<Element> run(final RobotWorld world, final HumanRobot robot) {
+	public ArrayList<Element> run(final RobotGame world, final HumanRobot robot) {
 		final LureRobot lureRobot = new LureRobot(robot.getPosition().x+10, robot.getPosition().y, this);
 		world.addStaticElement(lureRobot);
 		final LureCallback c = new LureCallback(world, lureRobot);
@@ -45,7 +45,7 @@ public class Lure extends Bonus {
 			@Override
 			public void run() {
 				long start = System.nanoTime();
-				ArrayList<Element> list = world.getListByType(ElementType.COMPUTER_ROBOT);
+				ArrayList<Element> list = world.getRobots();
 				while(((System.nanoTime()-start)/1000000)<(length*1000)){
 					timeleft = (int) ((length*1000)-(System.nanoTime()-start)/1000000);
 					for (Element enemy : list){

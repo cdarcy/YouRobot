@@ -8,7 +8,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 
-import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.util.ElementType;
@@ -19,7 +19,7 @@ public class BombWaveCallback implements QueryCallback {
 	private ElementType maxEffectType;
 
 
-	public BombWaveCallback(RobotWorld world, HumanRobot robot, ElementType typeEffectMax){
+	public BombWaveCallback(RobotGame world, HumanRobot robot, ElementType typeEffectMax){
 		this.robot = robot;
 		this.raycasted = new ArrayList<>();
 		this.maxEffectType = typeEffectMax;
@@ -89,7 +89,7 @@ public class BombWaveCallback implements QueryCallback {
 		float x = (robot.getX()-p.getX())*(robot.getX()-p.getX());
 		float y = (robot.getY()-p.getY())*(robot.getY()-p.getY());
 		float distance = (float) Math.sqrt(x+y);
-		float quarter_diagonal = (float) (Math.sqrt((RobotWorld.WIDTH*RobotWorld.WIDTH)+(RobotWorld.HEIGHT*RobotWorld.HEIGHT))/4);
+		float quarter_diagonal = (float) (Math.sqrt((RobotGame.WIDTH*RobotGame.WIDTH)+(RobotGame.HEIGHT*RobotGame.HEIGHT))/4);
 
 		if(((ElementData) p.getBody().getUserData()).type() == ElementType.PLAYER_ROBOT)
 			return -1;
