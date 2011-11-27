@@ -10,7 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import fr.umlv.yourobot.RobotGame.RobotGameMod;
-import fr.umlv.yourobot.util.KeyController.GameMenu;
+import fr.umlv.yourobot.util.KeyControllers.KeyController.GameMenu;
 import fr.umlv.yourobot.util.KeyControllers.RobotTextureMod;
 
 public class MenusDrawAPI {

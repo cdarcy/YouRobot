@@ -28,6 +28,7 @@ import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
+import fr.umlv.yourobot.physics.raycasts.ElementDetectionCallback;
 import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.KeyControllers;
@@ -130,8 +131,20 @@ public class RobotGame{
 		list.add(ElementType.LURE);
 
 		for (int i=0;i<5;i++){
+			
 			float x = MathUtils.randomFloat(100, WIDTH-100);
 			float y = MathUtils.randomFloat(100, HEIGHT-100);
+			
+			ElementDetectionCallback callback = new ElementDetectionCallback();
+			Vec2 lower = new Vec2(x - Wall.WALL_SIZE/2, y - Wall.WALL_SIZE/2);
+			Vec2 upper = new Vec2(x + Wall.WALL_SIZE/2, y + Wall.WALL_SIZE/2);
+			jboxWorld.queryAABB(callback, new AABB(lower, upper));
+			if(callback.isDetected()){
+				i--;
+				System.out.println("detected");
+				continue;
+			}
+			
 			if (!MapGenerator.getAllStaticElement().contains(new Vec2(x, y))){
 				MapGenerator.addVecPos(new Vec2(x, y));
 				int value = Math.round(MathUtils.randomFloat(0,list.size()-1));

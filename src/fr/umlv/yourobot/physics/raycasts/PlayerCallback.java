@@ -9,9 +9,8 @@ import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
-import fr.umlv.yourobot.util.ElementType.ElementClass;
 
-public class PlayerCallback implements GameDetectionCallback, RayCastCallback {
+public class PlayerCallback implements GameDetectionCallback {
 
 	private final RobotGame world;
 	private final HumanRobot robot;
@@ -27,19 +26,5 @@ public class PlayerCallback implements GameDetectionCallback, RayCastCallback {
 			world.removeElement(elem);
 			robot.setBonus((Bonus) elem);
 		}
-
-	}
-
-	@Override
-	public float reportFixture(Fixture arg0, Vec2 arg1, Vec2 arg2, float arg3) {
-		final Element elem = (Element) arg0.getBody().getUserData();
-		if(elem != null)
-			if (elem.classElem() == ElementClass.BONUS && MathUtils.distance(robot.getPosition(), elem.getPosition()) < 40) {
-				if(robot.getBonus() == null){
-					world.removeElement(elem);
-					robot.setBonus((Bonus) elem);	
-				}
-			}
-		return 0;
 	}
 }

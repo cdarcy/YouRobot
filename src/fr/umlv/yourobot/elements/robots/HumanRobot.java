@@ -5,15 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import fr.umlv.yourobot.RobotGame;
-import fr.umlv.yourobot.RobotGame.RobotGameMod;
-import fr.umlv.yourobot.YouRobotCode;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
 import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
-import fr.umlv.yourobot.util.KeyController;
+import fr.umlv.yourobot.util.KeyControllers.KeyController;
 import fr.umlv.zen.KeyboardEvent;
 
 public class HumanRobot extends Robot {
@@ -83,7 +81,7 @@ public class HumanRobot extends Robot {
 			@SuppressWarnings("unchecked")
 			ArrayList<Bonus> bonus = (ArrayList<Bonus>) world.getListByClass(ElementClass.BONUS).clone();
 			for(Bonus b : bonus)
-				world.raycast(c, bodyElem.getPosition(), b.getBody().getPosition());
+				c.raycast(b);
 		}
 		else{
 			ArrayList<Element> list = runBonus(world);
@@ -94,7 +92,7 @@ public class HumanRobot extends Robot {
 	}
 
 
-	public void setController(KeyController gameController) {
-		this.controller = gameController;
+	public void setController(KeyController keyController) {
+		this.controller = keyController;
 	}
 }

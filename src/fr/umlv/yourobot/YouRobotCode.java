@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import fr.umlv.yourobot.RobotGame.StateGame;
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
-import fr.umlv.yourobot.util.KeyController;
-import fr.umlv.yourobot.util.KeyController.GameMenu;
+import fr.umlv.yourobot.util.KeyControllers.KeyController;
 import fr.umlv.yourobot.util.KeyControllers;
+import fr.umlv.yourobot.util.KeyControllers.KeyController.GameMenu;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
 import fr.umlv.zen.ApplicationRenderCode;
