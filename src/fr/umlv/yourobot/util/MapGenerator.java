@@ -99,6 +99,18 @@ public class MapGenerator {
 	public static void setWalls(Graphics2D g, int level) throws IOException{
 		int wallNumber = level + 10;
 		
+		for (int i=50 ; i<150 ; i++){
+			for (int j=HEIGHT-190 ; j<HEIGHT-50 ; j++){
+				allStaticElement.add(new Vec2(i, j));
+			}
+		}
+		
+		for (int i=WIDTH-150 ; i<WIDTH-50 ; i++){
+			for (int j=0 ; j<150 ; j++){
+				allStaticElement.add(new Vec2(i, j));
+			}
+		}
+		
 		for (int i=0 ; i<wallNumber ; i++){
 			//give a position in the map between the border
 			//the map is represented like a matrix
