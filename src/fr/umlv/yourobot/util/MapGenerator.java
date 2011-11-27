@@ -17,6 +17,7 @@ import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.RobotWorld;
+import fr.umlv.yourobot.RobotWorld.RobotGameMod;
 import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.walls.BarWall;
@@ -75,8 +76,11 @@ public class MapGenerator {
 		GameDrawAPI.setBackground(nameBackgroundPicture);
 		createArena(g, world, nameWallPicture);
 		drawArena(g);
+		
 		setWalls(g, 20);
 	}
+
+
 
 	public static void drawArena(Graphics2D g){
 		for(int i=0;i<arena.size();i++)

@@ -35,6 +35,7 @@ import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.elements.walls.BorderWall;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
+import fr.umlv.yourobot.graphics.MenusDrawAPI;
 import fr.umlv.yourobot.physics.collisions.CollisionListener;
 import fr.umlv.yourobot.util.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
@@ -151,28 +152,27 @@ public class RobotWorld  {
 	 * Update the world
 	 * 
 	 * @param timeStep The amount of time to simulate
+	 * @return 
 	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
-	public boolean updateGame(Graphics2D g, KeyboardEvent event) throws IOException {
+	public boolean updateGame(Graphics2D g, KeyboardEvent event) throws IOException, InterruptedException {
 		if(event != null)
 			doControl(g, event);
 		// Steps jbox2d physics world
 		jboxWorld.step(1/30f, 15, 8);
 		jboxWorld.clearForces();
+		
+		if (Math.round(((HumanRobot) getListByType(ElementType.PLAYER_ROBOT).get(0)).getLife()) == 0){
+			GameDrawAPI.drawGameOver(g);
+			MenusDrawAPI.restartGame(g);
+		}
+		
 		//MapGenerator background
 		GameDrawAPI.drawBackground(g);
 		// Draw bonuses before drawing other elements (robots, walls)
 		// Draw elements of the ga		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
-		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
-		Circle c1 = new Circle(paint1, 40, 43, HEIGHT-100, ElementType.START_CIRCLE);
 
-		if (mode == RobotGameMod.TWOPLAYER){
-			RadialGradientPaint paint2 = new RadialGradientPaint(70, HEIGHT-150, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
-			g.setPaint(paint2);
-			 g.fill(new Ellipse2D.Float(43, HEIGHT-150, 40, 40));
-		}
-		RadialGradientPaint paint3 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
-		g.setPaint(paint3);
 		GameDrawAPI.draw(g);
 		
 		// Destroy effects
@@ -297,24 +297,23 @@ public class RobotWorld  {
 		addDynamicElement(r2);
 		addDynamicElement(r3);
 
-
-
+		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
+		RadialGradientPaint paint2 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
+		Circle c1 = new Circle(paint1, 40, 70, HEIGHT-100, ElementType.START_CIRCLE);
+		Circle c3 = new Circle(paint2, 40, 710, 70, ElementType.END_CIRCLE);
 		// Defining HumanRobots
 		e1 = new HumanRobot(this,"Camcam",46, HEIGHT-97);
 		e1.setController(KeyControllers.getGameController(this, e1, keysP1));
 		addDynamicElement(e1);
+		addStaticElement(c1);
+		addStaticElement(c3);
 		if(mode == RobotGameMod.TWOPLAYER){
 			e2 = new HumanRobot(this,"Loulou",46, HEIGHT-147);
 			e2.setController(KeyControllers.getGameController(this, e2, keysP2));
+			Circle c2 = new Circle(paint1, 40, 70, HEIGHT-150, ElementType.START_CIRCLE);
+			addStaticElement(c2);
 			addDynamicElement(e2);
 		}
-		RadialGradientPaint paint2 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
-		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-100, 40, new float[]{.3f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
-		
-		Circle c1 = new Circle(paint1, 40, 43, HEIGHT-100, ElementType.START_CIRCLE);
-		Circle c2 = new Circle(paint1, 40, 43, HEIGHT-150, ElementType.START_CIRCLE);
-		Circle c3 = new Circle(paint2, 40, 710, 70, ElementType.END_CIRCLE);
-
 		
 		// create map
 		try {

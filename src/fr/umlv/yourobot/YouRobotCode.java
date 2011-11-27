@@ -106,8 +106,8 @@ public class YouRobotCode implements ApplicationCode{
 
 		// World game initialisation
 
-		// Game loop. Updates world and manages control.
-		loop=true;
+		// Game loop. Updates world and manages control.players
+		
 		for(int i=0;i<20;i++){
 			// Defining basic Game Object
 			world = new RobotWorld(level , MenusDrawAPI.choice1, MenusDrawAPI.choice2);
@@ -118,7 +118,7 @@ public class YouRobotCode implements ApplicationCode{
 					world.init(graphics);
 				}
 			});
-			
+			loop=true;
 			System.out.println(level);
 			while(loop) {
 				
@@ -132,6 +132,8 @@ public class YouRobotCode implements ApplicationCode{
 								level++;
 							}
 						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (InterruptedException e) {
 							e.printStackTrace();
 						} 
 
