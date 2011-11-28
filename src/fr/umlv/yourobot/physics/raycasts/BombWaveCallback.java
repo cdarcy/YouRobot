@@ -12,6 +12,7 @@ import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.util.ElementType;
+import fr.umlv.yourobot.util.ElementType.ElementClass;
 
 public class BombWaveCallback implements QueryCallback {
 	private HumanRobot robot;
@@ -30,7 +31,7 @@ public class BombWaveCallback implements QueryCallback {
 		Element p = (Element) fixture.getBody().getUserData();
 
 		System.out.println(p);
-		if(p == null || raycasted.contains(p))
+		if(p == null || raycasted.contains(p) || p.classElem() != ElementClass.WALL)
 			return false;
 		p.getBody().setType(BodyType.DYNAMIC);	
 		Vec2 pos = new Vec2(robot.getPosition());
@@ -49,10 +50,8 @@ public class BombWaveCallback implements QueryCallback {
 			if(maxEffectType == ElementType.STONEWALL)
 				factor = 100000;		
 			break;
-		case BORDERWALL:
-			return false;
 		default:
-			break;
+			return false;
 		}
 		float distance = MathUtils.distance(robot.getPosition(), p.getPosition());
 		p.getBody().applyForce(new Vec2((force.x*distance)*factor,(force.y*distance)*factor), p.getBody().getWorldCenter());

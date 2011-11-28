@@ -75,6 +75,7 @@ public class RobotGame{
 		jboxWorld.setContinuousPhysics(true);
 		map = new HashMap<>();
 		all = new ArrayList<>();
+		
 		players = new ArrayList<>();
 		robots = new ArrayList<>();
 		lures = new ArrayList<>();
@@ -91,6 +92,7 @@ public class RobotGame{
 
 	public void addElement(Element element, BodyType type, boolean createFixture){
 		Body body = jboxWorld.createBody(element.getBodyDef());
+		body.setLinearDamping(.5f);
 		if(map.get(element.classElem()) == null){
 			ArrayList<Element> l = new ArrayList<>();
 			l.add(element);
@@ -184,13 +186,9 @@ public class RobotGame{
 		// Steps jbox2d physics world
 		jboxWorld.step(1/30f, 15, 8);
 		
-		GameDrawAPI.drawBackground(g);
 		GameDrawAPI.draw(g);
-		GameDrawAPI.drawInterface(g);
-		
-		// Destroy effects
-		
-		
+		destroyEffects();
+				
 		return getStateGame();
 	}
 
@@ -235,16 +233,19 @@ public class RobotGame{
 
 
 	public void removeEffects() {
-		if(getListByClass(ElementClass.EFFECT) != null)
-			toDestroy.addAll(getListByClass(ElementClass.EFFECT));
+		toDestroy.addAll(getListByClass(ElementClass.EFFECT));		
 	}
 	
 	public void destroyEffects(){
 		for (Element e : toDestroy){
+			e.getBody().destroyFixture(e.getFixture());
 			jboxWorld.destroyBody(e.getBody());
-			all.remove(e);
-			map.get(e.classElem()).remove(e);
+			map.get(ElementClass.EFFECT).remove(e);
 		}
+		if(map.get(ElementClass.EFFECT)!=null)
+		if(map.get(ElementClass.EFFECT).size()>0)
+		System.out.println("effect---->"+map.get(ElementClass.EFFECT));
+		toDestroy.clear();
 	}
 
 	public void setMode(RobotGameMod mode) {
@@ -303,9 +304,10 @@ public class RobotGame{
 		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-83, 40, new float[]{.1f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
 		RadialGradientPaint paint2 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
 		Circle c1 = new Circle(paint1, 40, 70, HEIGHT-83, ElementType.START_CIRCLE);
-		MapGenerator.addVecPos(new Vec2(50, HEIGHT-83));
+		//MapGenerator.addVecPos(new Vec2(50, HEIGHT-83));
+		//MapGenerator.addVecPos(new Vec2(100, HEIGHT-83+50));
 		Circle c3 = new Circle(paint2, 40, 730, 70, ElementType.END_CIRCLE);
-		MapGenerator.addVecPos(new Vec2(730, 70));
+		//MapGenerator.addVecPos(new Vec2(730, 70));
 		// Defining HumanRobots
 		HumanRobot e1 = new HumanRobot(this,"Camcam",50, HEIGHT-100);
 		e1.setController(KeyControllers.getGameController(this, e1, keysP1));
@@ -318,7 +320,7 @@ public class RobotGame{
 			RadialGradientPaint paint3 = new RadialGradientPaint(70, HEIGHT-133, 40, new float[]{.1f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
 			e2.setController(KeyControllers.getGameController(this, e2, keysP2));
 			Circle c2 = new Circle(paint3, 40, 70, HEIGHT-133, ElementType.START_CIRCLE);
-			MapGenerator.addVecPos(new Vec2(70, HEIGHT-133));
+			//MapGenerator.addVecPos(new Vec2(70, HEIGHT-133));
 			addStaticElement(c2);
 			addDynamicElement(e2);
 		}
@@ -329,26 +331,16 @@ public class RobotGame{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		
 		putBonus();
-		addStaticElement(new Snap(80, HEIGHT-150));
 
 		try {
 			updateRobots();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		for(Element e : map.get(ElementClass.BLOCK)){
-			try {
-				e.draw(g, api);
-			} catch (IOException e3) {
-				e3.printStackTrace();
-			}
-		}
-	}
-
-
-	public void drawArena() {
-		map.get(ElementClass.EFFECT);
+		
 	}
 
 

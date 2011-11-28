@@ -91,12 +91,23 @@ public class MapGenerator {
 		if(img == null)
 			img = ImageIO.read(new File("images/" + nameBackground));	
 		g.drawImage(img, null, Wall.WALL_SIZE-10, Wall.WALL_SIZE-10);
-		BufferedImage img = ImageIO.read(new File("images/" + nameBackground));
 		g.drawImage(img, null, Wall.WALL_SIZE, Wall.WALL_SIZE);
 	}
 
 	public static void setWalls(Graphics2D g, int level) throws IOException{
 		int wallNumber = level + 10;
+		
+		for (int i=50 ; i<150 ; i++){
+			for (int j=HEIGHT-190 ; j<HEIGHT-50 ; j++){
+				allStaticElement.add(new Vec2(i, j));
+			}
+		}
+		
+		for (int i=WIDTH-150 ; i<WIDTH-50 ; i++){
+			for (int j=0 ; j<150 ; j++){
+				allStaticElement.add(new Vec2(i, j));
+			}
+		}
 		
 		for (int i=0 ; i<wallNumber ; i++){
 			//give a position in the map between the border
@@ -155,6 +166,11 @@ public class MapGenerator {
 			wall.add("wall_3.png");
 			wall.add("wall_4.png");
 		}
+	}
+
+	public static BufferedImage getImgBorder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

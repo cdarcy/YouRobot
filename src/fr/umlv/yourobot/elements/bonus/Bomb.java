@@ -37,32 +37,23 @@ public abstract class Bomb extends Bonus {
 
 	public ArrayList<Element> run(final RobotGame world, final HumanRobot robot) {
 		final BombWaveCallback b = new BombWaveCallback(world, robot, getTypeBomb());
-		new Thread(new Runnable(){
+		Circle c1 = null;
+		float size = 200;
+		float x = robot.getBody().getWorldCenter().x;
+		float y = robot.getBody().getWorldCenter().y;
+		
 
-			@Override
-			public void run() {
-				Circle c1 = null;
-				float x = 0;
-				float y = 0;
-				float size = 200;
+		RadialGradientPaint paint1 = new RadialGradientPaint(x-size/2, y-size/2, 200, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.YELLOW});
 
-				x = robot.getBody().getWorldCenter().x;
-				y = robot.getBody().getWorldCenter().y;
-				
-				Vec2 lower = new Vec2(x - size/2, y - size/2);
-				Vec2 upper = new Vec2(x + size/2, y + size/2);
+		c1 = new Circle(paint1, 200, x-size/2, y-size/2, ElementType.EFFECT);
 
-				world.queryAABB(b, new AABB(lower, upper));
-			
-				RadialGradientPaint paint1 = new RadialGradientPaint(x, y, BONUS_SIZE*7, new float[]{0f, 1f}, new Color[]{Color.ORANGE, Color.YELLOW});
+		world.addElement(c1, BodyType.DYNAMIC, true);
 
-				c1 = new Circle(paint1, BONUS_SIZE*7, x, y, ElementType.EFFECT);
-				world.addElement(c1, BodyType.DYNAMIC, true);
-				world.removeEffects();
+		Vec2 lower = new Vec2(x - size/2, y - size/2);
+		Vec2 upper = new Vec2(x + size/2, y + size/2);
 
+		world.queryAABB(b, new AABB(lower, upper));
 
-			}
-		}).run();
 		return b.getRaycastedBorder();
 	}
 

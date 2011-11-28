@@ -22,9 +22,7 @@ public class PlayerCallback implements GameDetectionCallback {
 
 	@Override
 	public void raycast(Element elem) {
-		if (MathUtils.distance(robot.getPosition(), elem.getPosition()) < 40) {
-			world.removeElement(elem);
-			robot.setBonus((Bonus) elem);
-		}
+		world.removeElement(elem);
+		robot.setBonus((Bonus) elem);
 	}
 }

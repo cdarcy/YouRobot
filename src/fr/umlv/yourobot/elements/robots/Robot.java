@@ -79,11 +79,11 @@ abstract public class Robot extends Element {
 		
 		bodyElem.applyLinearImpulse(imp, bodyElem.getLocalCenter());
 		
-		dir.x = (float) Math.cos(Math.toRadians(direction*135));
-		dir.y = (float) Math.sin(Math.toRadians(direction*135));
+		dir.x = (float) (bodyElem.getPosition().x+Math.cos(Math.toRadians((direction+135)%360)+30));
+		dir.y = (float) (bodyElem.getPosition().y+Math.sin(Math.toRadians((direction+135)%360)+30));
 		
-		RadialGradientPaint paint = new RadialGradientPaint(dir.x, dir.y, 20, new float[]{.3f, 1f}, new Color[]{Color.YELLOW, Color.YELLOW});
-		Circle circle = new Circle (paint, 20, dir.x, dir.y, ElementType.EFFECT);
+		RadialGradientPaint paint = new RadialGradientPaint(dir.x, dir.y, 10, new float[]{.5f, 1f}, new Color[]{Color.YELLOW, Color.ORANGE});
+		Circle circle = new Circle (paint, 10, dir.x, dir.y, ElementType.EFFECT);
 		world.addDynamicElement(circle);
 		
 	}
@@ -99,7 +99,7 @@ abstract public class Robot extends Element {
 	public void rotate(float inc) {
 		direction = (direction + inc) % 360;
 		bodyElem.setType(BodyType.DYNAMIC);
-		bodyElem.setLinearDamping(.05f);
+		
 	}
 
 	@Override

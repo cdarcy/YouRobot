@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.jbox2d.common.MathUtils;
+
 import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
@@ -35,7 +37,6 @@ public class HumanRobot extends Robot {
 	public ArrayList<Element> runBonus(RobotGame world) {
 		if(currentBonus == null)
 			return null;
-		System.out.println(world);
 		return currentBonus.run(world, this);
 	}
 
@@ -80,8 +81,12 @@ public class HumanRobot extends Robot {
 			PlayerCallback c = new PlayerCallback(world, this);
 			@SuppressWarnings("unchecked")
 			ArrayList<Bonus> bonus = (ArrayList<Bonus>) world.getListByClass(ElementClass.BONUS).clone();
-			for(Bonus b : bonus)
-				c.raycast(b);
+			for(Bonus b : bonus){
+				if (MathUtils.distance(bodyElem.getPosition(), b.getPosition()) < 40){
+					c.raycast(b);
+					return;
+				}
+			}
 		}
 		else{
 			ArrayList<Element> list = runBonus(world);

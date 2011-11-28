@@ -13,7 +13,8 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
-import fr.umlv.yourobot.util.ElementType.ElementClass;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
+import fr.umlv.yourobot .util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 
 public class CollisionListener implements ContactListener {
@@ -41,6 +42,7 @@ public class CollisionListener implements ContactListener {
 				HumanRobot h = (HumanRobot) elemB;
 				double ecart = contact.getFixtureA().getBody().m_linearVelocity.normalize() * 0.003;
 				h.setLife(ecart+0.3);
+				GameDrawAPI.drawInterface();
 			}
 			else{
 				Robot elem = (Robot)elemA;
@@ -50,19 +52,13 @@ public class CollisionListener implements ContactListener {
 
 			break;
 		case PLAYER_ROBOT:
-			if(elemB.typeElem() == ElementType.COMPUTER_ROBOT){
-				final Vec2 force = elemB.getPosition().sub(elemA.getPosition());	
-				Robot elem = (Robot)elemB;
-				elem.rotate(MathUtils.randomFloat(15, 180));
-				elem.move(new Vec2(force.x * 10000, force.y * 10000));
-			}
-			else if(elemB.typeElem() == ElementType.END_CIRCLE){
+			if(elemB.typeElem() == ElementType.END_CIRCLE){
 				world.setGameFinished();
-				System.out.println("finished");
 			}
 			break;
 
-
+		case BORDERWALL:
+			GameDrawAPI.drawInterface();
 		default:
 			break;
 		}

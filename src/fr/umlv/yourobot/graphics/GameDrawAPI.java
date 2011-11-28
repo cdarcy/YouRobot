@@ -31,6 +31,7 @@ public class GameDrawAPI{
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	static RobotGame world;
+	private static boolean repaint=false;
 	private static BufferedImage img;
 
 	public GameDrawAPI(RobotGame world){
@@ -82,6 +83,11 @@ public class GameDrawAPI{
 	}
 
 	public static void draw(Graphics2D g) throws IOException {
+		if(repaint){
+			drawInterface(g);
+			repaint = false;
+		}
+		drawBackground(g);
 		for(Element e : world.getListByClass(ElementClass.BONUS)){
 			if(e != null)	
 				e.draw(g, world.getApi());
@@ -107,20 +113,13 @@ public class GameDrawAPI{
 					e.draw(g, world.getApi());
 			}
 			world.removeEffects();
-			world.destroyEffects();
 		}
-		
-		
 	}
-
+	
 
 	public static void drawInterface(Graphics2D g) throws IOException {
-		HumanRobot p1 = (HumanRobot) world.getPlayers().get(0);
-		BufferedImage img = ImageIO.read(new File("images/" + MapGenerator.getNameWallPicture()));
-		for (int i = 0; i < 800/Wall.WALL_SIZE; i++){
-			g.drawImage(img , null, (i*Wall.WALL_SIZE)+Wall.WALL_SIZE, 0);
-		}
-		
+		MapGenerator.drawArena(g);
+		HumanRobot p1 = (HumanRobot) world.getPlayers().get(0);	
 		int p1Col = 10;
 		g.setColor(Color.CYAN);
 		Font fonte = new Font(Font.SERIF,Font.BOLD, 20);
@@ -137,7 +136,9 @@ public class GameDrawAPI{
 		}
 	}
 
-
+	public static void drawInterface(){
+		repaint = true;
+	}
 
 	public static void setBackground(String nameBackgroundPicture) throws IOException {
 		img = ImageIO.read(new File("images/" + nameBackgroundPicture));
