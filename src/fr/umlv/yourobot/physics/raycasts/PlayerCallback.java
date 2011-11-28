@@ -1,10 +1,5 @@
 package fr.umlv.yourobot.physics.raycasts;
 
-import org.jbox2d.callbacks.RayCastCallback;
-import org.jbox2d.common.MathUtils;
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Fixture;
-
 import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
@@ -19,7 +14,10 @@ public class PlayerCallback implements GameDetectionCallback {
 		this.world = world;
 		this.robot = robot;
 	}
-
+	/**
+	 * Override the raycast methode
+	 * @param elem Element
+	 */
 	@Override
 	public void raycast(Element elem) {
 		world.removeElement(elem);

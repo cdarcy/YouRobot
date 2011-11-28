@@ -87,7 +87,12 @@ public class RobotGame{
 	}
 	
 	public static int getCurrentLevel(){
+		System.out.println(currentLevel);
 		return currentLevel;
+	}
+	
+	public static void setCurrentLevel(int i){
+		currentLevel = currentLevel + i;
 	}
 
 	public void addElement(Element element, BodyType type, boolean createFixture){
@@ -301,13 +306,10 @@ public class RobotGame{
 		addDynamicElement(r2);
 		addDynamicElement(r3);
 
-		RadialGradientPaint paint1 = new RadialGradientPaint(70, HEIGHT-83, 40, new float[]{.1f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
-		RadialGradientPaint paint2 = new RadialGradientPaint(710, 70, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
-		Circle c1 = new Circle(paint1, 40, 70, HEIGHT-83, ElementType.START_CIRCLE);
-		//MapGenerator.addVecPos(new Vec2(50, HEIGHT-83));
-		//MapGenerator.addVecPos(new Vec2(100, HEIGHT-83+50));
-		Circle c3 = new Circle(paint2, 40, 730, 70, ElementType.END_CIRCLE);
-		//MapGenerator.addVecPos(new Vec2(730, 70));
+		RadialGradientPaint paint1 = new RadialGradientPaint(47, HEIGHT-103, 40, new float[]{.1f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
+		RadialGradientPaint paint2 = new RadialGradientPaint(710, 47, 40, new float[]{.3f, 1f}, new Color[]{Color.GREEN, Color.WHITE});
+		Circle c1 = new Circle(paint1, 40, 47, HEIGHT-103, ElementType.START_CIRCLE);
+		Circle c3 = new Circle(paint2, 40, 710, 47, ElementType.END_CIRCLE);
 		// Defining HumanRobots
 		HumanRobot e1 = new HumanRobot(this,"Camcam",50, HEIGHT-100);
 		e1.setController(KeyControllers.getGameController(this, e1, keysP1));
@@ -317,10 +319,9 @@ public class RobotGame{
 
 		if(mode == RobotGameMod.TWOPLAYER){
 			HumanRobot e2 = new HumanRobot(this,"Loulou",50, HEIGHT-150);
-			RadialGradientPaint paint3 = new RadialGradientPaint(70, HEIGHT-133, 40, new float[]{.1f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
+			RadialGradientPaint paint3 = new RadialGradientPaint(47, HEIGHT-153, 40, new float[]{.1f, 1f}, new Color[]{Color.BLUE, Color.WHITE});
 			e2.setController(KeyControllers.getGameController(this, e2, keysP2));
-			Circle c2 = new Circle(paint3, 40, 70, HEIGHT-133, ElementType.START_CIRCLE);
-			//MapGenerator.addVecPos(new Vec2(70, HEIGHT-133));
+			Circle c2 = new Circle(paint3, 40, 47, HEIGHT-153, ElementType.START_CIRCLE);
 			addStaticElement(c2);
 			addDynamicElement(e2);
 		}

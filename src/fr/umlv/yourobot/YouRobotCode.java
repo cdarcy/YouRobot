@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 
 import fr.umlv.yourobot.RobotGame.StateGame;
+import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
 import fr.umlv.yourobot.util.KeyControllers.KeyController;
 import fr.umlv.yourobot.util.KeyControllers;
@@ -33,6 +34,7 @@ public class YouRobotCode implements ApplicationCode{
 	private static KeyController graphicController;
 	private static KeyController modeController;
 	private static KeyController gameOverMenuController;
+	private static Graphics2D graphics;
 
 	private static volatile RobotGame game;
 	private static int level = 0;
@@ -92,6 +94,12 @@ public class YouRobotCode implements ApplicationCode{
 						break;
 				}
 			}
+			try {
+				GameDrawAPI.drawEndOfGame(graphics);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			RobotGame.setCurrentLevel(1);
 		}
 	}
 	/**

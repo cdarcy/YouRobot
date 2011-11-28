@@ -34,28 +34,61 @@ public class GameDrawAPI{
 	private static boolean repaint=false;
 	private static BufferedImage img;
 
+	/**
+	 * Constructor of this class
+	 * @param world RobotGame : init the variable
+	 */
 	public GameDrawAPI(RobotGame world){
 		GameDrawAPI.world = world;
 	}
 
-
-
+	/**
+	 * Draw a simple circle
+	 * @param pos Vec2 : position x and y
+	 * @param direction
+	 * @param c Color of the circle
+	 * @param img BufferedImage with the OutPutFile 
+	 * @param g Graphics2D to use the library
+	 * @throws IOException if exist a problem with the draw method
+	 */
 	public void drawCircle(Vec2 pos, float direction, Color c, BufferedImage img, Graphics2D g) throws IOException {
 		g.setColor(c);    
 		drawRotateImage(pos,direction,img,g);
 	}
 
+	/**
+	 * Draw a gradient paint circle
+	 * @param pos Vec2 : position x and y
+	 * @param size int : radius of the circle
+	 * @param paint RadialGradientPaint : choose the position, the color and the type of gradient
+	 * @param g Graphics2D to use the library
+	 * @throws IOException if exist a problem with the draw method
+	 */
 	public void drawCircle(Vec2 pos, int size, RadialGradientPaint paint,  Graphics2D g) throws IOException {
 		g.setPaint(paint);
 		g.fillOval((int)pos.x, (int)pos.y, size, size);
 	}
 	
+	/**
+	 * Draw all the wall inside the map
+	 * @param pos : position x and y
+	 * @param img : BufferedImage with the OutPutFile
+	 * @param c Color of the circle
+	 * @param g Graphics2D to use the library
+	 */
 	public void drawWall(Vec2 pos, BufferedImage img, Color c, Graphics2D g) {
 		g.setColor(c);
 		g.drawImage(img, null, (int)pos.x-5, (int)pos.y-5);
 
 	}
 
+	/**
+	 * Draw an image with a rotate
+	 * @param pos : position x and y
+	 * @param direction
+	 * @param img : BufferedImage with the OutPutFile
+	 * @param g Graphics2D to use the library
+	 */
 	public void drawRotateImage(Vec2 pos, float direction, BufferedImage img, Graphics2D g){
 		AffineTransform at = new AffineTransform();
 		at.rotate(direction * Math.PI / 180.0, img.getWidth() / 2.0, img.getHeight() / 2.0);
@@ -64,24 +97,66 @@ public class GameDrawAPI{
 		g.drawImage(img, bio, (int)pos.x, (int)pos.y);
 	}
 
+	/**
+	 * Draw an effect
+	 * @param pos : position x and y
+	 * @param p Paint
+	 * @param c Color of the circle
+	 * @param img : BufferedImage with the OutPutFile
+	 * @param g Graphics2D to use the library
+	 * @throws IOException if exist a problem with the draw method
+	 */
 	public void drawEffect(Vec2 pos, Paint p, Color c, BufferedImage img,
 			Graphics2D g) throws IOException {
 
 	}
 
+	/**
+	 * 
+	 * @param circle
+	 * @param p Paint
+	 * @param c Color of the circle
+	 * @param img : BufferedImage with the OutPutFile
+	 * @param g Graphics2D to use the library
+	 * @throws IOException if exist a problem with the draw method
+	 */
 	public void drawEffect(CircleShape circle, Paint p, Color c,
 			BufferedImage img, Graphics2D g) throws IOException {
 	}
 
+	/**
+	 * Draw the game over menu
+	 * @param g Graphics2D to use the library
+	 * @throws IOException if exist a problem with the draw method
+	 */
 	public static void drawGameOver(Graphics2D g) throws IOException{
 		BufferedImage img = ImageIO.read(new File("images/gameOver.png"));
 		g.drawImage(img, null, 300, 200);
 	}
+	
+	/**
+	 * Drow the image of the end of game
+	 * @param g Graphics2D to use the library
+	 * @throws IOException if exist a problem with the draw method
+	 */
+	public static void drawEndOfGame(Graphics2D g) throws IOException{
+		BufferedImage img = ImageIO.read(new File("images/endOfGame.png"));
+		g.drawImage(img, null, 0, 0);
+	}
 
+	/**
+	 * Draw the background
+	 * @param g Graphics2D to use the library
+	 */
 	public static void drawBackground(Graphics2D g) {
 		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
 	}
 
+	/**
+	 * General draw methode to draw all the elements and body.
+	 * @param g Graphics2D to use the library
+	 * @throws IOException if exist a problem with the draw method
+	 */
 	public static void draw(Graphics2D g) throws IOException {
 		if(repaint){
 			drawInterface(g);
@@ -116,7 +191,11 @@ public class GameDrawAPI{
 		}
 	}
 	
-
+	/**
+	 * Draw the interface with the player name and the current level number
+	 * @param g Graphics2D to use the library
+	 * @throws IOException if exist a problem with the draw method
+	 */
 	public static void drawInterface(Graphics2D g) throws IOException {
 		MapGenerator.drawArena(g);
 		HumanRobot p1 = (HumanRobot) world.getPlayers().get(0);	
@@ -140,16 +219,12 @@ public class GameDrawAPI{
 		repaint = true;
 	}
 
+	/**
+	 * Modify the backround picture
+	 * @param nameBackgroundPicture String : name of the new background picture
+	 * @throws IOException if exist a problem with the draw method
+	 */
 	public static void setBackground(String nameBackgroundPicture) throws IOException {
 		img = ImageIO.read(new File("images/" + nameBackgroundPicture));
 	}
-
-	/*@Override
-	public void drawEffect(Shape circle, Paint paint, Color c,
-			BufferedImage img, Graphics2D g) throws IOException {
-		g.setPaint(paint);
-		g.draw(circle);
-		return this;
-	}
-	}*/
 }
