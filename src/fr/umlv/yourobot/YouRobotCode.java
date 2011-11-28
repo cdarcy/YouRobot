@@ -25,7 +25,7 @@ public class YouRobotCode implements ApplicationCode{
 	final int WIDTH = 800;
 	final int HEIGHT = 600;
 
-	public static boolean loop = true;
+	public static boolean loop;
 	public static StateGame causeInterruption;
 	public final static String[] DEFAULT_KEYBOARDSET = {"UP","DOWN","LEFT","RIGHT", "SPACE"};
 	public final static String[] ALT_KEYBOARDSET  = {"Z","S","Q","D","X"};
@@ -47,6 +47,7 @@ public class YouRobotCode implements ApplicationCode{
 	public void run(final ApplicationContext context) {
 
 		while(true){
+			loop = true;
 			// Displays menu 1 (game mod choice)
 			context.render(CodeFactory.runMenu1());
 
@@ -81,7 +82,7 @@ public class YouRobotCode implements ApplicationCode{
 					}
 				}
 
-				// If players died, we show the game over menu
+				// If players died, we show the game-over menu
 				if(causeInterruption == StateGame.PLAYERDIED){
 					context.render(CodeFactory.runMenuGameOver());	
 					loop=true;
