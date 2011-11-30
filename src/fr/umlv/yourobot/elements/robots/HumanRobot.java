@@ -127,23 +127,22 @@ public class HumanRobot extends Robot {
 		if(currentBonus == null){
 			ArrayList<Element> bonus = world.getBonuses();
 			for(Element b : bonus){
-				if(getBonus() == null){
-					//if the human robot has any bonus, he take a bonus
-					if (MathUtils.distance(bodyElem.getPosition(), b.getPosition()) < 40){
-						world.removeElement(b);
-						currentBonus = (Bonus) b;
-						return;
-					}
-				}
-				else{
-					runningBonus = currentBonus;
-					runningBonus.run(world, this);
-					currentBonus = null;
-
+				//if the human robot has any bonus, he take a bonus
+				if (MathUtils.distance(bodyElem.getPosition(), b.getPosition()) < 40){
+					world.removeElement(b);
+					currentBonus = (Bonus) b;
+					return;
 				}
 			}
 		}
+		else{
+			runningBonus = currentBonus;
+			runningBonus.run(world, this);
+			currentBonus = null;
+
+		}
 	}
+
 	/**
 	 * Modify the key controller use in this game
 	 * @param keyController KeyController
