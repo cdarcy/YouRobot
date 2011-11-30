@@ -24,8 +24,7 @@ import fr.umlv.zen.KeyboardEvent;
  */
 public class HumanRobot extends Robot {
 	private volatile double life;
-	//TODO
-	private Bonus currentBonus = new IceBomb(0,0);
+	private Bonus currentBonus = null;
 	private Bonus runningBonus = null;
 	protected KeyController controller;
 
