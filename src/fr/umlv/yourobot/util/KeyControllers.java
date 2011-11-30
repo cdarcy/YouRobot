@@ -5,22 +5,27 @@ import java.io.IOException;
 
 import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.RobotGame.RobotGameMod;
+import fr.umlv.yourobot.RobotGame.RobotTextureMod;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.graphics.MenusDrawAPI;
 import fr.umlv.zen.KeyboardEvent;
 
+
+/**
+ * @code {@link KeyControllers}
+ * Factory of controllers used for game and menus
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ */
 public class KeyControllers {
 	private static RobotGameMod player;
 	private static RobotTextureMod graphic;
-	
-	public enum RobotTextureMod{
-		TEXTURE,
-		GRAPHIC
-	}
+
+
 	public RobotGameMod getModePlayer(){
 		return player;
 	}
-	
+
 	public RobotTextureMod getModeGraphic(){
 		return graphic;
 	}
@@ -91,13 +96,18 @@ public class KeyControllers {
 				try {
 					MenusDrawAPI.menu1(g);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		};
 	}
 
+	/**
+	 *	Graphics menu controller 
+	 *	Returns a keyController object which defines commands for keyboard events
+	 * @param keys the set of keys to use to manage events (up/down/fire)  
+	 * @return new KeyController defines commands for the keys passed in parameter
+	 */
 	public static KeyController getGraphicsMenuController(String keys[]){
 		return new KeyController(keys){
 			@Override
@@ -130,41 +140,42 @@ public class KeyControllers {
 					e.printStackTrace();
 				}
 			}
-			
+
 
 		};
 	}
 
+
+	/**
+	 *	Game Over menu controller 
+	 *	Returns a keyController object which defines commands for keyboard events
+	 * @param keys the set of keys to use to manage events (up/down/fire)  
+	 * @return new KeyController defines commands for the keys passed in parameter
+	 */
 	public static KeyController getMenuGameOverController(String[] k) {
 		return new KeyController(k) {
-			
+
 			@Override
 			public void pressKeyUp() {
 				MenusDrawAPI.choiceEndGame = GameMenu.REPLAY;
 			}
-			
+
 			@Override
-			public void pressKeyRight() {
-				// TODO Auto-generated method stub
-				
-			}
-			
+			public void pressKeyRight() {    }
+
 			@Override
-			public void pressKeyLeft() {
-				// TODO Auto-generated method stub
-				
-			}
-			
+			public void pressKeyLeft() {	}
+
 			@Override
 			public void pressKeyFire() {
 				finished = true;				
 			}
-			
+
 			@Override
 			public void pressKeyDown() {
 				MenusDrawAPI.choiceEndGame = GameMenu.EXIT;
 			}
-			
+
 			@Override
 			public void drawMenu(Graphics2D g) {
 				try {
@@ -176,6 +187,12 @@ public class KeyControllers {
 		};
 	}
 
+	/**
+	 * @code {@link KeyController}
+	 * Abstract class defining a keyboard controller and its events listeners
+	 * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+	 * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+	 */
 	public abstract static class KeyController {
 		private String keyUp;
 		private String keyDown;
@@ -183,7 +200,7 @@ public class KeyControllers {
 		private String keyRight;
 		private String keyFire;
 		protected boolean finished;
-		
+
 		public KeyController(String keys[]){
 			keyUp = keys[0];
 			keyDown = keys[1];
@@ -192,7 +209,7 @@ public class KeyControllers {
 			keyFire = keys[4];
 			finished = false;
 		}
-		
+
 		public void control(KeyboardEvent event) {
 			if(keyUp.equals(event.getKey().name()))
 				pressKeyUp();
@@ -212,6 +229,7 @@ public class KeyControllers {
 		abstract public void pressKeyRight();
 		abstract public void pressKeyFire();
 		abstract public void drawMenu(Graphics2D g);
+		
 		public boolean isFinished() {
 			return finished;
 		}

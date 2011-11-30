@@ -2,11 +2,8 @@ package fr.umlv.yourobot.elements.robots;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
-
-import org.jbox2d.common.MathUtils;
 
 import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
@@ -25,13 +22,14 @@ public class LureRobot extends Robot {
 
 	@Override
 	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
-
-		Graphics gr = g.create();
-		gr.setColor(Color.WHITE);
-		gr.setFont(new Font ("Sans", Font.BOLD, 15));
-		gr.drawString(lure.getTimeleft()/1000+ "s", (int) getPosition().x, (int)getPosition().y);
+		g.setColor(Color.WHITE);
+		g.setFont(new Font ("Sans", Font.BOLD, 15));
+		g.drawString(lure.getTimeleft()/1000+ "s", (int) getPosition().x, (int)getPosition().y);
 		return super.draw(this, "robot_game.png", g, api);
 	}
-	
-	
+
+	@Override
+	public void run(RobotGame world) {
+		
+	}
 }

@@ -13,6 +13,14 @@ import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
 
+/**
+ * @code {@link StoneWall}
+ * StoneWall element definition
+ * @see {@link Wall} 
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ *
+ */
 public class StoneWall extends Wall {
 
 	public StoneWall(float x, float y) {

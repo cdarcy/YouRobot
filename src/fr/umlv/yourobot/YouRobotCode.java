@@ -32,7 +32,7 @@ public class YouRobotCode implements ApplicationCode{
 	public final static String[] ALT_KEYBOARDSET  = {"Z","S","Q","D","X"};
 
 	private static KeyController graphicController;
-	private static KeyController modeController;
+	private static KeyController modeController; 
 	private static KeyController gameOverMenuController;
 	private static Graphics2D graphics;
 
@@ -41,7 +41,7 @@ public class YouRobotCode implements ApplicationCode{
 
 	/**
 	 * Run method of YouRobot game
-	 * Displays menus and launches set of games
+	 * Displays menus and launch a set of games
 	 * @see CodeFactory
 	 * @see fr.umlv.zen.ApplicationCode#run(fr.umlv.zen.ApplicationContext)
 	 */
@@ -95,21 +95,25 @@ public class YouRobotCode implements ApplicationCode{
 						break;
 				}
 			}
-			try {
-				GameDrawAPI.drawEndOfGame(graphics);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			RobotGame.setCurrentLevel(1);
+			if(causeInterruption == StateGame.WINLEVEL)
+				try {
+					GameDrawAPI.drawEndOfGame(graphics);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 	/**
 	 * Private inner-class CodeFactory 
-	 * Returns render codes to manage displaying and controlling of menus and game
+	 * Provides render codes to manage display and control of menus 
+	 * runGame() render code is the game updating method
 	 * @see YouRobotCode
 	 */
 	private static class CodeFactory {
 
+		/**
+		 * Returns game over menu render code
+		 */
 		private static ApplicationRenderCode runMenuGameOver() {
 			gameOverMenuController  = KeyControllers.getMenuGameOverController(DEFAULT_KEYBOARDSET);
 
@@ -126,6 +130,10 @@ public class YouRobotCode implements ApplicationCode{
 			};
 		}
 
+
+		/**
+		 * Returns game over menu control code
+		 */
 		private static ApplicationRenderCode controlMenuGameOver(final ApplicationContext context){
 			return new ApplicationRenderCode() {
 				final KeyboardEvent event = context.pollKeyboard();
@@ -144,6 +152,11 @@ public class YouRobotCode implements ApplicationCode{
 				}
 			};
 		}
+		
+
+		/**
+		 * Initializes a new game from menu choices
+		 */
 		private static ApplicationRenderCode initNewGame() {
 			return new ApplicationRenderCode() {
 
@@ -156,6 +169,9 @@ public class YouRobotCode implements ApplicationCode{
 		}
 
 
+		/**
+		 * Returns graphic menu control code
+		 */
 		private static ApplicationRenderCode controlMenu2(final ApplicationContext context) {
 			return new ApplicationRenderCode() {
 				final KeyboardEvent event = context.pollKeyboard();
@@ -176,6 +192,9 @@ public class YouRobotCode implements ApplicationCode{
 		}
 
 
+		/**
+		 * Returns graphic menu render code
+		 */
 		private static ApplicationRenderCode runMenu2() {
 			graphicController  = KeyControllers.getGraphicsMenuController(DEFAULT_KEYBOARDSET);
 			return new ApplicationRenderCode() {
@@ -195,7 +214,13 @@ public class YouRobotCode implements ApplicationCode{
 			};
 		}
 
-
+		/**
+		 * Return render code for game updating
+		 * Manage events, update game
+		 * @param game
+		 * @param context
+		 * @see {@code RobotGame}
+		 */
 		private static ApplicationRenderCode runGame(final RobotGame game, final ApplicationContext context){
 			return new ApplicationRenderCode() {
 
@@ -223,7 +248,11 @@ public class YouRobotCode implements ApplicationCode{
 			};
 		}
 
+		/**
+		 * Returns game mode menu render code
+		 */
 		private static ApplicationRenderCode runMenu1(){
+			
 			modeController  = KeyControllers.getGraphicsMenuController(DEFAULT_KEYBOARDSET);
 
 			return new ApplicationRenderCode() {
@@ -239,7 +268,9 @@ public class YouRobotCode implements ApplicationCode{
 				}
 			};
 		}
-
+		/**
+		 * Returns game mode menu control code
+		 */
 		private static ApplicationRenderCode controlMenu1(final ApplicationContext context){
 			return new ApplicationRenderCode() {
 
@@ -250,8 +281,10 @@ public class YouRobotCode implements ApplicationCode{
 
 					if(event != null)
 						try {
-							if(doControlMenuFinished(modeController, graphics, event))
+							if(doControlMenuFinished(modeController, graphics, event)){
+								System.out.println(loop);
 								loop=false;
+							}
 						} catch (IOException | InterruptedException e) {
 							e.printStackTrace();
 						}
@@ -259,6 +292,15 @@ public class YouRobotCode implements ApplicationCode{
 			};
 		}
 
+		/**
+		 * Manages menu rendering and controlling for any type of menu
+		 * @param k
+		 * @param g
+		 * @param event
+		 * @return
+		 * @throws IOException
+		 * @throws InterruptedException
+		 */
 		private static boolean doControlMenuFinished(KeyController k, Graphics2D g, KeyboardEvent event) throws IOException, InterruptedException{
 			if (k != null){
 				k.drawMenu(g);

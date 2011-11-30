@@ -1,4 +1,13 @@
 package fr.umlv.yourobot.util;
+
+
+
+/**
+ * @code {@link ElementType}
+ * Enumeration defining types of game Elements
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ */
 public enum ElementType{
 	COMPUTER_ROBOT(ElementClass.ROBOT), 
 	PLAYER_ROBOT(ElementClass.ROBOT),
@@ -26,6 +35,9 @@ public enum ElementType{
 		return eclass;
 	}
 	
+	/**
+	 * Inner-enumeration defining category of the element
+	 */
 	public enum ElementClass{
 		ROBOT, // Human and AI robots
 		WALL, // Wall group

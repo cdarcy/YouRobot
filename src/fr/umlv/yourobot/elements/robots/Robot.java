@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyType;
@@ -71,21 +72,25 @@ abstract public class Robot extends Element {
 	public void impulse(RobotGame world) {
 		
 		final Vec2 imp = new Vec2();
-		final Vec2 dir = new Vec2();
 		
 
 		imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
 		imp.y = (float) Math.sin(Math.toRadians(direction)) * SPEED;
 		
 		bodyElem.applyLinearImpulse(imp, bodyElem.getLocalCenter());
-		
-		dir.x = (float) (bodyElem.getPosition().x+Math.cos(Math.toRadians((direction+135)%360)+30));
-		dir.y = (float) (bodyElem.getPosition().y+Math.sin(Math.toRadians((direction+135)%360)+30));
+	/*	
+		float x = bodyElem.getLinearVelocity().x;
+		float y = bodyElem.getLinearVelocity().y;
+		double hypo = Math.sqrt(x*x + y*y);
+		double direction = Math.toDegrees(Math.acos(y/hypo));
+	
+		dir.x =  bodyElem.getPosition().x+(float)Math.cos(Math.toRadians(direction));
+		dir.y =  bodyElem.getPosition().y+(float)Math.sin(Math.toRadians(direction));
 		
 		RadialGradientPaint paint = new RadialGradientPaint(dir.x, dir.y, 10, new float[]{.5f, 1f}, new Color[]{Color.YELLOW, Color.ORANGE});
 		Circle circle = new Circle (paint, 10, dir.x, dir.y, ElementType.EFFECT);
 		world.addDynamicElement(circle);
-		
+		*/
 	}
 
 	public void impulse(float speed){
@@ -114,4 +119,5 @@ abstract public class Robot extends Element {
 		return this;
 	}
 
+	abstract public void run(final RobotGame world);
 }

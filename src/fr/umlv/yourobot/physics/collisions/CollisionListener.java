@@ -14,14 +14,26 @@ import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
-import fr.umlv.yourobot .util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
+import fr.umlv.yourobot.util.ElementType.ElementClass;
 
+
+/**
+ * @code {@link CollisionListener}
+ * CollisionListener element definition. Implements Jbox2D ContactListener interface.
+ * Manages start and end of contacts between each type of element
+ * @see {@link ContactListener} 
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ *
+ */
 public class CollisionListener implements ContactListener {
 	private final RobotGame world;
+	
 	public CollisionListener(RobotGame world){
 		this.world = world;
 	}
+	
 	@Override
 	public void beginContact(Contact contact) {
 
@@ -75,11 +87,13 @@ public class CollisionListener implements ContactListener {
 	}
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
+		Element elemA = (Element) contact.getFixtureA().getBody().getUserData();
 		Element elemB = (Element) contact.getFixtureB().getBody().getUserData();
 
-		if(elemB == null)
+		if(elemB == null && elemA == null)
 			return;
-		if(elemB.classElem() == ElementClass.BONUS || elemB.typeElem() == ElementType.START_CIRCLE)
+		if(elemB.classElem() == ElementClass.BONUS || elemB.typeElem() == ElementType.START_CIRCLE
+				|| elemA.typeElem() == ElementType.START_CIRCLE)
 			contact.setEnabled(false);
 		
 	}

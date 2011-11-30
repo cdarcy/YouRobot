@@ -1,2 +1,9 @@
-
 fr.umlv.yourobot
+fr.umlv.yourobot.elements
+fr.umlv.yourobot.elements.bonus
+fr.umlv.yourobot.elements.robots
+fr.umlv.yourobot.elements.walls
+fr.umlv.yourobot.graphics
+fr.umlv.yourobot.physics.collisions
+fr.umlv.yourobot.physics.raycasts
+fr.umlv.yourobot.util

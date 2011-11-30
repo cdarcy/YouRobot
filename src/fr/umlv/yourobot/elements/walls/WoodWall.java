@@ -12,15 +12,20 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
+/**
+ * @code {@link WoodWall}
+ * WoodWall element definition
+ * @see {@link Wall} 
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ *
+ */
 public class WoodWall extends Wall {
 
 	public WoodWall(float x, float y) {
 		super(x, y);
 		type = ElementType.WOODWALL;
 	}
-
-	
-
 	@Override
 	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		Vec2 pos = bodyElem.getPosition();

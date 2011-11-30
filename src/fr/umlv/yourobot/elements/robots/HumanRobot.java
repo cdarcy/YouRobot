@@ -9,17 +9,19 @@ import org.jbox2d.common.MathUtils;
 import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
+import fr.umlv.yourobot.elements.bonus.IceBomb;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
-import fr.umlv.yourobot.physics.raycasts.PlayerCallback;
-import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.KeyControllers.KeyController;
 import fr.umlv.zen.KeyboardEvent;
 
 public class HumanRobot extends Robot {
 	private volatile double life;
-	private Bonus currentBonus = null;
+	//TODO
+	private Bonus currentBonus = new IceBomb(0,0);
+	private Bonus runningBonus = null;
 	protected KeyController controller;
+	
 	
 	public HumanRobot(RobotGame world, String name, float x, float y) {
 		super(x, y);
@@ -27,17 +29,16 @@ public class HumanRobot extends Robot {
 		this.life = 100;
 	}
 	
-
 	public void setBonus(Bonus b) {
 		if(currentBonus == b)
 			return;
 		currentBonus = b;
 	}
 	
-	public ArrayList<Element> runBonus(RobotGame world) {
+	public void runBonus(RobotGame world) {
 		if(currentBonus == null)
-			return null;
-		return currentBonus.run(world, this);
+			return;
+		currentBonus.run(world, this);
 	}
 
 
@@ -77,27 +78,35 @@ public class HumanRobot extends Robot {
 
 
 	public void detectBonus(RobotGame world) {
-		if(getBonus() == null){
-			PlayerCallback c = new PlayerCallback(world, this);
-			@SuppressWarnings("unchecked")
-			ArrayList<Bonus> bonus = (ArrayList<Bonus>) world.getListByClass(ElementClass.BONUS).clone();
-			for(Bonus b : bonus){
+		if(currentBonus == null){
+			ArrayList<Element> bonus = world.getBonuses();
+			for(Element b : bonus){
 				if (MathUtils.distance(bodyElem.getPosition(), b.getPosition()) < 40){
-					c.raycast(b);
+					world.removeElement(b);
+					currentBonus = (Bonus) b;
 					return;
 				}
 			}
 		}
 		else{
-			ArrayList<Element> list = runBonus(world);
-			if(list != null && list.size()>0)
-				world.drawElements(list);
-			setBonus(null);
+			runningBonus = currentBonus;
+			runningBonus.run(world, this);
+			currentBonus = null;
 		}
 	}
 
 
 	public void setController(KeyController keyController) {
 		this.controller = keyController;
+	}
+
+
+	@Override
+	public void run(RobotGame world) {
+		if(runningBonus != null){
+			if(!runningBonus.update()){
+				runningBonus = null;				
+			}
+		}
 	}
 }

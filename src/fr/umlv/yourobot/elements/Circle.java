@@ -21,7 +21,6 @@ public class Circle extends Element {
 	private RadialGradientPaint paint;
 	public Circle(float x, float y) {
 		super(x, y);
-		bodyElem.setType(BodyType.DYNAMIC);	
 	}
 
 	public Circle(RadialGradientPaint paint, int size, float x, float y, ElementType type) {
@@ -29,7 +28,7 @@ public class Circle extends Element {
 		fixtureDef = new FixtureDef();
 		shapeElem = new CircleShape();
 		fixtureDef.shape = shapeElem;
-		shapeElem.m_radius = size/2;
+		shapeElem.m_radius = 0;
 		this.size = size;
 		this.paint = paint;
 		this.type = type;

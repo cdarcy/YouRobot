@@ -24,60 +24,44 @@ public class ComputerRobot extends Robot {
 		return this;
 	}
 
+	@Override
 	public void run(final RobotGame world) {
-		new Thread(new Runnable() {
+		float quarter_diagonal = (float) (Math.sqrt((RobotGame.WIDTH*RobotGame.WIDTH)+(RobotGame.HEIGHT*RobotGame.HEIGHT))/4);
+		ArrayList<Element> list = new ArrayList<>();
+		list.addAll(world.getPlayers());
+		list.addAll(world.getLureRobots());
 
-			@Override
-			public void run() {
-				float quarter_diagonal = (float) (Math.sqrt((RobotGame.WIDTH*RobotGame.WIDTH)+(RobotGame.HEIGHT*RobotGame.HEIGHT))/4);
-				ArrayList<Element> list = new ArrayList<>();
-				list.addAll(world.getPlayers());
-				list.addAll(world.getLureRobots());
-				
-				while(true) {
-					for (final Element p : list){
-						float distance = MathUtils.distance(bodyElem.getPosition(), p.getPosition());
-						Random rand = new Random();
-						
-						if(distance < quarter_diagonal && p.typeElem() == ElementType.PLAYER_ROBOT && world.getLureRobots().size() == 0)
-						{
-							distance = MathUtils.distance(bodyElem.getPosition(), p.getPosition());
-							final Vec2 force = p.getPosition().sub(bodyElem.getPosition());		
-							move(new Vec2(force.x * 10000, force.y * 10000));
+		for (final Element p : list){
+			float distance = MathUtils.distance(bodyElem.getPosition(), p.getPosition());
+			Random rand = new Random();
 
-							try {
-								Thread.sleep(rand.nextInt(2000));
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-
-						}
-						else  {
-							int rotation = rand.nextInt(45);
-
-							if(rand.nextBoolean()) {
-								rotate(-rotation);
-							}
-							else {
-								rotate(rotation);
-							}
-							final Vec2 imp = new Vec2();
-
-							imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
-							imp.y = (float) Math.sin(Math.toRadians(direction)) * SPEED;
-
-							bodyElem.applyLinearImpulse(imp, getPosition());
-						}
-						try {
-							Thread.sleep(rand.nextInt(5000));
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
+			if(distance < quarter_diagonal && p.typeElem() == ElementType.PLAYER_ROBOT && world.getLureRobots().size() == 0)
+			{
+				if(rand.nextInt()<5) {
+					final Vec2 force = p.getPosition().sub(bodyElem.getPosition());		
+					move(new Vec2(force.x * 10000, force.y * 10000));
 				}
-
 			}
-		}).start();
-	}
+			else if (p.typeElem() == ElementType.LURE_ROBOT && world.getLureRobots().size()>0){
+				final Vec2 force = p.getPosition().sub(bodyElem.getPosition());		
+				move(new Vec2(force.x * 30000, force.y * 30000));
+			}
+			else  {
+				int rotation = rand.nextInt(45);
 
+				if(rand.nextBoolean()) {
+					rotate(-rotation);
+				}
+				else {
+					rotate(rotation);
+				}
+				final Vec2 imp = new Vec2();
+
+				imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
+				imp.y = (float) Math.sin(Math.toRadians(direction)) * SPEED;
+
+				bodyElem.applyLinearImpulse(imp, getPosition());
+			}
+		}
+	}
 }

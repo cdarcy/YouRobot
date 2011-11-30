@@ -7,6 +7,14 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
+/**
+ * @code {@link WoodBomb}
+ * Sub bonus simulating magnetic stone bomb
+ * @see {@link Bomb} 
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ *
+ */
 public class WoodBomb extends Bomb{
 
 	public WoodBomb(float x, float y) {

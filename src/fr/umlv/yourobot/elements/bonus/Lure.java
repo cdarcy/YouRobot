@@ -4,59 +4,42 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
 import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.LureRobot;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
-import fr.umlv.yourobot.physics.raycasts.LureCallback;
 import fr.umlv.yourobot.util.ElementType;
 
+
+/**
+ * @code {@link Lure}
+ * Sub bonus simulating lure robot bonus
+ * @see {@link Bonus} 
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ *
+ */
 public class Lure extends Bonus {
-	private HumanRobot robot;
-	private final static int length = (int) Math.round(Math.random()*13+2);
-	private static int timeleft = length;
+	private LureRobot lureRobot;
+	
 	public Lure(float x, float y) {
 		super(x, y);
 		type = ElementType.LURE;
 	}
-
+	
+	/**
+	 * Lure effect. 
+	 * Adds a lure robot on the 
+		long start = System.nanoTime();map to attract AI robots
+	 */
 	@Override
-	public void drawIcon(int x, int y, Graphics2D g) throws IOException {
-		if(img == null)
-			img = ImageIO.read(new File("images/lure.png"));	
-		g.drawImage(img, null, (int)x, (int)y);
-	}
-
-	@Override
-	public ArrayList<Element> run(final RobotGame world, final HumanRobot robot) {
-		final LureRobot lureRobot = new LureRobot(robot.getPosition().x+10, robot.getPosition().y, this);
+	public void run(final RobotGame world, final HumanRobot robot) {
+		this.lureRobot = new LureRobot(robot.getPosition().x+20, robot.getPosition().y, this);
+		this.world = world;
 		world.addStaticElement(lureRobot);
-		final LureCallback c = new LureCallback(world, lureRobot);
-		this.robot=robot;
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				long start = System.nanoTime();
-				ArrayList<Element> list = world.getRobots();
-				while(((System.nanoTime()-start)/1000000)<(length*1000)){
-					timeleft = (int) ((length*1000)-(System.nanoTime()-start)/1000000);
-					for (Element enemy : list){
-						c.raycast(enemy);
-					}
-				}
-				world.removeElement(lureRobot);
-			}
-		}).start();
-
-		return null;
+		start = (int) System.nanoTime();
 	}
 
 	@Override
@@ -69,7 +52,22 @@ public class Lure extends Bonus {
 		return this;
 	}
 
+	/**
+	 * Accessor for the time remaining before the end of the effect
+	 * @return
+	 */
 	public int getTimeleft() {
 		return timeleft;
+	}
+
+	@Override
+	public boolean update() {
+		
+		if(start + ((long)length*1000000000) > System.nanoTime()){
+			timeleft = (int) (System.nanoTime()-start)/1000000;
+			return true;
+		}
+		world.removeElement(lureRobot);
+		return false;
 	}
 }

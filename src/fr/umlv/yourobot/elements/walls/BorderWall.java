@@ -7,6 +7,14 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
+/**
+ * @code {@link BorderWall}
+ * BorderWall element definition
+ * @see {@link Wall} 
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ *
+ */
 public class BorderWall extends Wall{
 	String fileName;
 
@@ -16,13 +24,7 @@ public class BorderWall extends Wall{
 		type = ElementType.BORDERWALL;
 		
 	}
-
-
-	public BorderWall(BorderWall borderWall) throws IOException {
-		this(borderWall.getBody().getPosition().x, borderWall.getBody().getPosition().y, "");
-	}
-
-
+	
 	@Override
 	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		super.draw(this, fileName, g, api);

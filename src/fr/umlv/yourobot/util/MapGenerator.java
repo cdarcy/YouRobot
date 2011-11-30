@@ -22,6 +22,13 @@ import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.elements.walls.WoodWall;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 
+
+/**
+ * @code {@link MapGenerator}
+ * Generator of random maps
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ */
 public class MapGenerator {
 
 	private static int value;
@@ -34,10 +41,15 @@ public class MapGenerator {
 	public final static int HEIGHT = 600;
 	public static String nameWallPicture;
 
-	public static String getNameWallPicture(){
-		return nameWallPicture;
-	}
 
+	/**
+	 * Method that adds an arena all around the map
+	 * Depends on value to choose the style applied to the walls
+	 * @param g
+	 * @param world
+	 * @param nameWallPicture
+	 * @throws IOException
+	 */
 	public static void createArena(Graphics2D g, RobotGame world, String nameWallPicture) throws IOException{
 		arena = new ArrayList<>();
 		if (value == 0)	color = new Color(0, 0, 100); //BLUE
@@ -65,6 +77,14 @@ public class MapGenerator {
 
 	}
 
+	/**
+	 * Static method that generates a new map depending on the current level of the game
+	 * Initializes style, background, arena and walls
+	 * @param level
+	 * @param w
+	 * @param g
+	 * @throws IOException
+	 */
 	public static void mapRandom (int level, RobotGame w, Graphics2D g) throws IOException{
 		new MapStyle();
 		value =  (int) MathUtils.randomFloat(0, 4);
@@ -74,9 +94,14 @@ public class MapGenerator {
 		GameDrawAPI.setBackground(nameBackgroundPicture);
 		createArena(g, world, nameWallPicture);
 		drawArena(g);
+		GameDrawAPI.drawInterface(g);
 		setWalls(g, RobotGame.getCurrentLevel()+20);
 	}
 
+	/**
+	 * Static method used to draw the arena
+	 * @param g
+	 */
 	public static void drawArena(Graphics2D g){
 		for(int i=0;i<arena.size();i++)
 			try {
@@ -87,28 +112,39 @@ public class MapGenerator {
 			}
 	}
 
+	/**
+	 * Static method to draw the background on the screen
+	 * @param g
+	 * @param nameBackground
+	 * @throws IOException
+	 */
 	public static void drawBackground (Graphics2D g, String nameBackground) throws IOException{
 		if(img == null)
 			img = ImageIO.read(new File("images/" + nameBackground));	
-		g.drawImage(img, null, Wall.WALL_SIZE-10, Wall.WALL_SIZE-10);
 		g.drawImage(img, null, Wall.WALL_SIZE, Wall.WALL_SIZE);
 	}
 
+	/**
+	 * Methods adding a certain number of walls to the world depending on the game level
+	 * @param g
+	 * @param level
+	 * @throws IOException
+	 */
 	public static void setWalls(Graphics2D g, int level) throws IOException{
 		int wallNumber = level + 10;
-		
+
 		for (int i=50 ; i<150 ; i++){
 			for (int j=HEIGHT-190 ; j<HEIGHT-50 ; j++){
 				allStaticElement.add(new Vec2(i, j));
 			}
 		}
-		
+
 		for (int i=WIDTH-150 ; i<WIDTH-50 ; i++){
 			for (int j=0 ; j<150 ; j++){
 				allStaticElement.add(new Vec2(i, j));
 			}
 		}
-		
+
 		for (int i=0 ; i<wallNumber ; i++){
 			//give a position in the map between the border
 			//the map is represented like a matrix
@@ -134,44 +170,37 @@ public class MapGenerator {
 				i--;
 		}
 	}
-	
+
 	public static void addVecPos (Vec2 vec){
 		allStaticElement.add(vec);
 	}
-	
+
 	public static ArrayList<Vec2> getAllStaticElement(){
 		return allStaticElement;
 	}
 
-	public static BufferedImage getBackground() {
-		return img;
-	}
 
-	public static ArrayList<BorderWall> getArena() {
-		return arena;
-	}
-
+	/**
+	 * @code {@link MapStyle}
+	 * Defines the styles of maps being used during the game.
+	 * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+	 * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+	 */
 	private static class MapStyle {
 		public static ArrayList<String> background = new ArrayList<>();
 		public static ArrayList<String> wall = new ArrayList<>();
-		
+
 		public MapStyle() {
 			background.add("background_1.png");
 			background.add("background_2.png");
 			background.add("background_3.png");
 			background.add("background_4.png");
-			
+
 			wall.add("wall_1.png");
 			wall.add("wall_2.png");
 			wall.add("wall_3.png");
 			wall.add("wall_4.png");
 		}
 	}
-
-	public static BufferedImage getImgBorder() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
 

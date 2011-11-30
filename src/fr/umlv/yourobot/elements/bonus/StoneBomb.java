@@ -7,10 +7,18 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
+
+/**
+ * @code {@link StoneBomb}
+ * Sub bonus simulating magnetic stone bomb
+ * @see {@link Bomb} 
+ * @author Darcy Camille <cdarcy@etudiant.univ-mlv.fr>
+ * @author Baudrand Sebastien <sbaudran@etudiant.univ-mlv.fr>
+ *
+ */
+
 public class StoneBomb extends Bomb {
 
-	public ElementType typeEffectMax;
-	
 	public StoneBomb(float x, float y){
 		super(x, y);
 		type = ElementType.STONEBOMB;
@@ -20,10 +28,5 @@ public class StoneBomb extends Bomb {
 	@Override
 	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		return super.draw("stonebomb.png", g, api);
-	}
-
-	@Override
-	public ElementType getTypeBomb() {
-		return typeEffectMax;
 	}
 }
