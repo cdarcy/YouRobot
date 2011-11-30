@@ -13,18 +13,39 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
+/**
+ * @code {@link ComputerRobot.java}
+ * @see {@link Robot.java}
+ * This class define all behavior of an computer robot
+ * @author BAUDRAND Sebastien <sbaudran@univ-mlv.fr>
+ * @author Camille <cdarcy@univ-mlv.fr>
+ */
 public class ComputerRobot extends Robot {
+
+	/**
+	 * Constructor of a computer robot
+	 * @param x float
+	 * @param y float
+	 */
 	public ComputerRobot(float x, float y) {
 		super(x, y);
 		type = ElementType.COMPUTER_ROBOT;
 	}
 
+	/**
+	 * Use the method on the super class Robot
+	 */
 	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException{
 		super.draw(this, "robot_IA.png", g, api);
 		return this;
 	}
 
-	@Override
+
+	/**
+	 * Define the method run to a computer robot
+	 * @param world Robot Game
+	 */
+	@Override	
 	public void run(final RobotGame world) {
 		float quarter_diagonal = (float) (Math.sqrt((RobotGame.WIDTH*RobotGame.WIDTH)+(RobotGame.HEIGHT*RobotGame.HEIGHT))/4);
 		ArrayList<Element> list = new ArrayList<>();
@@ -47,6 +68,7 @@ public class ComputerRobot extends Robot {
 				move(new Vec2(force.x * 30000, force.y * 30000));
 			}
 			else  {
+				//else the computer robot move in the map
 				int rotation = rand.nextInt(45);
 
 				if(rand.nextBoolean()) {
@@ -59,7 +81,6 @@ public class ComputerRobot extends Robot {
 
 				imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
 				imp.y = (float) Math.sin(Math.toRadians(direction)) * SPEED;
-
 				bodyElem.applyLinearImpulse(imp, getPosition());
 			}
 		}

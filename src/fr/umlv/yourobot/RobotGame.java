@@ -106,6 +106,8 @@ public class RobotGame{
 	 * @param gameMod
 	 * @param graphicMod
 	 */
+	Body body;
+
 	public RobotGame(int level, RobotGameMod gameMod, RobotTextureMod graphicMod) {
 		jboxWorld = new World(new Vec2(0, 0), true);
 		mode = gameMod;
@@ -116,6 +118,7 @@ public class RobotGame{
 		robots = new ArrayList<>();
 		lures = new ArrayList<>();
 		toDestroy = new ArrayList<>();
+
 		toDraw = new ArrayList<>();
 	}
 
@@ -327,6 +330,10 @@ public class RobotGame{
 	 * Accessor for game mode attribute
 	 * @return the game mode attribute
 	 */
+	public static void setMode(RobotGameMod mode) {
+		RobotGame.mode = mode;
+	}
+
 	public RobotGameMod getMode(){
 		return RobotGame.mode;
 	}

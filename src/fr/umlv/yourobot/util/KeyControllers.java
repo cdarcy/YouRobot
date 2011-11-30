@@ -22,11 +22,11 @@ public class KeyControllers {
 	private static RobotTextureMod graphic;
 
 
-	public RobotGameMod getModePlayer(){
+	public static RobotGameMod getModePlayer(){
 		return player;
 	}
 
-	public RobotTextureMod getModeGraphic(){
+	public static RobotTextureMod getModeGraphic(){
 		return graphic;
 	}
 	/**
@@ -229,7 +229,6 @@ public class KeyControllers {
 		abstract public void pressKeyRight();
 		abstract public void pressKeyFire();
 		abstract public void drawMenu(Graphics2D g);
-		
 		public boolean isFinished() {
 			return finished;
 		}
