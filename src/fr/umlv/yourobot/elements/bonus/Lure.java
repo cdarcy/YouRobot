@@ -39,7 +39,7 @@ public class Lure extends Bonus {
 		this.lureRobot = new LureRobot(robot.getPosition().x+20, robot.getPosition().y, this);
 		this.world = world;
 		world.addStaticElement(lureRobot);
-		start = (int) System.nanoTime();
+		start = System.nanoTime();
 	}
 
 	@Override
@@ -64,7 +64,8 @@ public class Lure extends Bonus {
 	public boolean update() {
 		
 		if(start + ((long)length*1000000000) > System.nanoTime()){
-			timeleft = (int) (System.nanoTime()-start)/1000000;
+			System.out.println(length-((System.nanoTime()-start)/1000000000));
+			timeleft = (int) (length-((System.nanoTime()-start)/1000000000));
 			return true;
 		}
 		world.removeElement(lureRobot);

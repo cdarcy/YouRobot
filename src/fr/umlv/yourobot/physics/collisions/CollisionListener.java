@@ -65,12 +65,19 @@ public class CollisionListener implements ContactListener {
 			break;
 		case PLAYER_ROBOT:
 			if(elemB.typeElem() == ElementType.END_CIRCLE){
+				System.out.println("finished");
 				world.setGameFinished();
 			}
 			break;
 
 		case BORDERWALL:
 			GameDrawAPI.drawInterface();
+			break;
+		case END_CIRCLE:
+			if(elemB.typeElem() == ElementType.PLAYER_ROBOT){
+				world.setGameFinished();
+			}
+			break;
 		default:
 			break;
 		}
@@ -89,7 +96,6 @@ public class CollisionListener implements ContactListener {
 	public void preSolve(Contact contact, Manifold oldManifold) {
 		Element elemA = (Element) contact.getFixtureA().getBody().getUserData();
 		Element elemB = (Element) contact.getFixtureB().getBody().getUserData();
-
 		if(elemB == null && elemA == null)
 			return;
 		if(elemB.classElem() == ElementClass.BONUS || elemB.typeElem() == ElementType.START_CIRCLE

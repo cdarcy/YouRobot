@@ -24,7 +24,6 @@ import fr.umlv.yourobot.RobotGame.RobotTextureMod;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
-import fr.umlv.yourobot.util.ElementType.ElementClass;
 import fr.umlv.yourobot.util.KeyControllers;
 import fr.umlv.yourobot.util.MapGenerator;
 
@@ -56,9 +55,12 @@ public class GameDrawAPI{
 	 * @param g Graphics2D to use the library
 	 * @throws IOException if exist a problem with the draw method
 	 */
-	public void drawCircle(Vec2 pos, float direction, Color c, BufferedImage img, Graphics2D g) throws IOException {
+	public void drawCircle(Vec2 pos, int size, float direction, Color c, BufferedImage img, Graphics2D g) throws IOException {
 		g.setColor(c);    
-		drawRotateImage(pos,direction,img,g);
+		if(world.getGraphicMode() == RobotTextureMod.TEXTURE)
+			drawRotateImage(pos,direction,img,g);
+		else 
+			g.fillOval((int)pos.x, (int)pos.y, size, size);
 	}
 
 	/**
@@ -81,10 +83,12 @@ public class GameDrawAPI{
 	 * @param c Color of the circle
 	 * @param g Graphics2D to use the library
 	 */
-	public void drawWall(Vec2 pos, BufferedImage img, Color c, Graphics2D g) {
+	public void drawWall(Vec2 pos, int size, BufferedImage img, Color c, Graphics2D g) {
 		g.setColor(c);
-		g.drawImage(img, null, (int)pos.x-5, (int)pos.y-5);
-
+		if(world.getGraphicMode() == RobotTextureMod.TEXTURE)
+			g.drawImage(img, null, (int)pos.x-5, (int)pos.y-5);
+		else
+			g.fillRect((int)pos.x, (int)pos.y, size, size);
 	}
 
 	/**
@@ -200,7 +204,7 @@ public class GameDrawAPI{
 		Font fonte = new Font("Liberation Mono Bold",Font.BOLD,20);
 		g.setFont(fonte);
 		g.drawString("player 1 - " + Math.round(p1.getLife())+"%", p1Col, 20);
-		g.drawString("Level - " + RobotGame.getCurrentLevel()+1, 350, 20);
+		g.drawString("Level - " + (RobotGame.getCurrentLevel()+1), 350, 20);
 		if (world.getMode() == RobotGameMod.TWOPLAYER){
 			HumanRobot p2 = (HumanRobot) world.getPlayers().get(1);
 			int p2Col = 640;

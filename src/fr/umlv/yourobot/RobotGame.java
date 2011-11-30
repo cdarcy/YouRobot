@@ -24,7 +24,6 @@ import fr.umlv.yourobot.elements.bonus.Lure;
 import fr.umlv.yourobot.elements.bonus.Snap;
 import fr.umlv.yourobot.elements.bonus.StoneBomb;
 import fr.umlv.yourobot.elements.bonus.WoodBomb;
-import fr.umlv.yourobot.elements.robots.ComputerRobot;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.robots.Robot;
 import fr.umlv.yourobot.elements.walls.Wall;
@@ -61,6 +60,7 @@ public class RobotGame{
 	private ArrayList<Element> toDraw;
 	private ArrayList<Element> circles;
 	
+	private static RobotTextureMod texture;
 	private static RobotGameMod mode;
 	private static int currentLevel;
 	private boolean finished = false;
@@ -111,6 +111,7 @@ public class RobotGame{
 	public RobotGame(int level, RobotGameMod gameMod, RobotTextureMod graphicMod) {
 		jboxWorld = new World(new Vec2(0, 0), true);
 		mode = gameMod;
+		texture = graphicMod;
 		walls = new ArrayList<>();
 		circles = new ArrayList<>();
 		bonuses = new ArrayList<>();
@@ -526,6 +527,14 @@ public class RobotGame{
 	 */
 	public ArrayList<Element> getToDraw() {
 		return toDraw;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public RobotTextureMod getGraphicMode(){
+		return texture;
 	}
 }
 

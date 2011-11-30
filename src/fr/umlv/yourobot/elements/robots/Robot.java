@@ -2,24 +2,20 @@ package fr.umlv.yourobot.elements.robots;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.RadialGradientPaint;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.RobotGame;
-import fr.umlv.yourobot.elements.Circle;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
-import fr.umlv.yourobot.util.ElementType;
 
 /**
  * @code {@link Robot.java}
@@ -61,7 +57,6 @@ abstract public class Robot extends Element {
 	public void impulse(RobotGame world) {
 		
 		final Vec2 imp = new Vec2();		
-		final Vec2 dir = new Vec2();
 
 		//random coordinate value
 		imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
@@ -132,7 +127,7 @@ abstract public class Robot extends Element {
 	public Robot draw(Element robot, String fileName, Graphics2D g, GameDrawAPI api) throws IOException {
 		if(img == null)
 			img = ImageIO.read(new File("images/" + fileName));
-		api.drawCircle(robot.getBody().getPosition(), direction, Color.lightGray, img, g);
+		api.drawCircle(robot.getBody().getPosition(), ROBOT_SIZE, direction, Color.lightGray, img, g);
 		return this;
 	}
 

@@ -5,7 +5,6 @@ import java.awt.RadialGradientPaint;
 import java.io.IOException;
 
 import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
 import fr.umlv.yourobot.util.ElementType;

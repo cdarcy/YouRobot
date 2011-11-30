@@ -9,7 +9,7 @@ import org.jbox2d.common.MathUtils;
 import fr.umlv.yourobot.RobotGame;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.bonus.Bonus;
-import fr.umlv.yourobot.elements.bonus.IceBomb;
+import fr.umlv.yourobot.elements.bonus.Lure;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 import fr.umlv.yourobot.util.KeyControllers.KeyController;
@@ -24,7 +24,7 @@ import fr.umlv.zen.KeyboardEvent;
  */
 public class HumanRobot extends Robot {
 	private volatile double life;
-	private Bonus currentBonus = null;
+	private Bonus currentBonus = new Lure(0,0);
 	private Bonus runningBonus = null;
 	protected KeyController controller;
 

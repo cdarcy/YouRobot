@@ -41,7 +41,7 @@ abstract public class Wall extends Element{
 	public Wall draw(Element wall, String fileName, Graphics2D g, GameDrawAPI api) throws IOException {
 		if(img == null)
 			img = ImageIO.read(new File("images/" + fileName));
-		api.drawWall(wall.getBody().getWorldCenter(), img, Color.lightGray, g);
+		api.drawWall(wall.getBody().getWorldCenter(), WALL_SIZE, img, Color.lightGray, g);
 		return this;
 	}
 }

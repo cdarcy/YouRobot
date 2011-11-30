@@ -60,7 +60,7 @@ abstract public class Bonus extends Element{
 	public Element draw(String name, Graphics2D g, GameDrawAPI api) throws IOException{
 		if(img==null)
 			img=ImageIO.read(new File("images/"+name));
-		api.drawCircle(bodyElem.getPosition(), 0, Color.GREEN, img, g);
+		api.drawCircle(bodyElem.getPosition(), BONUS_SIZE, 0, Color.GREEN, img, g);
 		return this;
 	}
 

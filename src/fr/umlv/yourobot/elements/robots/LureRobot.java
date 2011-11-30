@@ -24,7 +24,7 @@ public class LureRobot extends Robot {
 	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
 		g.setColor(Color.WHITE);
 		g.setFont(new Font ("Sans", Font.BOLD, 15));
-		g.drawString(lure.getTimeleft()/1000+ "s", (int) getPosition().x, (int)getPosition().y);
+		g.drawString(lure.getTimeleft()+ "s", (int) getPosition().x, (int)getPosition().y);
 		return super.draw(this, "robot_game.png", g, api);
 	}
 
