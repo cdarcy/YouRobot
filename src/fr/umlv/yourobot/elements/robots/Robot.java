@@ -3,7 +3,6 @@ package fr.umlv.yourobot.elements.robots;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
-import java.awt.geom.Ellipse2D;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,16 +20,25 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.graphics.GameDrawAPI;
 import fr.umlv.yourobot.util.ElementType;
 
+/**
+ * @code {@link Robot.java}
+ * This is the super class of robot and defined all methode using by all robot type
+ * @author BAUDRAND Sebastien <sbaudran@univ-mlv.fr>
+ * @author Camille <cdarcy@univ-mlv.fr>
+ *
+ */
 abstract public class Robot extends Element {
-	private String pName;
 	protected int ROBOT_SIZE = 35;
 	protected float SPEED = 10000;
 	protected float RADIUS = ROBOT_SIZE / 2;
 	protected float direction = 1.f;
 	protected CircleShape shapeElem;
 
-	/*
+
+	/**
 	 * Public contructor for human players
+	 * @param x float
+	 * @param y float
 	 */
 	public Robot(float x, float y) {
 		super(x, y);
@@ -45,49 +53,34 @@ abstract public class Robot extends Element {
 
 	}
 
-	public void fireBomb(final Graphics2D g) {
-		final float x = bodyElem.getWorldCenter().x;
-		final float y = bodyElem.getWorldCenter().y;
-		final RadialGradientPaint paint = new RadialGradientPaint(x, y,
-				ROBOT_SIZE, new float[] { .0f, 1f }, new Color[] { Color.RED, Color.WHITE });
-		g.setPaint(paint);
-		new Runnable() {
-
-			@Override
-			public void run() {
-				for (int i = 0; i < 100; i++) {
-					g.fill(new Ellipse2D.Float(x - bodyElem.getWorldCenter().x,
-							bodyElem.getWorldCenter().y, ROBOT_SIZE + i,
-							ROBOT_SIZE + i));
-				}
-			}
-		}.run();
-	}
-
-	public String getpName() {
-		return pName;
-	}
-
+	/**
+	 * This method can moved randomly
+	 * @param world RobotGame
+	 */
 	public void impulse(RobotGame world) {
 		
 		final Vec2 imp = new Vec2();
 		final Vec2 dir = new Vec2();
-		
 
+		//random coordinate value
 		imp.x = (float) Math.cos(Math.toRadians(direction)) * SPEED;
 		imp.y = (float) Math.sin(Math.toRadians(direction)) * SPEED;
-		
+		//linear impulse to move the robot
 		bodyElem.applyLinearImpulse(imp, bodyElem.getLocalCenter());
-		
+		//calcul of the effect place
 		dir.x = (float) (bodyElem.getPosition().x+Math.cos(Math.toRadians((direction+135)%360)+30));
 		dir.y = (float) (bodyElem.getPosition().y+Math.sin(Math.toRadians((direction+135)%360)+30));
-		
+
 		RadialGradientPaint paint = new RadialGradientPaint(dir.x, dir.y, 10, new float[]{.5f, 1f}, new Color[]{Color.YELLOW, Color.ORANGE});
 		Circle circle = new Circle (paint, 10, dir.x, dir.y, ElementType.EFFECT);
 		world.addDynamicElement(circle);
 		
 	}
 
+	/**
+	 * Creat a movement with a defined speed
+	 * @param speed float
+	 */
 	public void impulse(float speed){
 		final Vec2 imp = new Vec2();
 		imp.x = (float) Math.cos(Math.toRadians(direction)) * speed;
@@ -96,17 +89,33 @@ abstract public class Robot extends Element {
 
 	}
 	
+	/**
+	 * Can rotate the robot whan it change his direction
+	 * @param inc float
+	 */
 	public void rotate(float inc) {
 		direction = (direction + inc) % 360;
 		bodyElem.setType(BodyType.DYNAMIC);
 		
 	}
 
+	/**
+	 * Override the setBody to set the good value
+	 */
 	@Override
 	public void setBody(Body bodyElem) {
 		super.setBody(bodyElem);
 	}
 
+	/**
+	 * Draw a robot on the map.
+	 * @param robot Element
+	 * @param fileName String : name of the image
+	 * @param g Graphics2D
+	 * @param api GameDrawAPI
+	 * @return
+	 * @throws IOException
+	 */
 	public Robot draw(Element robot, String fileName, Graphics2D g, GameDrawAPI api) throws IOException {
 		if(img == null)
 			img = ImageIO.read(new File("images/" + fileName));

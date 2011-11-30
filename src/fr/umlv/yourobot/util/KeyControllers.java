@@ -17,13 +17,25 @@ public class KeyControllers {
 		TEXTURE,
 		GRAPHIC
 	}
+	
+	/**
+	 * Return the player number of the game
+	 * Use an enum : RobotModeMod
+	 * @return RobotGameMod
+	 */
 	public RobotGameMod getModePlayer(){
 		return player;
 	}
 	
-	public RobotTextureMod getModeGraphic(){
+	/**
+	 * Return the value of texture or graphic mode to drw the good font
+	 * Use an enum : RobotTextureMod
+	 * @return RobotTextureMod
+	 */
+	public static RobotTextureMod getModeGraphic() {
 		return graphic;
 	}
+	
 	/**
 	 *	Default game controller for Yourobot
 	 *	Returns a keyController object which defines command for keyboard events
@@ -69,18 +81,22 @@ public class KeyControllers {
 	 */
 	public static KeyController getMenuController(String keys[]){
 		return new KeyController(keys){
+			int result = 1;
 
 			@Override
 			public void pressKeyUp() {
 				MenusDrawAPI.choice1 = RobotGameMod.ONEPLAYER;
+				result = 1;
 			}
 			@Override
 			public void pressKeyFire() {
+				if (result == 1)	RobotGame.setMode(RobotGameMod.ONEPLAYER);
 				finished = true;
 			}
 			@Override
 			public void pressKeyDown() {
 				MenusDrawAPI.choice1 = RobotGameMod.TWOPLAYER;
+				result = 2;
 			}
 			@Override
 			public void pressKeyRight() { 	 }
@@ -100,14 +116,17 @@ public class KeyControllers {
 
 	public static KeyController getGraphicsMenuController(String keys[]){
 		return new KeyController(keys){
+			int result = 1;
 			@Override
 			public void pressKeyUp() {
 				MenusDrawAPI.choice2 = RobotTextureMod.TEXTURE;
+				result = 1;
 			}
 
 			@Override
 			public void pressKeyDown() {
 				MenusDrawAPI.choice2 = RobotTextureMod.GRAPHIC;
+				result = 2;
 			}
 
 			@Override
@@ -120,6 +139,8 @@ public class KeyControllers {
 			@Override
 			public void pressKeyFire() {
 				finished = true;
+				if (result == 1)	graphic = RobotTextureMod.TEXTURE;
+				if (result == 2)	graphic = RobotTextureMod.GRAPHIC;
 			}
 
 			@Override

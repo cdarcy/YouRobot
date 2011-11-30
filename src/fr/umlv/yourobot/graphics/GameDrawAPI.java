@@ -23,11 +23,18 @@ import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.robots.HumanRobot;
 import fr.umlv.yourobot.elements.walls.Wall;
 import fr.umlv.yourobot.util.ElementType.ElementClass;
+import fr.umlv.yourobot.util.KeyControllers;
+import fr.umlv.yourobot.util.KeyControllers.RobotTextureMod;
 import fr.umlv.yourobot.util.MapGenerator;
 
+/**
+ * @code {@link MenuGameAPI.java}
+ * This class includes all methode to draw all elements.
+ * @author BAUDRAND Sebastien <sbaudran@univ-mlv.fr>
+ * @author Camille <cdarcy@univ-mlv.fr>
+ *
+ */
 public class GameDrawAPI{
-
-
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	static RobotGame world;
@@ -149,7 +156,13 @@ public class GameDrawAPI{
 	 * @param g Graphics2D to use the library
 	 */
 	public static void drawBackground(Graphics2D g) {
-		g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
+		if (KeyControllers.getModeGraphic() == RobotTextureMod.TEXTURE)
+			System.out.println("text");
+			g.drawImage(img, null, Wall.WALL_SIZE-8, Wall.WALL_SIZE-8);
+		if (KeyControllers.getModeGraphic() == RobotTextureMod.GRAPHIC){
+			g.drawRect(0, 0, 800, 600);
+			System.out.println("graph");
+		}
 	}
 
 	/**

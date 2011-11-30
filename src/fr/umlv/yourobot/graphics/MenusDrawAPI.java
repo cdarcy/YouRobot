@@ -13,6 +13,13 @@ import fr.umlv.yourobot.RobotGame.RobotGameMod;
 import fr.umlv.yourobot.util.KeyControllers.KeyController.GameMenu;
 import fr.umlv.yourobot.util.KeyControllers.RobotTextureMod;
 
+/**
+ * @code {@link MenuDrawAPI.java}
+ * This class includes all the methode to draw the third menus
+ * @author BAUDRAND Sebastien <sbaudran@univ-mlv.fr>
+ * @author Camille <cdarcy@univ-mlv.fr>
+ *
+ */
 public class MenusDrawAPI {
 	private static BufferedImage imgLoad;
 	private static BufferedImage imgEnd;

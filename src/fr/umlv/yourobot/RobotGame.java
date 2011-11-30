@@ -58,7 +58,7 @@ public class RobotGame{
 	}
 
 	Body body;
-	RobotGameMod mode;
+	static RobotGameMod mode;
 	private static int currentLevel;
 	private boolean finished = false;
 	private ArrayList<Element> walls;
@@ -253,12 +253,12 @@ public class RobotGame{
 		toDestroy.clear();
 	}
 
-	public void setMode(RobotGameMod mode) {
-		this.mode = mode;
+	public static void setMode(RobotGameMod mode) {
+		RobotGame.mode = mode;
 	}
 
 	public RobotGameMod getMode(){
-		return this.mode;
+		return RobotGame.mode;
 	}
 
 
