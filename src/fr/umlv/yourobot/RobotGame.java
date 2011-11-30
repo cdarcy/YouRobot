@@ -530,8 +530,8 @@ public class RobotGame{
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Return the graphic mode chose by the user
+	 * @return RobotTextureMod
 	 */
 	public RobotTextureMod getGraphicMode(){
 		return texture;
