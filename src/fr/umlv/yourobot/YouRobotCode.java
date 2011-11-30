@@ -253,7 +253,7 @@ public class YouRobotCode implements ApplicationCode{
 		 */
 		private static ApplicationRenderCode runMenu1(){
 			
-			modeController  = KeyControllers.getGraphicsMenuController(DEFAULT_KEYBOARDSET);
+			modeController  = KeyControllers.getMenuController(DEFAULT_KEYBOARDSET);
 
 			return new ApplicationRenderCode() {
 

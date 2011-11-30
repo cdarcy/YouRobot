@@ -464,6 +464,10 @@ public class RobotGame{
 	public Joint addJoint(RevoluteJointDef rjd) {
 		return jboxWorld.createJoint(rjd);
 	}
+	
+	public void destroyJoint(Joint joint) {
+		jboxWorld.destroyJoint(joint);
+	}
 
 
 	/**

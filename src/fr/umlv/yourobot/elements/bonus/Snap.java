@@ -7,9 +7,12 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.tools.DiagnosticCollector;
+
 import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.joints.DistanceJointDef;
 import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
@@ -29,7 +32,7 @@ import fr.umlv.yourobot.util.ElementType;
  *
  */
 public class Snap  extends Bonus  {
-	private float quarter_diagonal;
+	private final float quarter_diagonal = (float) (Math.sqrt((RobotGame.WIDTH*RobotGame.WIDTH)+(RobotGame.HEIGHT*RobotGame.HEIGHT))/4);
 	
 	/**
 	 * Main constructor
@@ -42,10 +45,32 @@ public class Snap  extends Bonus  {
 		length = (int) Math.round((Math.random()*13)+2);
 		type = ElementType.SNAP;
 	}
-
+	
+	private static class SnapElement {
+		Element element;
+		BodyType bodyType;
+		Joint joint;
+	}
+	private final ArrayList<SnapElement> snapElements = new ArrayList<>();
+	private RobotGame world;
+	
 	@Override
 	public void run(RobotGame world, HumanRobot robot){
-		start = (int) System.nanoTime();		
+		this.world = world;
+		start = System.nanoTime();
+		for(final Element wall : world.getWalls()){
+			float distance = MathUtils.distance(robot.getPosition(), wall.getPosition());
+			if(distance < quarter_diagonal/2){
+				SnapElement snapElement = new SnapElement();
+				snapElement.element = wall;
+				snapElement.bodyType = wall.getBody().getType();
+				wall.getBody().setType(BodyType.DYNAMIC);
+				RevoluteJointDef rjd = new RevoluteJointDef();
+				rjd.initialize(robot.getBody(),	wall.getBody(), new Vec2(1,1));
+				snapElement.joint = world.addJoint(rjd);
+				snapElements.add(snapElement);
+			}
+		}
 	}
 	@Override
 	public Element draw(Graphics2D g, GameDrawAPI api) throws IOException {
@@ -67,19 +92,15 @@ public class Snap  extends Bonus  {
 
 	@Override
 	public boolean update() {
-		if(((System.nanoTime()-start)/1000000)<(length*1000)){
+		if(start + ((long)length*1000000000) > System.nanoTime()){
 			timeleft = (int) ((length*1000)-(System.nanoTime()-start)/1000000);
-			for(final Element wall : world.getWalls()){
-				float distance = MathUtils.distance(robot.getPosition(), wall.getPosition());
-				if(distance < quarter_diagonal){
-					wall.getBody().setType(BodyType.DYNAMIC);
-					Vec2 pos = new Vec2(robot.getPosition());
-					Vec2 force = pos.sub(wall.getPosition());
-					wall.getBody().applyForce(new Vec2((force.x*distance),(force.y*distance)), wall.getBody().getWorldCenter());
-				}
-			}
 			return true;
 		}
+		for(SnapElement snapElement : snapElements) {
+			snapElement.element.getBody().setType(snapElement.bodyType);
+			this.world.destroyJoint(snapElement.joint);
+		}
+		snapElements.clear();
 		return false;
 	}
 }
